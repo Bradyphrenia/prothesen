@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1400</width>
+    <height>880</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1400</width>
+    <height>880</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1400</width>
+    <height>880</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <italic>false</italic>
+    <kerning>false</kerning>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Prothesendatenbank EPZ</string>
+  </property>
+  <property name="toolTip">
+   <string extracomment="Hauptfenster"/>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pushButton_suche">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>80</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Suche...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_patientennummer">
+    <property name="geometry">
+     <rect>
+      <x>94</x>
+      <y>80</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Patientennummer:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_patientennummer">
+    <property name="geometry">
+     <rect>
+      <x>214</x>
+      <y>80</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string>D9999999</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="cursorPosition">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>48000000</string>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_wechseleingriff">
+    <property name="geometry">
+     <rect>
+      <x>94</x>
+      <y>160</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="accessibleName">
+     <string comment="2"/>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Wechseleingriff:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="titel">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>401</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
+    <property name="text">
+     <string>Prothesendatenbank EPZ Boddenklinken</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_art_der_prothese">
+    <property name="geometry">
+     <rect>
+      <x>104</x>
+      <y>120</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Art der Prothese:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_seite">
+    <property name="geometry">
+     <rect>
+      <x>164</x>
+      <y>190</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Seite:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_proximal">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>220</y>
+      <width>60</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>proximal:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_distal">
+    <property name="geometry">
+     <rect>
+      <x>164</x>
+      <y>250</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>distal:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_praeop_planung">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>280</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>präop. Planung:</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_fraktur">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>310</y>
+      <width>87</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Fraktur:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_praeop_roentgen">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>340</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>präop. Röntgen:</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_ct">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>370</y>
+      <width>87</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>CT:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_postop_roentgen">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>400</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>postop. Röntgen:</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_opdatum">
+    <property name="geometry">
+     <rect>
+      <x>104</x>
+      <y>430</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Operationsdatum:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_operateur">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>460</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Operateur:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_assistenz">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>490</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Assistenz:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_opzeit">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>520</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Operationszeit:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_opdatum">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>430</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_operationszeit">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>520</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_infektion">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>560</y>
+      <width>87</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Infektion:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_spaetinfektion">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>590</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Spätinfektion:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_luxation">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>620</y>
+      <width>87</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Luxation:</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_trochanterabriss">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>680</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Trochanterabriss:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_fissur">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>710</y>
+      <width>87</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Fissur:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_thromboembolie">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>740</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Thrombose / Embolie:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_gestorben">
+    <property name="geometry">
+     <rect>
+      <x>144</x>
+      <y>770</y>
+      <width>87</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>gestorben:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_inklinationswinkel">
+    <property name="geometry">
+     <rect>
+      <x>103</x>
+      <y>650</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Inklinationswinkel:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_inklinationswinkel">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>650</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string>99</string>
+    </property>
+    <property name="placeholderText">
+     <string>00</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_neurologie">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>800</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>neurolog. Komplikationen:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_vollstaendig">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>830</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Dokumentation vollst.:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_reintervention">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>80</y>
+      <width>341</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Änderung des Behandlungspfades / Reintervention:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_abweichung">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>220</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Abweichung:</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit_memo">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>620</y>
+      <width>341</width>
+      <height>191</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_seite">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>190</y>
+      <width>111</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <property name="maxVisibleItems">
+     <number>2</number>
+    </property>
+    <property name="maxCount">
+     <number>2</number>
+    </property>
+    <property name="insertPolicy">
+     <enum>QComboBox::NoInsert</enum>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_proximal">
+    <property name="geometry">
+     <rect>
+      <x>213</x>
+      <y>220</y>
+      <width>241</width>
+      <height>26</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_distal">
+    <property name="geometry">
+     <rect>
+      <x>213</x>
+      <y>250</y>
+      <width>241</width>
+      <height>26</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_prothesenart">
+    <property name="geometry">
+     <rect>
+      <x>213</x>
+      <y>120</y>
+      <width>241</width>
+      <height>26</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_operateur">
+    <property name="geometry">
+     <rect>
+      <x>223</x>
+      <y>460</y>
+      <width>231</width>
+      <height>26</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_assistenz">
+    <property name="geometry">
+     <rect>
+      <x>223</x>
+      <y>490</y>
+      <width>231</width>
+      <height>26</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_copyright">
+    <property name="geometry">
+     <rect>
+      <x>1280</x>
+      <y>830</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>© Steffen Troeger</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_einweiser">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>490</y>
+      <width>231</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_einweiser">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>490</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Einweiser:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_implantation">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>250</y>
+      <width>261</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Implantation zementiert / zementfrei:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_implantat">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>280</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Implantat +/- 2 Größen:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_stabilisatoren">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>310</y>
+      <width>341</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>zusätzl. Stabilisatoren (Stem, Inlay mit Kragen o.ä.):</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_blutung">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>340</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>vermehrte Blutung:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_vorbereitung">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>370</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>präoperative Vorbereitung:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_operation">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>400</y>
+      <width>231</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Vorkommnisse bei der Operation:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_anaesthesie">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>430</y>
+      <width>241</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>Vorkommnisse bei der Anästhesie:</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>250</y>
+      <width>341</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_neunzig">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>560</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>&lt; 90 Tage:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_vierundzwanzig">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>430</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>&gt; 24 Stunden:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_postop_winkel">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>650</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string>99</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_postop_winkel">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>650</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>postop. Winkel:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_praeop_winkel">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>340</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>präop. Winkel:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_praeop_winkel">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>340</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string>99</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_knochenverankert">
+    <property name="geometry">
+     <rect>
+      <x>306</x>
+      <y>160</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>knochenverankert:</string>
+    </property>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>pushButton_suche</zorder>
+   <zorder>label_patientennummer</zorder>
+   <zorder>lineEdit_patientennummer</zorder>
+   <zorder>checkBox_wechseleingriff</zorder>
+   <zorder>titel</zorder>
+   <zorder>label_art_der_prothese</zorder>
+   <zorder>label_seite</zorder>
+   <zorder>label_proximal</zorder>
+   <zorder>label_distal</zorder>
+   <zorder>checkBox_praeop_planung</zorder>
+   <zorder>checkBox_fraktur</zorder>
+   <zorder>checkBox_praeop_roentgen</zorder>
+   <zorder>checkBox_ct</zorder>
+   <zorder>checkBox_postop_roentgen</zorder>
+   <zorder>label_opdatum</zorder>
+   <zorder>label_operateur</zorder>
+   <zorder>label_assistenz</zorder>
+   <zorder>label_opzeit</zorder>
+   <zorder>lineEdit_opdatum</zorder>
+   <zorder>lineEdit_operationszeit</zorder>
+   <zorder>checkBox_infektion</zorder>
+   <zorder>checkBox_spaetinfektion</zorder>
+   <zorder>checkBox_luxation</zorder>
+   <zorder>checkBox_trochanterabriss</zorder>
+   <zorder>checkBox_fissur</zorder>
+   <zorder>checkBox_thromboembolie</zorder>
+   <zorder>checkBox_gestorben</zorder>
+   <zorder>label_inklinationswinkel</zorder>
+   <zorder>lineEdit_inklinationswinkel</zorder>
+   <zorder>checkBox_neurologie</zorder>
+   <zorder>checkBox_vollstaendig</zorder>
+   <zorder>checkBox_reintervention</zorder>
+   <zorder>checkBox_abweichung</zorder>
+   <zorder>plainTextEdit_memo</zorder>
+   <zorder>comboBox_seite</zorder>
+   <zorder>comboBox_proximal</zorder>
+   <zorder>comboBox_distal</zorder>
+   <zorder>comboBox_prothesenart</zorder>
+   <zorder>comboBox_operateur</zorder>
+   <zorder>comboBox_assistenz</zorder>
+   <zorder>label_copyright</zorder>
+   <zorder>comboBox_einweiser</zorder>
+   <zorder>label_einweiser</zorder>
+   <zorder>checkBox_implantation</zorder>
+   <zorder>checkBox_implantat</zorder>
+   <zorder>checkBox_stabilisatoren</zorder>
+   <zorder>checkBox_blutung</zorder>
+   <zorder>checkBox_vorbereitung</zorder>
+   <zorder>checkBox_operation</zorder>
+   <zorder>checkBox_anaesthesie</zorder>
+   <zorder>checkBox_neunzig</zorder>
+   <zorder>checkBox_vierundzwanzig</zorder>
+   <zorder>lineEdit_postop_winkel</zorder>
+   <zorder>label_postop_winkel</zorder>
+   <zorder>label_praeop_winkel</zorder>
+   <zorder>lineEdit_praeop_winkel</zorder>
+   <zorder>checkBox_knochenverankert</zorder>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>lineEdit_patientennummer</tabstop>
+  <tabstop>pushButton_suche</tabstop>
+  <tabstop>checkBox_wechseleingriff</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
