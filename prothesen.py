@@ -232,7 +232,7 @@ def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
         w.comboBox_operateur.addItem(op)
         w.comboBox_assistenz.addItem(op)
     close_db()
-    w.comboBox_operateur.setCurrentText('Joker')  # Eingabe leer
+    w.comboBox_operateur.setCurrentText('Joker')  # Eingabe vorbelegen
     w.comboBox_assistenz.setCurrentText('Joker')
 
 
