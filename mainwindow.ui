@@ -347,16 +347,6 @@
      <string>Operationszeit:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_opdatum">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>430</y>
-      <width>111</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_operationszeit">
     <property name="geometry">
      <rect>
@@ -589,7 +579,7 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>620</y>
+      <y>590</y>
       <width>341</width>
       <height>191</height>
      </rect>
@@ -670,16 +660,17 @@
    <widget class="QLabel" name="label_copyright">
     <property name="geometry">
      <rect>
-      <x>1280</x>
-      <y>830</y>
-      <width>101</width>
-      <height>16</height>
+      <x>1270</x>
+      <y>805</y>
+      <width>111</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <pointsize>11</pointsize>
       <weight>75</weight>
+      <italic>true</italic>
       <bold>true</bold>
      </font>
     </property>
@@ -944,6 +935,136 @@
      <string>knochenverankert:</string>
     </property>
    </widget>
+   <widget class="QCommandLinkButton" name="commandLinkButton_speichern">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>800</y>
+      <width>193</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Prüfen und Speichern...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_boddenkliniken">
+    <property name="geometry">
+     <rect>
+      <x>1260</x>
+      <y>10</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <property name="lineWidth">
+     <number>2</number>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>Logomit Haus.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_endocert">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>10</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <property name="lineWidth">
+     <number>2</number>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>endocert_logozertifikat_RZ_cmyk.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit_opdatum">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>430</y>
+      <width>110</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="dateTime">
+     <datetime>
+      <hour>0</hour>
+      <minute>0</minute>
+      <second>0</second>
+      <year>2018</year>
+      <month>1</month>
+      <day>1</day>
+     </datetime>
+    </property>
+    <property name="displayFormat">
+     <string>dd.MM.yyyy</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+    <property name="date">
+     <date>
+      <year>2018</year>
+      <month>1</month>
+      <day>1</day>
+     </date>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_copyright_year">
+    <property name="geometry">
+     <rect>
+      <x>1280</x>
+      <y>820</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>2017</string>
+    </property>
+   </widget>
    <zorder>frame</zorder>
    <zorder>pushButton_suche</zorder>
    <zorder>label_patientennummer</zorder>
@@ -963,7 +1084,6 @@
    <zorder>label_operateur</zorder>
    <zorder>label_assistenz</zorder>
    <zorder>label_opzeit</zorder>
-   <zorder>lineEdit_opdatum</zorder>
    <zorder>lineEdit_operationszeit</zorder>
    <zorder>checkBox_infektion</zorder>
    <zorder>checkBox_spaetinfektion</zorder>
@@ -1002,13 +1122,58 @@
    <zorder>label_praeop_winkel</zorder>
    <zorder>lineEdit_praeop_winkel</zorder>
    <zorder>checkBox_knochenverankert</zorder>
+   <zorder>commandLinkButton_speichern</zorder>
+   <zorder>label_boddenkliniken</zorder>
+   <zorder>label_endocert</zorder>
+   <zorder>dateEdit_opdatum</zorder>
+   <zorder>label_copyright_year</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
   <tabstop>lineEdit_patientennummer</tabstop>
   <tabstop>pushButton_suche</tabstop>
+  <tabstop>comboBox_prothesenart</tabstop>
   <tabstop>checkBox_wechseleingriff</tabstop>
+  <tabstop>checkBox_knochenverankert</tabstop>
+  <tabstop>comboBox_seite</tabstop>
+  <tabstop>comboBox_proximal</tabstop>
+  <tabstop>comboBox_distal</tabstop>
+  <tabstop>checkBox_praeop_planung</tabstop>
+  <tabstop>checkBox_fraktur</tabstop>
+  <tabstop>checkBox_praeop_roentgen</tabstop>
+  <tabstop>lineEdit_praeop_winkel</tabstop>
+  <tabstop>checkBox_ct</tabstop>
+  <tabstop>checkBox_postop_roentgen</tabstop>
+  <tabstop>dateEdit_opdatum</tabstop>
+  <tabstop>checkBox_vierundzwanzig</tabstop>
+  <tabstop>comboBox_operateur</tabstop>
+  <tabstop>comboBox_assistenz</tabstop>
+  <tabstop>lineEdit_operationszeit</tabstop>
+  <tabstop>checkBox_infektion</tabstop>
+  <tabstop>checkBox_neunzig</tabstop>
+  <tabstop>checkBox_spaetinfektion</tabstop>
+  <tabstop>checkBox_luxation</tabstop>
+  <tabstop>lineEdit_inklinationswinkel</tabstop>
+  <tabstop>lineEdit_postop_winkel</tabstop>
+  <tabstop>checkBox_trochanterabriss</tabstop>
+  <tabstop>checkBox_fissur</tabstop>
+  <tabstop>checkBox_thromboembolie</tabstop>
+  <tabstop>checkBox_gestorben</tabstop>
+  <tabstop>checkBox_neurologie</tabstop>
+  <tabstop>checkBox_vollstaendig</tabstop>
+  <tabstop>checkBox_reintervention</tabstop>
+  <tabstop>checkBox_abweichung</tabstop>
+  <tabstop>checkBox_implantation</tabstop>
+  <tabstop>checkBox_implantat</tabstop>
+  <tabstop>checkBox_stabilisatoren</tabstop>
+  <tabstop>checkBox_blutung</tabstop>
+  <tabstop>checkBox_vorbereitung</tabstop>
+  <tabstop>checkBox_operation</tabstop>
+  <tabstop>checkBox_anaesthesie</tabstop>
+  <tabstop>comboBox_einweiser</tabstop>
+  <tabstop>plainTextEdit_memo</tabstop>
+  <tabstop>commandLinkButton_speichern</tabstop>
  </tabstops>
  <resources/>
  <connections/>

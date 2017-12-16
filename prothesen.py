@@ -9,7 +9,8 @@ import psycopg2
 
 app = QApplication(sys.argv)
 
-w = loadUi('mainwindow.ui')
+w = loadUi('mainwindow.ui')  # Hauptfenster
+uwe = loadUi('achtung.ui')  # Unterfenster Fehler
 
 dic_prothesen = {}  # Dictionary für Formulardaten
 
@@ -22,12 +23,10 @@ def open_db():
     cur = conn.cursor()
 
 
-
 def close_db():
     conn.commit()
     cur.close()
     conn.close()
-
 
 
 def suche_patientennummer():
@@ -35,14 +34,15 @@ def suche_patientennummer():
 
 
 def init_comboBox_einweiser():  # Eingabemaske Einweiser initialisieren
+    w.comboBox_einweiser.clear()
     open_db()
     cur.execute("""SELECT "Einweiser" FROM "Prothesen";""")
     lesen = set(cur.fetchall())  # Satz aller Einweiser (auch None!)
     einweiser = [it[0] for it in lesen if it[0] != None]  # Einweiserliste bereinigen
-    for ew in sorted(einweiser):    # Einweiser laden
+    for ew in sorted(einweiser):  # Einweiser laden
         w.comboBox_einweiser.addItem(ew)
     close_db()
-    w.comboBox_einweiser.setCurrentText('') # Eingabe leer
+    w.comboBox_einweiser.setCurrentText('')  # Eingabe leer
 
 
 def change_prothesenart():  # Eingabemaske anpassen...
@@ -99,10 +99,6 @@ def change_prothesenart():  # Eingabemaske anpassen...
         w.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         w.checkBox_trochanterabriss.setCheckState(False)
 
-    init_comboBox_proximal()  # beide Auswahlmasken initialisieren
-    init_comboBox_distal()
-
-
 
 def change_abweichung():  # Abweichung an und aus
     wglist = (  # Elemente der Eingabemaske in Liste laden
@@ -125,7 +121,6 @@ def change_abweichung():  # Abweichung an und aus
             wg.setCheckState(False)
 
 
-
 def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
     if w.checkBox_wechseleingriff.isChecked() == True:
         w.checkBox_knochenverankert.setVisible(True)  # Checkbox knochenverankert ein-
@@ -134,26 +129,23 @@ def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
         w.checkBox_knochenverankert.setCheckState(False)
 
 
-
 def init_lineEdit_patientennummer():  # Patientennummer initialisieren
     w.lineEdit_patientennummer.setText('48000000')  # Maske vorbelegen
     w.lineEdit_patientennummer.setCursorPosition(2)  # Cursor auf 3. Position
 
 
-
 def init_comboBox_seite():  # Seitenangabe ...
+    w.comboBox_seite.clear()
     w.comboBox_seite.addItem('rechts')
     w.comboBox_seite.addItem('links')
 
 
-
 def init_comboBox_prothesenart():  # Prothesenart ...
+    w.comboBox_prothesenart.clear()
     w.comboBox_prothesenart.addItem('Hüfte')
     w.comboBox_prothesenart.addItem('Knie')
     w.comboBox_prothesenart.addItem('Schulter')
     w.comboBox_prothesenart.addItem('Radiusköpfchen')
-    w.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
-
 
 
 def init_comboBox_proximal():  # Eingabemasken Implantate proximal und distal
@@ -187,7 +179,6 @@ def init_comboBox_proximal():  # Eingabemasken Implantate proximal und distal
         for it in ("",
                    "sonstiges"):
             w.comboBox_proximal.addItem(it)
-
 
 
 def init_comboBox_distal():
@@ -225,6 +216,61 @@ def init_comboBox_distal():
             w.comboBox_distal.addItem(it)
 
 
+def init_dateEdit_opdatum():
+    w.dateEdit_opdatum.setMinimumDate(QDate(2018, 1, 1))
+    w.dateEdit_opdatum.setMaximumDate(QDate(2020, 12, 31))
+
+
+def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
+    w.comboBox_operateur.clear()
+    w.comboBox_assistenz.clear()
+    open_db()
+    cur.execute("""SELECT "Operateur" FROM "Prothesen";""")
+    lesen = set(cur.fetchall())  # Satz aller Operateure (auch None!)
+    operateur = [it[0] for it in lesen if it[0] != None]  # Operateurliste bereinigen
+    for op in sorted(operateur):  # Einweiser laden
+        w.comboBox_operateur.addItem(op)
+        w.comboBox_assistenz.addItem(op)
+    close_db()
+    w.comboBox_operateur.setCurrentText('Joker')  # Eingabe leer
+    w.comboBox_assistenz.setCurrentText('Joker')
+
+
+def change_operateur():
+    if test_operateur(w.comboBox_operateur.currentText(), w.comboBox_assistenz.currentText()) == False:
+        uwe.exec()  # Fenster Eingabefehler
+        w.comboBox_operateur.setCurrentText('Joker')
+
+
+def change_assistenz():
+    if test_operateur(w.comboBox_operateur.currentText(), w.comboBox_assistenz.currentText()) == False:
+        uwe.exec()  # Fenster Eingabefehler
+        w.comboBox_assistenz.setCurrentText('Joker')
+
+
+def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
+    if op1 == 'Joker' and op2 == 'Joker':
+        return True
+    elif op1 == '' and op2 == '':
+        return True
+    elif op1 == op2:
+        return False
+    else:
+        return True
+
+
+def set_start_default():  # alle Eingaben auf Standard stellen...
+    for it in lineEditState.keys():
+        it.setText(lineEditState[it])
+    for it in checkBoxState:
+        it.setCheckState(checkBoxState[it])
+
+
+def speichern():
+    # prüfen unbd speichern
+    init_neuesFormular()
+    set_start_default()
+
 
 def init_neuesFormular():  # neues Formular initialisieren
     init_lineEdit_patientennummer()
@@ -234,15 +280,31 @@ def init_neuesFormular():  # neues Formular initialisieren
     init_comboBox_seite()
     init_comboBox_proximal()
     init_comboBox_distal()
+    init_dateEdit_opdatum()
     change_abweichung()
+    init_comboBox_operateur()
     init_comboBox_einweiser()
-
 
 
 # Hauptprogramm
 w.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
 w.checkBox_abweichung.stateChanged.connect(change_abweichung)  # Ereignis Abweichung an / aus
 w.pushButton_suche.clicked.connect(suche_patientennummer)  # Ereignis Button Patientensuche gedrückt
+w.comboBox_operateur.currentTextChanged.connect(change_operateur)  # Ereignis Wechsel Operateur
+w.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis Wechsel Assistenz
+w.commandLinkButton_speichern.pressed.connect(speichern)  # Ereignis Speichertaste gedrückt
+w.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
+
 init_neuesFormular()  # Aufruf neues Formular
+
+lineEdits = w.findChildren(QLineEdit)  # Status in Dictionaries speichern
+lineEditState = {}
+for it in lineEdits:
+    lineEditState.update({it: it.text()})
+checkBoxState = {}
+checkBoxes = w.findChildren(QCheckBox)
+for it in checkBoxes:
+    checkBoxState.update({it: it.checkState()})
+
 w.show()  # Fenster anzeigen
 sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
