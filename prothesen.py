@@ -266,6 +266,19 @@ def set_start_default():  # alle Eingaben auf Standard stellen...
         it.setCheckState(checkBoxState[it])
 
 
+def save_state():  # Status in Dictionaries speichern
+    lineEdits = w.findChildren(QLineEdit)
+    global lineEditState
+    lineEditState = {}
+    for it in lineEdits:
+        lineEditState.update({it: it.text()})
+    global checkBoxState
+    checkBoxState = {}
+    checkBoxes = w.findChildren(QCheckBox)
+    for it in checkBoxes:
+        checkBoxState.update({it: it.checkState()})
+
+
 def speichern():
     # prüfen unbd speichern
     init_neuesFormular()
@@ -296,15 +309,7 @@ w.commandLinkButton_speichern.pressed.connect(speichern)  # Ereignis Speichertas
 w.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
 
 init_neuesFormular()  # Aufruf neues Formular
-
-lineEdits = w.findChildren(QLineEdit)  # Status in Dictionaries speichern
-lineEditState = {}
-for it in lineEdits:
-    lineEditState.update({it: it.text()})
-checkBoxState = {}
-checkBoxes = w.findChildren(QCheckBox)
-for it in checkBoxes:
-    checkBoxState.update({it: it.checkState()})
+save_state()    # als Standard speichern
 
 w.show()  # Fenster anzeigen
 sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
