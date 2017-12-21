@@ -16,7 +16,7 @@ dic_prothesen = {}  # Dictionary für Formulardaten
 
 
 def open_db():
-    # Datenbankfehler abfangen!!!
+    # TODO Datenbankfehler abfangen!!!
     global conn
     conn = psycopg2.connect("dbname='prothesen2' user='postgres' password='postgres'")
     global cur
@@ -24,13 +24,115 @@ def open_db():
 
 
 def close_db():
+    # TODO Datenbankfehler abfangen!!!
     conn.commit()
     cur.close()
     conn.close()
 
 
+def change_patientennummer():
+    if w.lineEdit_patientennummer.cursorPosition() == 8 or len(w.lineEdit_patientennummer.text()) == 8:
+        suche_patientennummer()
+    elif w.pushButton_suche.text() == 'Laden':
+        w.label_alt_patnummer.setText('----------')
+        w.label_alt_proth_art.setText('----------------')
+        w.label_alt_seite.setText('------')
+        w.label_alt_op_datum.setText('-----------')
+        w.pushButton_suche.setText('Suche')
+
+
+def datensatz_laden(patnr):
+    global dic_prothesen
+    suche = """SELECT "ID", "Patientennummer","Prothesenart","Prothesentyp",proximal,distal,"Seite","Wechseleingriff",\
+"Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
+"Luxation","Inklinationswinkel","Trochanterabriss","Fissuren","Thrombose/Embolie","Sterblichkeit","Neurologie",\
+"Dokumentation","Memo",knochenverankert,periprothetisch,"Reintervention","Abweichung","CT",ab_imp_art,ab_imp_groesse,\
+ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweiser" \
+  FROM "Prothesen" WHERE "Patientennummer" = """
+    suche += patnr + ';'
+    open_db()
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    k_list = ["ID", "Patientennummer", "Prothesenart", "Prothesentyp", "proximal", "distal", "Seite", "Wechseleingriff",
+              "Praeop_roentgen", "Postop_roentgen", "Fraktur", "Planung", "Opdatum", "Operateur", "Assistenz",
+              "Op_zeiten", "Infektion", "Luxation", "Inklinationswinkel", "Trochanterabriss", "Fissuren",
+              "Thrombose/Embolie",
+              "Sterblichkeit", "Neurologie", "Dokumentation", "Memo", "knochenverankert", "periprothetisch",
+              "Reintervention",
+              "Abweichung", "CT", "ab_imp_art", "ab_imp_groesse", "ab_stab", "ab_blutung", "ab_präop", "ab_operation",
+              "ab_anaesthesie", "spaet_infekt", "Einweiser"]
+    v_list = list(lesen)
+    if len(dic_prothesen) < len(k_list):  # Datensatz noch nicht im Dictionary Formulardaten?
+        dic_prothesen = dict(zip(k_list, v_list))  # leeres Dictionary Formulardaten mit Datensatz füllen
+    else:
+        pos = 0
+        for it in k_list:
+            dic_prothesen.update({it: lesen[pos]})  # Dictionary Formulardaten mit Datensatz aktualisieren...
+            pos += 1
+    close_db()
+    aktualisiere_widgets()
+
+
+def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
+    w.comboBox_prothesenart.setCurrentText(dic_prothesen['Prothesenart'])
+    w.comboBox_seite.setCurrentText(dic_prothesen['Seite'])
+    w.comboBox_proximal.setCurrentText(dic_prothesen['proximal'])
+    w.comboBox_proximal.setCurrentText(dic_prothesen['distal'])
+    w.checkBox_wechseleingriff.setCheckState(dic_prothesen['Wechseleingriff'])
+    print (type(dic_prothesen['Praeop_roentgen']))
+    w.checkBox_praeop_roentgen.setChecked(dic_prothesen['Praeop_roentgen'])
+    w.checkBox_postop_roentgen.setCheckState(dic_prothesen['Postop_roentgen'])
+    w.checkBox_fraktur.setCheckState(dic_prothesen['Fraktur'])
+    w.checkBox_praeop_planung.setCheckState(dic_prothesen['Planung'])
+    ds = str(dic_prothesen['Opdatum'])
+    yy = int(ds[0:4])
+    mm = int(ds[5:7])
+    dd = int(ds[8:10])
+    print (yy,mm,dd)
+    w.dateEdit_opdatum.setDate(QDate(yy,mm,dd))
+
+
+
+"""
+    ''Operateur'' \
+    ''Assistenz',
+    "Op_zeiten"" \
+    ""Infektion"\
+    "Luxation"\
+    "Inklinationswinkel"" \
+    ""Trochanterabriss"" \
+    ""Fissuren"
+    "Thrombose/Embolie",
+    "Sterblichkeit", "Neurologie", "Dokumentation", "Memo", "knochenverankert", "periprothetisch",
+    "Reintervention",
+    "Abweichung", "CT", "ab_imp_art", "ab_imp_groesse", "ab_stab", "ab_blutung", "ab_präop", "ab_operation",
+    "ab_anaesthesie", "spaet_infekt", "Einweiser"]
+"""
+
 def suche_patientennummer():
-    pass
+    patnr = w.lineEdit_patientennummer.text()
+    if w.pushButton_suche.text() == 'Laden':
+        datensatz_laden(patnr)
+    if w.lineEdit_patientennummer.text() == '':
+        patnr = '0'  # sonst Fehler bei Postgres
+    suche = """SELECT "Patientennummer","Prothesenart","Seite","Opdatum" FROM "Prothesen" WHERE "Patientennummer" = """
+    suche += patnr + ';'
+    open_db()
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    if lesen:
+        w.label_alt_patnummer.setText(str(lesen[0]))
+        w.label_alt_proth_art.setText(str(lesen[1]))
+        w.label_alt_seite.setText(str(lesen[2]))
+        w.label_alt_op_datum.setText(str(lesen[3]))
+        w.pushButton_suche.setText('Laden')
+    else:
+        w.label_alt_patnummer.setText('----------')
+        w.label_alt_proth_art.setText('----------------')
+        w.label_alt_seite.setText('------')
+        w.label_alt_op_datum.setText('-----------')
+        w.pushButton_suche.setText('Suche')
+    close_db()
 
 
 def init_comboBox_einweiser():  # Eingabemaske Einweiser initialisieren
@@ -108,17 +210,17 @@ def change_abweichung():  # Abweichung an und aus
         w.checkBox_operation,
         w.checkBox_implantat,
         w.checkBox_stabilisatoren,
-        w.checkBox_anaesthesie,
-        w.frame)
+        w.checkBox_anaesthesie)
 
     if w.checkBox_abweichung.isChecked() == True:  # Eingabemaske für Abweichungen...
         for wg in wglist:  # einschalten
             wg.setVisible(True)
+        w.frame.setVisible(True)
     else:
         for wg in wglist:  # ausschalten
             wg.setVisible(False)
-        for wg in wglist[:-1]:  # frame hat kein setCheckState!
             wg.setCheckState(False)
+        w.frame.setVisible(False)
 
 
 def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
@@ -217,7 +319,7 @@ def init_comboBox_distal():
 
 
 def init_dateEdit_opdatum():
-    w.dateEdit_opdatum.setMinimumDate(QDate(2018, 1, 1))
+    # w.dateEdit_opdatum.setMinimumDate(QDate(2018, 1, 1))
     w.dateEdit_opdatum.setMaximumDate(QDate(2020, 12, 31))
 
 
@@ -260,10 +362,12 @@ def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
 
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
+    w.pushButton_suche.setText('Suche')  # Schalter zurückstellen, sonst Datensatzsuche!
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
     for it in checkBoxState:
         it.setCheckState(checkBoxState[it])
+
 
 
 def save_state():  # Status in Dictionaries speichern
@@ -280,12 +384,13 @@ def save_state():  # Status in Dictionaries speichern
 
 
 def speichern():
-    # prüfen unbd speichern
-    init_neuesFormular()
-    set_start_default()
+    # prüfen und speichern
 
+    set_start_default()
+    init_neuesFormular()
 
 def init_neuesFormular():  # neues Formular initialisieren
+
     init_lineEdit_patientennummer()
     init_comboBox_prothesenart()
     change_prothesenart()
@@ -307,9 +412,10 @@ w.comboBox_operateur.currentTextChanged.connect(change_operateur)  # Ereignis We
 w.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis Wechsel Assistenz
 w.commandLinkButton_speichern.pressed.connect(speichern)  # Ereignis Speichertaste gedrückt
 w.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
+w.lineEdit_patientennummer.textChanged.connect(change_patientennummer)
 
 init_neuesFormular()  # Aufruf neues Formular
-save_state()    # als Standard speichern
+save_state()  # als Standard speichern
 
 w.show()  # Fenster anzeigen
 sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
