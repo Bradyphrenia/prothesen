@@ -1,16 +1,13 @@
 import sys
-
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-# from PyQt5.uic import *
-
 import psycopg2
 from mainwindow import Ui_MainWindow
 from achtung import Ui_Dialog
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):   # Python 3 Mainwindow-Klasse
+class MainWindow(QMainWindow, Ui_MainWindow):  # Python 3 Mainwindow-Klasse
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent=parent)
         self.setupUi(self)
@@ -27,6 +24,8 @@ w = MainWindow()
 uwe = achtung()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
+
+status = False  # Datensatzstatus False -> append, True -> update
 
 
 def open_db():
@@ -45,17 +44,23 @@ def close_db():
 
 
 def change_patientennummer():
+    global status
+    if status:
+        if w.lineEdit_patientennummer.text() != w.label_alt_patnummer.text():
+            status = False
     if w.lineEdit_patientennummer.cursorPosition() == 8 or len(w.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
-    elif w.pushButton_suche.text() == 'Laden':
+    elif w.pushButton_suche.text() == 'Laden...':
         w.label_alt_patnummer.setText('----------')
         w.label_alt_proth_art.setText('----------------')
         w.label_alt_seite.setText('------')
         w.label_alt_op_datum.setText('-----------')
-        w.pushButton_suche.setText('Suche')
+        w.pushButton_suche.setText('Suche...')
 
 
 def datensatz_laden(patnr):
+    global status
+    status = True
     global dic_prothesen
     suche = """SELECT "ID", "Patientennummer","Prothesenart","Prothesentyp",proximal,distal,"Seite","Wechseleingriff",\
 "Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
@@ -88,25 +93,26 @@ ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweis
 
 
 def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
+    w.pushButton_suche.setText('Ändern')
     w.comboBox_prothesenart.setCurrentText(dic_prothesen['Prothesenart'])
     w.comboBox_seite.setCurrentText(dic_prothesen['Seite'])
     w.comboBox_proximal.setCurrentText(dic_prothesen['proximal'])
     w.comboBox_proximal.setCurrentText(dic_prothesen['distal'])
-    w.checkBox_wechseleingriff.setCheckState(dic_prothesen['Wechseleingriff'])
-    print(type(dic_prothesen['Praeop_roentgen']))
+    w.checkBox_wechseleingriff.setChecked(dic_prothesen['Wechseleingriff'])
     w.checkBox_praeop_roentgen.setChecked(dic_prothesen['Praeop_roentgen'])
-    w.checkBox_postop_roentgen.setCheckState(dic_prothesen['Postop_roentgen'])
-    w.checkBox_fraktur.setCheckState(dic_prothesen['Fraktur'])
-    w.checkBox_praeop_planung.setCheckState(dic_prothesen['Planung'])
+    w.checkBox_postop_roentgen.setChecked(dic_prothesen['Postop_roentgen'])
+    w.checkBox_fraktur.setChecked(dic_prothesen['Fraktur'])
+    w.checkBox_praeop_planung.setChecked(dic_prothesen['Planung'])
     ds = str(dic_prothesen['Opdatum'])
     yy = int(ds[0:4])
     mm = int(ds[5:7])
     dd = int(ds[8:10])
-    print(yy, mm, dd)
     w.dateEdit_opdatum.setDate(QDate(yy, mm, dd))
 
 
+# TODO hier weiter
 """
+
     ''Operateur'' \
     ''Assistenz',
     "Op_zeiten"" \
@@ -123,9 +129,16 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
 """
 
 
-def suche_patientennummer():
+def aktualisiere_dictionary():
+    pass
+
+
+# TODO Daten aus Formular in das Dictionary laden...
+
+
+def suche_patientennummer():  # Schalter mit 2 Funktionen Suchen / Laden
     patnr = w.lineEdit_patientennummer.text()
-    if w.pushButton_suche.text() == 'Laden':
+    if w.pushButton_suche.text() == 'Laden...':
         datensatz_laden(patnr)
     if w.lineEdit_patientennummer.text() == '':
         patnr = '0'  # sonst Fehler bei Postgres
@@ -139,13 +152,13 @@ def suche_patientennummer():
         w.label_alt_proth_art.setText(str(lesen[1]))
         w.label_alt_seite.setText(str(lesen[2]))
         w.label_alt_op_datum.setText(str(lesen[3]))
-        w.pushButton_suche.setText('Laden')
+        w.pushButton_suche.setText('Laden...')
     else:
         w.label_alt_patnummer.setText('----------')
         w.label_alt_proth_art.setText('----------------')
         w.label_alt_seite.setText('------')
         w.label_alt_op_datum.setText('-----------')
-        w.pushButton_suche.setText('Suche')
+        w.pushButton_suche.setText('Suche...')
     close_db()
 
 
@@ -376,7 +389,9 @@ def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
 
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
-    w.pushButton_suche.setText('Suche')  # Schalter zurückstellen, sonst Datensatzsuche!
+    w.pushButton_suche.setText('Suche...')  # Schalter zurückstellen, sonst Datensatzsuche!
+    global status
+    status = False  # Datensatzstatus zurücksetzen
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
     for it in checkBoxState:
