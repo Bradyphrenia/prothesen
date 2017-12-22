@@ -433,15 +433,15 @@ def init_neuesFormular():  # neues Formular initialisieren
     init_comboBox_einweiser()
 
 
-# Hauptprogramm
+# Ereignisse mit Funktionen verbinden...
 w.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
 w.checkBox_abweichung.stateChanged.connect(change_abweichung)  # Ereignis Abweichung an / aus
-w.pushButton_suche.clicked.connect(suche_patientennummer)  # Ereignis Button Patientensuche gedrückt
+w.pushButton_suche.clicked.connect(suche_patientennummer)  # Ereignis Taste Suchen/Laden gedrückt
 w.comboBox_operateur.currentTextChanged.connect(change_operateur)  # Ereignis Wechsel Operateur
 w.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis Wechsel Assistenz
-w.commandLinkButton_speichern.pressed.connect(speichern)  # Ereignis Speichertaste gedrückt
+w.commandLinkButton_speichern.pressed.connect(speichern)  # Ereignis Taste Speichern gedrückt
 w.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
-w.lineEdit_patientennummer.textChanged.connect(change_patientennummer)
+w.lineEdit_patientennummer.textChanged.connect(change_patientennummer)  # Ereignis Änderung Patientennummer
 
 init_neuesFormular()  # Aufruf neues Formular
 save_state()  # als Standard speichern
