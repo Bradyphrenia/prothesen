@@ -3,14 +3,28 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.uic import *
+# from PyQt5.uic import *
 
 import psycopg2
+from mainwindow import Ui_MainWindow
+from achtung import Ui_Dialog
+
+
+class MainWindow(QMainWindow, Ui_MainWindow):   # Python 3 Mainwindow-Klasse
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__(parent=parent)
+        self.setupUi(self)
+
+
+class achtung(QDialog, Ui_Dialog):  # Python 3 Dialog-Klasse
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
 
 app = QApplication(sys.argv)
-
-w = loadUi('mainwindow.ui')  # Hauptfenster
-uwe = loadUi('achtung.ui')  # Unterfenster Fehler
+w = MainWindow()
+uwe = achtung()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
 
@@ -79,7 +93,7 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     w.comboBox_proximal.setCurrentText(dic_prothesen['proximal'])
     w.comboBox_proximal.setCurrentText(dic_prothesen['distal'])
     w.checkBox_wechseleingriff.setCheckState(dic_prothesen['Wechseleingriff'])
-    print (type(dic_prothesen['Praeop_roentgen']))
+    print(type(dic_prothesen['Praeop_roentgen']))
     w.checkBox_praeop_roentgen.setChecked(dic_prothesen['Praeop_roentgen'])
     w.checkBox_postop_roentgen.setCheckState(dic_prothesen['Postop_roentgen'])
     w.checkBox_fraktur.setCheckState(dic_prothesen['Fraktur'])
@@ -88,9 +102,8 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     yy = int(ds[0:4])
     mm = int(ds[5:7])
     dd = int(ds[8:10])
-    print (yy,mm,dd)
-    w.dateEdit_opdatum.setDate(QDate(yy,mm,dd))
-
+    print(yy, mm, dd)
+    w.dateEdit_opdatum.setDate(QDate(yy, mm, dd))
 
 
 """
@@ -108,6 +121,7 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     "Abweichung", "CT", "ab_imp_art", "ab_imp_groesse", "ab_stab", "ab_blutung", "ab_präop", "ab_operation",
     "ab_anaesthesie", "spaet_infekt", "Einweiser"]
 """
+
 
 def suche_patientennummer():
     patnr = w.lineEdit_patientennummer.text()
@@ -369,7 +383,6 @@ def set_start_default():  # alle Eingaben auf Standard stellen...
         it.setCheckState(checkBoxState[it])
 
 
-
 def save_state():  # Status in Dictionaries speichern
     lineEdits = w.findChildren(QLineEdit)
     global lineEditState
@@ -388,6 +401,7 @@ def speichern():
 
     set_start_default()
     init_neuesFormular()
+
 
 def init_neuesFormular():  # neues Formular initialisieren
 
