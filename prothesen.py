@@ -28,6 +28,7 @@ dic_prothesen = {}  # Dictionary für Formulardaten
 status = False  # Datensatzstatus False -> append, True -> update
 
 
+
 def init_dictionary():
     global k_list, dic_prothesen
     k_list = ["ID", "Patientennummer", "Prothesenart", "Prothesentyp", "proximal", "distal", "Seite", "Wechseleingriff",
@@ -70,7 +71,7 @@ def change_patientennummer():
         w.label_alt_proth_art.setText('----------------')
         w.label_alt_seite.setText('------')
         w.label_alt_op_datum.setText('-----------')
-        w.pushButton_suche.setText('Suche...')
+        w.pushButton_suche.setText('Suchen...')
 
 
 def datensatz_laden(patnr):
@@ -125,16 +126,18 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     w.plainTextEdit_memo.setPlainText(dic_prothesen['Memo'])
     w.checkBox_knochenverankert.setChecked(dic_prothesen['knochenverankert'])
     w.checkBox_periprothetisch.setChecked(dic_prothesen['periprothetisch'])
-
-
-# TODO hier weiter
-"""
-
-    "Reintervention",
-    "Abweichung", "CT", "ab_imp_art", "ab_imp_groesse", "ab_stab", "ab_blutung", "ab_präop", "ab_operation",
-    "ab_anaesthesie", "spaet_infekt", "Einweiser"]
-"""
-
+    w.checkBox_reintervention.setChecked(dic_prothesen['Reintervention'])
+    w.checkBox_abweichung.setChecked(dic_prothesen['Abweichung'])
+    w.checkBox_ct.setChecked(dic_prothesen['CT'])
+    w.checkBox_implantation.setChecked(dic_prothesen['ab_imp_art'])
+    w.checkBox_implantat.setChecked(dic_prothesen['ab_imp_groesse'])
+    w.checkBox_stabilisatoren.setChecked(dic_prothesen['ab_stab'])
+    w.checkBox_blutung.setChecked(dic_prothesen['ab_blutung'])
+    w.checkBox_vorbereitung.setChecked(dic_prothesen['ab_präop'])
+    w.checkBox_operation.setChecked(dic_prothesen['ab_operation'])
+    w.checkBox_anaesthesie.setChecked(dic_prothesen['ab_anaesthesie'])
+    w.checkBox_spaetinfektion.setChecked(dic_prothesen['spaet_infekt'])
+    w.comboBox_einweiser.setCurrentText(dic_prothesen['Einweiser'])
 
 def aktualisiere_dictionary():  # TODO Daten aus Formular in das Dictionary laden...
     pass
@@ -167,7 +170,7 @@ def suche_patientennummer():
         w.label_alt_proth_art.setText('----------------')
         w.label_alt_seite.setText('------')
         w.label_alt_op_datum.setText('-----------')
-        w.pushButton_suche.setText('Suche...')
+        w.pushButton_suche.setText('Suchen...')
     close_db()
 
 
@@ -400,7 +403,7 @@ def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
 
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
-    w.pushButton_suche.setText('Suche...')  # Schalter zurückstellen, sonst Datensatzsuche!
+    w.pushButton_suche.setText('Suchen...')  # Schalter zurückstellen, sonst Datensatzsuche!
     global status
     status = False  # Datensatzstatus zurücksetzen
     for it in lineEditState.keys():
