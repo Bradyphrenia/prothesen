@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 import psycopg2
 from mainwindow import Ui_MainWindow
 from achtung import Ui_Dialog
-
+import datetime
 
 class MainWindow(QMainWindow, Ui_MainWindow):  # Mainwindow-Klasse
     def __init__(self, parent=None):
@@ -139,8 +139,45 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     w.checkBox_spaetinfektion.setChecked(dic_prothesen['spaet_infekt'])
     w.comboBox_einweiser.setCurrentText(dic_prothesen['Einweiser'])
 
-def aktualisiere_dictionary():  # TODO Daten aus Formular in das Dictionary laden...
-    pass
+def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
+    dic_prothesen['Prothesenart']  =  w.comboBox_prothesenart.currentText()
+    dic_prothesen['Seite'] = w.comboBox_seite.currentText()
+    dic_prothesen['proximal'] = w.comboBox_proximal.currentText()
+    dic_prothesen['distal']= w.comboBox_proximal.currentText()
+    dic_prothesen['Wechseleingriff'] = w.checkBox_wechseleingriff.isChecked()
+    dic_prothesen['Praeop_roentgen']= w.checkBox_praeop_roentgen.isChecked()
+    dic_prothesen['Postop_roentgen']= w.checkBox_postop_roentgen.isChecked()
+    dic_prothesen['Fraktur'] = w.checkBox_fraktur.isChecked()
+    dic_prothesen['Planung'] = w.checkBox_praeop_planung.isChecked()
+    dic_prothesen['Opdatum'] = w.dateEdit_opdatum.date().toString('yyyy-MM-dd')
+    dic_prothesen['Operateur'] = w.comboBox_operateur.currentText()
+    dic_prothesen['Assistenz'] = w.comboBox_assistenz.currentText()
+    dic_prothesen['Op_zeiten'] = int(w.lineEdit_operationszeit.text())
+    dic_prothesen['Infektion'] = w.checkBox_infektion.isChecked()
+    dic_prothesen['Luxation'] = w.checkBox_luxation.isChecked()
+    dic_prothesen['Inklinationswinkel'] = int(w.lineEdit_inklinationswinkel.text())
+    dic_prothesen['Trochanterabriss'] = w.checkBox_trochanterabriss.isChecked()
+    dic_prothesen['Fissuren'] = w.checkBox_fissur.isChecked()
+    dic_prothesen['Thrombose/Embolie'] = w.checkBox_thromboembolie.isChecked()
+    dic_prothesen['Sterblichkeit'] = w.checkBox_gestorben.isChecked()
+    dic_prothesen['Neurologie'] = w.checkBox_neurologie.isChecked()
+    dic_prothesen['Dokumentation'] = w.checkBox_vollstaendig.isChecked()
+    dic_prothesen['Memo'] = w.plainTextEdit_memo.toPlainText()
+    dic_prothesen['knochenverankert'] = w.checkBox_knochenverankert.isChecked()
+    dic_prothesen['periprothetisch'] = w.checkBox_periprothetisch.isChecked()
+    dic_prothesen['Reintervention'] = w.checkBox_reintervention.isChecked()
+    dic_prothesen['Abweichung'] = w.checkBox_abweichung.isChecked()
+    dic_prothesen['CT'] = w.checkBox_ct.isChecked()
+    dic_prothesen['ab_imp_art'] = w.checkBox_implantation.isChecked()
+    dic_prothesen['ab_imp_groesse'] = w.checkBox_implantat.isChecked()
+    dic_prothesen['ab_stab'] = w.checkBox_stabilisatoren.isChecked()
+    dic_prothesen['ab_blutung'] = w.checkBox_blutung.isChecked()
+    dic_prothesen['ab_präop'] = w.checkBox_vorbereitung.isChecked()
+    dic_prothesen['ab_operation'] = w.checkBox_operation.isChecked()
+    dic_prothesen['ab_anaesthesie'] = w.checkBox_anaesthesie.isChecked()
+    dic_prothesen['spaet_infekt'] = w.checkBox_spaetinfektion.isChecked()
+    dic_prothesen['Einweiser'] = w.comboBox_einweiser.currentText()
+# TODO Prüfung...
 
 
 
@@ -401,6 +438,26 @@ def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
     else:
         return True
 
+def change_opzeit():   # TODO '' abfangen!
+    zt = int(w.lineEdit_operationszeit.text())
+    print(zt)
+    if zt > 100 and w.comboBox_prothesenart.currentText() == 'Hüfte':
+        w.label_zeit_achtung.setVisible(True)
+    elif zt > 110 and w.comboBox_prothesenart.currentText() == 'Knie':
+        w.label_zeit_achtung.setVisible(True)
+    else:
+        w.label_zeit_achtung.setVisible(False)
+
+def change_inklination():   # TODO '' abfangen!
+    ik = int(w.lineEdit_inklinationswinkel.text())
+    print(ik)
+    if ik > 50 and w.comboBox_prothesenart.currentText() == 'Hüfte':
+        w.label_inklination_achtung.setVisible(True)
+    else:
+        w.label_inklination_achtung.setVisible(False)
+
+
+
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
     w.pushButton_suche.setText('Suchen...')  # Schalter zurückstellen, sonst Datensatzsuche!
@@ -428,6 +485,8 @@ def save_state():  # Status der Widgets in Dictionaries speichern
 def speichern():
     # TODO prüfen und speichern
     print(dic_prothesen)
+    aktualisiere_dictionary()
+    print(dic_prothesen)
     set_start_default()
     init_neuesFormular()
 
@@ -445,6 +504,8 @@ def init_neuesFormular():  # neues Formular initialisieren
     change_abweichung()
     init_comboBox_operateur()
     init_comboBox_einweiser()
+    w.label_zeit_achtung.setVisible(False)
+    w.label_inklination_achtung.setVisible(False)
 
 
 # Ereignisse mit Funktionen verbinden...
@@ -456,7 +517,8 @@ w.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis We
 w.pushButton_speichern.pressed.connect(speichern)  # Ereignis Taste Speichern gedrückt
 w.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
 w.lineEdit_patientennummer.textChanged.connect(change_patientennummer)  # Ereignis Änderung Patientennummer
-
+w.lineEdit_operationszeit.textChanged.connect(change_opzeit)
+w.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
 init_neuesFormular()  # Aufruf neues Formular
 save_state()  # als Standard speichern
 
