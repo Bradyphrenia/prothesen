@@ -327,6 +327,10 @@ class Ui_MainWindow(object):
         self.checkBox_gestorben.setGeometry(QtCore.QRect(104, 150, 87, 20))
         self.checkBox_gestorben.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.checkBox_gestorben.setObjectName("checkBox_gestorben")
+        self.checkBox_periprothetisch = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_periprothetisch.setGeometry(QtCore.QRect(292, 308, 121, 20))
+        self.checkBox_periprothetisch.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.checkBox_periprothetisch.setObjectName("checkBox_periprothetisch")
         self.label_boddenkliniken.raise_()
         self.pushButton_suche.raise_()
         self.label_patientennummer.raise_()
@@ -374,6 +378,7 @@ class Ui_MainWindow(object):
         self.groupBox_vorhanden.raise_()
         self.groupBox_abweichung.raise_()
         self.groupBox_komplikation.raise_()
+        self.checkBox_periprothetisch.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -486,6 +491,7 @@ class Ui_MainWindow(object):
         self.checkBox_thromboembolie.setText(_translate("MainWindow", "Thrombose / Embolie:"))
         self.checkBox_neurologie.setText(_translate("MainWindow", "neurolog. Komplikationen:"))
         self.checkBox_gestorben.setText(_translate("MainWindow", "gestorben:"))
+        self.checkBox_periprothetisch.setText(_translate("MainWindow", "periprothetisch"))
 
 
 if __name__ == "__main__":

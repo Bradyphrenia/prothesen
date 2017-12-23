@@ -1167,6 +1167,22 @@
      </property>
     </widget>
    </widget>
+   <widget class="QCheckBox" name="checkBox_periprothetisch">
+    <property name="geometry">
+     <rect>
+      <x>292</x>
+      <y>308</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>periprothetisch</string>
+    </property>
+   </widget>
    <zorder>label_boddenkliniken</zorder>
    <zorder>pushButton_suche</zorder>
    <zorder>label_patientennummer</zorder>
@@ -1214,6 +1230,7 @@
    <zorder>groupBox_vorhanden</zorder>
    <zorder>groupBox_abweichung</zorder>
    <zorder>groupBox_komplikation</zorder>
+   <zorder>checkBox_periprothetisch</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
