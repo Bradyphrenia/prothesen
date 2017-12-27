@@ -516,16 +516,16 @@ ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweis
  = ("""
         pos = 0
         for it in k_list:
-            if it != 'ID':  # Update ohne 'ID'
+            if it != 'ID':  # Postgres-Update ohne 'ID'
                 schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'Einweiser' else ''
+                schreiben += ',' if it != 'Einweiser' else ''   # letztes Feld?
         schreiben += """) WHERE "ID" = """
         schreiben += str(idnr) + ';'
         print(schreiben)
         open_db()
         cur.execute(schreiben)
         close_db()
-    else:   # Insert
+    else:  # Insert
         schreiben = """INSERT INTO "Prothesen" ("Patientennummer","Prothesenart","Prothesentyp",proximal,distal,"Seite","Wechseleingriff",\
 "Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
 "Luxation","Inklinationswinkel","Trochanterabriss","Fissuren","Thrombose/Embolie","Sterblichkeit","Neurologie",\
@@ -534,10 +534,10 @@ ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweis
  VALUES ("""
         pos = 0
         for it in k_list:
-            if it != 'ID':  # Update ohne 'ID'
+            if it != 'ID':  # Postgres-Insert ohne 'ID'
 
                 schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'Einweiser' else ''
+                schreiben += ',' if it != 'Einweiser' else ''   # letztes Feld?
         schreiben += """);"""
         print(schreiben)
         open_db()
