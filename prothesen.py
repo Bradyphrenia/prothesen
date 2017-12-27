@@ -25,9 +25,9 @@ w = MainWindow()
 uwe = achtung()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
-dic_typ = {}  # Typ für Speicherung in Postgres
+dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
 
-status = False  # Datensatzstatus False -> append, True -> update
+status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
 
 
 def init_dictionary():
@@ -53,9 +53,6 @@ def init_dictionary():
     dic_typ['Assistenz'] = 1
     dic_typ['Memo'] = 1
     dic_typ['Einweiser'] = 1
-
-    print(dic_prothesen)
-    print(dic_typ)
 
 
 def open_db():
@@ -197,9 +194,6 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['Einweiser'] = w.comboBox_einweiser.currentText()
 
 
-# TODO Prüfung...
-
-
 def schalter_suchen_laden():  # Schalter mit 2 Funktionen Suchen / Laden
     if w.pushButton_suche.text() == 'Laden...':
         patnr = w.lineEdit_patientennummer.text()
@@ -207,9 +201,8 @@ def schalter_suchen_laden():  # Schalter mit 2 Funktionen Suchen / Laden
 
 
 def suche_patientennummer():
-    patnr = w.lineEdit_patientennummer.text()
-    if w.lineEdit_patientennummer.text() == '':
-        patnr = '0'  # sonst Fehler bei Postgres
+    patnr = (
+    w.lineEdit_patientennummer.text() if w.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
     suche = """SELECT "Patientennummer","Prothesenart","Seite","Opdatum" FROM "Prothesen" WHERE "Patientennummer" = """
     suche += patnr + ';'
     open_db()
@@ -247,52 +240,37 @@ def change_prothesenart():  # Eingabemaske anpassen...
         w.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
         w.lineEdit_praeop_winkel.setText('')
         w.lineEdit_praeop_winkel.setVisible(False)
-
         w.label_postop_winkel.setVisible(False)  # postop. Winkel aus
         w.lineEdit_postop_winkel.setText('')
         w.lineEdit_postop_winkel.setVisible(False)
-
         w.checkBox_luxation.setVisible(True)  # Luxation an
         w.checkBox_luxation.setCheckState(False)
-
         w.label_inklinationswinkel.setVisible(True)  # Inklination an
         w.lineEdit_inklinationswinkel.setVisible(True)
-
         w.checkBox_trochanterabriss.setVisible(True)  # Trochanterabriss an
-
-
     elif w.comboBox_prothesenart.currentText() == 'Knie':
         w.label_praeop_winkel.setVisible(True)  # präop. Winkel an
         w.lineEdit_praeop_winkel.setVisible(True)
-
         w.label_postop_winkel.setVisible(True)  # postop. Winkel an
         w.lineEdit_postop_winkel.setVisible(True)
-
         w.lineEdit_inklinationswinkel.setText('')  # Inklination aus
         w.lineEdit_inklinationswinkel.setVisible(False)
         w.label_inklinationswinkel.setVisible(False)
-
         w.checkBox_luxation.setVisible(False)  # Luxation aus
         w.checkBox_luxation.setCheckState(False)
-
         w.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         w.checkBox_trochanterabriss.setCheckState(False)
-
     else:  # Schulter- und Radiusköpchenprothese
         w.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
         w.lineEdit_praeop_winkel.setText('')
         w.lineEdit_praeop_winkel.setVisible(False)
-
         w.label_postop_winkel.setVisible(False)  # postop. Winkel aus
         w.lineEdit_postop_winkel.setText('')
         w.lineEdit_postop_winkel.setVisible(False)
-
         w.label_inklinationswinkel.setVisible(False)  # Inklination aus
         w.lineEdit_inklinationswinkel.setText('')
         w.lineEdit_inklinationswinkel.setVisible(False)
-
         w.checkBox_luxation.setVisible(True)  # Luxation an
-
         w.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         w.checkBox_trochanterabriss.setCheckState(False)
     init_comboBox_proximal()
@@ -308,7 +286,6 @@ def change_abweichung():  # Abweichung an und aus
         w.checkBox_implantat,
         w.checkBox_stabilisatoren,
         w.checkBox_anaesthesie)
-
     if w.checkBox_abweichung.isChecked() == True:  # Eingabemaske für Abweichungen...
         for wg in wglist:  # einschalten
             wg.setVisible(True)
@@ -416,7 +393,7 @@ def init_comboBox_distal():
 
 
 def init_dateEdit_opdatum():
-    # w.dateEdit_opdatum.setMinimumDate(QDate(2018, 1, 1))
+    w.dateEdit_opdatum.setMinimumDate(QDate(2018, 1, 1))
     w.dateEdit_opdatum.setMaximumDate(QDate(2020, 12, 31))
 
 
@@ -460,7 +437,6 @@ def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
 
 def change_opzeit():
     zt = int(w.lineEdit_operationszeit.text() if w.lineEdit_operationszeit.text() != '' else '0')  # '' abfangen!
-    print(zt)
     if zt > 100 and w.comboBox_prothesenart.currentText() == 'Hüfte':
         w.label_zeit_achtung.setVisible(True)
     elif zt > 110 and w.comboBox_prothesenart.currentText() == 'Knie':
@@ -472,7 +448,6 @@ def change_opzeit():
 def change_inklination():
     ik = int(
         w.lineEdit_inklinationswinkel.text() if w.lineEdit_inklinationswinkel.text() != '' else '0')  # '' abfangen!
-    print(ik)
     if ik > 50 and w.comboBox_prothesenart.currentText() == 'Hüfte':
         w.label_inklination_achtung.setVisible(True)
     else:
@@ -503,10 +478,7 @@ def save_state():  # Status der Widgets in Dictionaries speichern
 
 
 def datensatz_speichern(idnr):
-    global status
-
-    global dic_prothesen, k_list
-
+    global status, dic_prothesen, k_list
     if status:  # Update
         schreiben = """UPDATE "Prothesen" SET ("Patientennummer","Prothesenart","Prothesentyp",proximal,distal,"Seite","Wechseleingriff",\
 "Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
@@ -518,7 +490,7 @@ ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweis
         for it in k_list:
             if it != 'ID':  # Postgres-Update ohne 'ID'
                 schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'Einweiser' else ''   # letztes Feld?
+                schreiben += ',' if it != 'Einweiser' else ''  # letztes Feld?
         schreiben += """) WHERE "ID" = """
         schreiben += str(idnr) + ';'
         print(schreiben)
@@ -535,9 +507,8 @@ ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweis
         pos = 0
         for it in k_list:
             if it != 'ID':  # Postgres-Insert ohne 'ID'
-
                 schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'Einweiser' else ''   # letztes Feld?
+                schreiben += ',' if it != 'Einweiser' else ''  # letztes Feld?
         schreiben += """);"""
         print(schreiben)
         open_db()
@@ -548,10 +519,8 @@ ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweis
 
 def speichern():
     # TODO prüfen und speichern
-    print(dic_prothesen)
     aktualisiere_dictionary()
     datensatz_speichern(str(dic_prothesen['ID']))
-    print(dic_prothesen)
     set_start_default()
     init_neuesFormular()
 
@@ -586,6 +555,5 @@ w.lineEdit_operationszeit.textChanged.connect(change_opzeit)
 w.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
 init_neuesFormular()  # Aufruf neues Formular
 save_state()  # als Standard speichern
-
 w.show()  # Fenster anzeigen
 sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
