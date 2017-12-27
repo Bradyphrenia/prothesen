@@ -7,6 +7,7 @@ from mainwindow import Ui_MainWindow
 from achtung import Ui_Dialog
 import datetime
 
+
 class MainWindow(QMainWindow, Ui_MainWindow):  # Mainwindow-Klasse
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent=parent)
@@ -24,13 +25,13 @@ w = MainWindow()
 uwe = achtung()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
+dic_typ = {}  # Typ für Speicherung in Postgres
 
 status = False  # Datensatzstatus False -> append, True -> update
 
 
-
 def init_dictionary():
-    global k_list, dic_prothesen
+    global k_list, dic_prothesen, dic_typ
     k_list = ["ID", "Patientennummer", "Prothesenart", "Prothesentyp", "proximal", "distal", "Seite", "Wechseleingriff",
               "Praeop_roentgen", "Postop_roentgen", "Fraktur", "Planung", "Opdatum", "Operateur", "Assistenz",
               "Op_zeiten", "Infektion", "Luxation", "Inklinationswinkel", "Trochanterabriss", "Fissuren",
@@ -41,7 +42,20 @@ def init_dictionary():
               "ab_anaesthesie", "spaet_infekt", "Einweiser"]  # Key-Liste Datenbank
     for it in k_list:
         dic_prothesen.update({it: None})
+        dic_typ.update({it: 0})
+    dic_typ['Prothesenart'] = 1  # in ' setzen?
+    dic_typ['Prothesentyp'] = 1
+    dic_typ['proximal'] = 1
+    dic_typ['distal'] = 1
+    dic_typ['Seite'] = 1
+    dic_typ['Opdatum'] = 1
+    dic_typ['Operateur'] = 1
+    dic_typ['Assistenz'] = 1
+    dic_typ['Memo'] = 1
+    dic_typ['Einweiser'] = 1
+
     print(dic_prothesen)
+    print(dic_typ)
 
 
 def open_db():
@@ -82,8 +96,8 @@ def datensatz_laden(patnr):
 "Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
 "Luxation","Inklinationswinkel","Trochanterabriss","Fissuren","Thrombose/Embolie","Sterblichkeit","Neurologie",\
 "Dokumentation","Memo",knochenverankert,periprothetisch,"Reintervention","Abweichung","CT",ab_imp_art,ab_imp_groesse,\
-ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweiser" \
-  FROM "Prothesen" WHERE "Patientennummer" = """
+ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweiser"\
+ FROM "Prothesen" WHERE "Patientennummer" = """
     suche += patnr + ';'
     open_db()
     cur.execute(suche)
@@ -108,7 +122,7 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     w.checkBox_praeop_planung.setChecked(dic_prothesen['Planung'])
     ds = str(dic_prothesen['Opdatum'])  # Datums-String
     yy = int(ds[0:4])  # Zerlegung ...
-    mm = int(ds[5:7])
+    mm = int(ds[5:7])  # TODO Fehler '' abfangen?
     dd = int(ds[8:10])
     w.dateEdit_opdatum.setDate(QDate(yy, mm, dd))
     w.comboBox_operateur.setCurrentText(dic_prothesen['Operateur'])
@@ -139,23 +153,27 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     w.checkBox_spaetinfektion.setChecked(dic_prothesen['spaet_infekt'])
     w.comboBox_einweiser.setCurrentText(dic_prothesen['Einweiser'])
 
+
 def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
-    dic_prothesen['Prothesenart']  =  w.comboBox_prothesenart.currentText()
+    dic_prothesen['Patientennummer'] = w.lineEdit_patientennummer.text()
+    dic_prothesen['Prothesenart'] = w.comboBox_prothesenart.currentText()
     dic_prothesen['Seite'] = w.comboBox_seite.currentText()
     dic_prothesen['proximal'] = w.comboBox_proximal.currentText()
-    dic_prothesen['distal']= w.comboBox_proximal.currentText()
+    dic_prothesen['distal'] = w.comboBox_distal.currentText()
     dic_prothesen['Wechseleingriff'] = w.checkBox_wechseleingriff.isChecked()
-    dic_prothesen['Praeop_roentgen']= w.checkBox_praeop_roentgen.isChecked()
-    dic_prothesen['Postop_roentgen']= w.checkBox_postop_roentgen.isChecked()
+    dic_prothesen['Praeop_roentgen'] = w.checkBox_praeop_roentgen.isChecked()
+    dic_prothesen['Postop_roentgen'] = w.checkBox_postop_roentgen.isChecked()
     dic_prothesen['Fraktur'] = w.checkBox_fraktur.isChecked()
     dic_prothesen['Planung'] = w.checkBox_praeop_planung.isChecked()
     dic_prothesen['Opdatum'] = w.dateEdit_opdatum.date().toString('yyyy-MM-dd')
     dic_prothesen['Operateur'] = w.comboBox_operateur.currentText()
     dic_prothesen['Assistenz'] = w.comboBox_assistenz.currentText()
-    dic_prothesen['Op_zeiten'] = int(w.lineEdit_operationszeit.text())
+    dic_prothesen['Op_zeiten'] = int(
+        w.lineEdit_operationszeit.text() if w.lineEdit_operationszeit.text() != '' else '0')
     dic_prothesen['Infektion'] = w.checkBox_infektion.isChecked()
     dic_prothesen['Luxation'] = w.checkBox_luxation.isChecked()
-    dic_prothesen['Inklinationswinkel'] = int(w.lineEdit_inklinationswinkel.text())
+    dic_prothesen['Inklinationswinkel'] = int(
+        w.lineEdit_inklinationswinkel.text() if w.lineEdit_inklinationswinkel.text() != '' else '0')
     dic_prothesen['Trochanterabriss'] = w.checkBox_trochanterabriss.isChecked()
     dic_prothesen['Fissuren'] = w.checkBox_fissur.isChecked()
     dic_prothesen['Thrombose/Embolie'] = w.checkBox_thromboembolie.isChecked()
@@ -177,8 +195,9 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['ab_anaesthesie'] = w.checkBox_anaesthesie.isChecked()
     dic_prothesen['spaet_infekt'] = w.checkBox_spaetinfektion.isChecked()
     dic_prothesen['Einweiser'] = w.comboBox_einweiser.currentText()
-# TODO Prüfung...
 
+
+# TODO Prüfung...
 
 
 def schalter_suchen_laden():  # Schalter mit 2 Funktionen Suchen / Laden
@@ -438,8 +457,9 @@ def test_operateur(op1, op2):  # Test der Eingabe Operateur & Assistenz
     else:
         return True
 
-def change_opzeit():   # TODO '' abfangen!
-    zt = int(w.lineEdit_operationszeit.text())
+
+def change_opzeit():
+    zt = int(w.lineEdit_operationszeit.text() if w.lineEdit_operationszeit.text() != '' else '0')  # '' abfangen!
     print(zt)
     if zt > 100 and w.comboBox_prothesenart.currentText() == 'Hüfte':
         w.label_zeit_achtung.setVisible(True)
@@ -448,15 +468,15 @@ def change_opzeit():   # TODO '' abfangen!
     else:
         w.label_zeit_achtung.setVisible(False)
 
-def change_inklination():   # TODO '' abfangen!
-    ik = int(w.lineEdit_inklinationswinkel.text())
+
+def change_inklination():
+    ik = int(
+        w.lineEdit_inklinationswinkel.text() if w.lineEdit_inklinationswinkel.text() != '' else '0')  # '' abfangen!
     print(ik)
     if ik > 50 and w.comboBox_prothesenart.currentText() == 'Hüfte':
         w.label_inklination_achtung.setVisible(True)
     else:
         w.label_inklination_achtung.setVisible(False)
-
-
 
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
@@ -482,10 +502,55 @@ def save_state():  # Status der Widgets in Dictionaries speichern
         checkBoxState.update({it: it.checkState()})
 
 
+def datensatz_speichern(idnr):
+    global status
+
+    global dic_prothesen, k_list
+
+    if status:  # Update
+        schreiben = """UPDATE "Prothesen" SET ("Patientennummer","Prothesenart","Prothesentyp",proximal,distal,"Seite","Wechseleingriff",\
+"Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
+"Luxation","Inklinationswinkel","Trochanterabriss","Fissuren","Thrombose/Embolie","Sterblichkeit","Neurologie",\
+"Dokumentation","Memo",knochenverankert,periprothetisch,"Reintervention","Abweichung","CT",ab_imp_art,ab_imp_groesse,\
+ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweiser")\
+ = ("""
+        pos = 0
+        for it in k_list:
+            if it != 'ID':  # Update ohne 'ID'
+                schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 else str(dic_prothesen[it])  # '?
+                schreiben += ',' if it != 'Einweiser' else ''
+        schreiben += """) WHERE "ID" = """
+        schreiben += str(idnr) + ';'
+        print(schreiben)
+        open_db()
+        cur.execute(schreiben)
+        close_db()
+    else:   # Insert
+        schreiben = """INSERT INTO "Prothesen" ("Patientennummer","Prothesenart","Prothesentyp",proximal,distal,"Seite","Wechseleingriff",\
+"Praeop_roentgen","Postop_roentgen","Fraktur","Planung","Opdatum","Operateur","Assistenz","Op_zeiten","Infektion",\
+"Luxation","Inklinationswinkel","Trochanterabriss","Fissuren","Thrombose/Embolie","Sterblichkeit","Neurologie",\
+"Dokumentation","Memo",knochenverankert,periprothetisch,"Reintervention","Abweichung","CT",ab_imp_art,ab_imp_groesse,\
+ab_stab,ab_blutung,"ab_präop",ab_operation,ab_anaesthesie,spaet_infekt,"Einweiser")\
+ VALUES ("""
+        pos = 0
+        for it in k_list:
+            if it != 'ID':  # Update ohne 'ID'
+
+                schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 else str(dic_prothesen[it])  # '?
+                schreiben += ',' if it != 'Einweiser' else ''
+        schreiben += """);"""
+        print(schreiben)
+        open_db()
+        cur.execute(schreiben)
+        close_db()
+    status = False
+
+
 def speichern():
     # TODO prüfen und speichern
     print(dic_prothesen)
     aktualisiere_dictionary()
+    datensatz_speichern(str(dic_prothesen['ID']))
     print(dic_prothesen)
     set_start_default()
     init_neuesFormular()
