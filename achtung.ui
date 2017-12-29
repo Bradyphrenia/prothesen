@@ -58,7 +58,7 @@
    <property name="font">
     <font>
      <family>Verdana</family>
-     <pointsize>22</pointsize>
+     <pointsize>12</pointsize>
      <weight>75</weight>
      <italic>true</italic>
      <bold>true</bold>

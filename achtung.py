@@ -30,7 +30,7 @@ class Ui_Dialog(object):
         self.label_achtung.setGeometry(QtCore.QRect(10, 30, 241, 51))
         font = QtGui.QFont()
         font.setFamily("Verdana")
-        font.setPointSize(22)
+        font.setPointSize(12)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)

@@ -26,12 +26,13 @@ dwindow = achtung()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
 dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
+dic_statistik = {}  # Dictionary für statistische Daten
 
 status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
 
 
 def init_dictionary():
-    global k_list, dic_prothesen, dic_typ
+    global k_list, dic_prothesen, dic_typ, dic_statistik
     k_list = ["ID", "Patientennummer", "Prothesenart", "Prothesentyp", "proximal", "distal", "Seite", "Wechseleingriff",
               "Praeop_roentgen", "Postop_roentgen", "Fraktur", "Planung", "Opdatum", "Operateur", "Assistenz",
               "Op_zeiten", "Infektion", "Luxation", "Inklinationswinkel", "Trochanterabriss", "Fissuren",
@@ -53,6 +54,7 @@ def init_dictionary():
     dic_typ['Assistenz'] = 1
     dic_typ['Memo'] = 1
     dic_typ['Einweiser'] = 1
+    # TODO Statistik...
 
 
 def open_db():
