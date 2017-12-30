@@ -219,7 +219,7 @@ def suche_patientennummer():
     open_db()
     cur.execute(suche)
     lesen = cur.fetchone()
-    if lesen:
+    if lesen:  # ein Datensatz mit dieser Patientennummer vorhanden...
         mwindow.label_alt_patnummer.setText(str(lesen[0]))
         mwindow.label_alt_proth_art.setText(str(lesen[1]))
         mwindow.label_alt_seite.setText(str(lesen[2]))
@@ -314,6 +314,30 @@ def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
     else:
         mwindow.checkBox_knochenverankert.setVisible(False)  # und ausschalten / löschen
         mwindow.checkBox_knochenverankert.setCheckState(False)
+
+
+def change_fraktur():  # Änderung Fraktur -> periprothetisch?
+    if mwindow.checkBox_fraktur.isChecked() == True:
+        mwindow.checkBox_periprothetisch.setVisible(True)  # Checkbox periprothetisch ein-
+    else:
+        mwindow.checkBox_periprothetisch.setVisible(False)  # und ausschalten / löschen
+        mwindow.checkBox_periprothetisch.setCheckState(False)
+
+
+def change_vierundzwanzig():
+    if mwindow.checkBox_vierundzwanzig.isChecked() == True:
+        mwindow.checkBox_oak.setVisible(True)  # Checkbox periprothetisch ein-
+    else:
+        mwindow.checkBox_oak.setVisible(False)  # und ausschalten / löschen
+        mwindow.checkBox_oak.setCheckState(False)
+
+
+def change_neunzig():
+    if mwindow.checkBox_infektion.isChecked() == False and mwindow.checkBox_luxation.isChecked() == False \
+            and mwindow.checkBox_trochanterabriss.isChecked() == False and mwindow.checkBox_fissur.isChecked() == False \
+            and mwindow.checkBox_thromboembolie.isChecked() == False and mwindow.checkBox_neurologie.isChecked() == False \
+            and mwindow.checkBox_gestorben.isChecked() == False:
+        mwindow.checkBox_neunzig.setCheckState(False)
 
 
 def init_lineEdit_patientennummer():  # Patientennummer initialisieren
@@ -547,6 +571,8 @@ def init_neuesFormular():  # neues Formular initialisieren
     init_comboBox_seite()
     init_comboBox_proximal()
     init_comboBox_distal()
+    change_fraktur()
+    change_vierundzwanzig()
     init_dateEdit_opdatum()
     change_abweichung()
     init_comboBox_operateur()
@@ -566,6 +592,11 @@ mwindow.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  #
 mwindow.lineEdit_patientennummer.textChanged.connect(change_patientennummer)  # Ereignis Änderung Patientennummer
 mwindow.lineEdit_operationszeit.textChanged.connect(change_opzeit)
 mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
+mwindow.checkBox_fraktur.stateChanged.connect(change_fraktur)  # Ereignis Änderung Fraktur an / aus
+mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
+for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):    # Ereignis für alle CheckBoxes in Gruppe setzen
+    it.stateChanged.connect(change_neunzig)
+
 init_neuesFormular()  # Aufruf neues Formular
 save_state()  # als Standard speichern
 mwindow.show()  # Fenster anzeigen
