@@ -81,6 +81,37 @@ def close_db():
         pass
 
 
+def hole_statistik():
+    global dic_statistik
+    open_db()
+    suche = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."Prothesen" WHERE "Opdatum" >= '2017-01-01' AND "Opdatum" <= '2017-12-31';"""
+    cur.execute(suche)
+    suche = """SELECT COUNT (*) FROM jahr;"""
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    dic_statistik[suche] = lesen[0]
+    suche = """SELECT COUNT(*) FROM jahr WHERE "Prothesenart" = 'Hüfte'"""
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    dic_statistik[suche] = lesen[0]
+    suche = """SELECT COUNT(*) FROM jahr WHERE "Prothesenart" = 'Knie'"""
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    dic_statistik[suche] = lesen[0]
+    suche = """SELECT COUNT(*) FROM jahr WHERE "Prothesenart" = 'Schulter'"""
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    dic_statistik[suche] = lesen[0]
+    suche = """SELECT COUNT(*) FROM jahr WHERE "Prothesenart" = 'Radiusköpfchen'"""
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    dic_statistik[suche] = lesen[0]
+    close_db()
+    mwindow.plainTextEdit_statistik.clear()
+    for it in dic_statistik.keys():
+        mwindow.plainTextEdit_statistik.appendPlainText(it + ' -> ' + str(dic_statistik.get(it)))
+
+
 def change_patientennummer():
     global status
     if status:
@@ -564,6 +595,7 @@ def speichern():
 
 def init_neuesFormular():  # neues Formular initialisieren
     init_dictionary()
+    hole_statistik()
     init_lineEdit_patientennummer()
     init_comboBox_prothesenart()
     change_prothesenart()
@@ -594,7 +626,7 @@ mwindow.lineEdit_operationszeit.textChanged.connect(change_opzeit)
 mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
 mwindow.checkBox_fraktur.stateChanged.connect(change_fraktur)  # Ereignis Änderung Fraktur an / aus
 mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
-for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):    # Ereignis für alle CheckBoxes in Gruppe setzen
+for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
     it.stateChanged.connect(change_neunzig)
 
 init_neuesFormular()  # Aufruf neues Formular
