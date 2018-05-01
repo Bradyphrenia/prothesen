@@ -34,7 +34,7 @@
   <property name="font">
    <font>
     <family>Arial</family>
-    <pointsize>14</pointsize>
+    <pointsize>12</pointsize>
     <kerning>false</kerning>
    </font>
   </property>
@@ -59,7 +59,6 @@
    <property name="font">
     <font>
      <family>Courier</family>
-     <pointsize>18</pointsize>
      <weight>75</weight>
      <italic>true</italic>
      <bold>true</bold>
