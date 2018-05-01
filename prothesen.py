@@ -1,24 +1,20 @@
-import datetime
 import sys
-
-import psycopg2
-import psycopg2.extras
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-
-from achtung import Ui_Dialog
+import psycopg2
 from mainwindow import Ui_MainWindow
+from achtung import Ui_Dialog
+import datetime
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):  # Mainwindow-Klasse
-
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent=parent)
         self.setupUi(self)
 
 
 class achtung(QDialog, Ui_Dialog):  # Dialog-Klasse
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -30,7 +26,6 @@ dwindow = achtung()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
 dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
-dic_statistik = {}  # Dictionary für statistische Daten
 
 status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
 
@@ -102,7 +97,8 @@ def init_dictionary():
 def open_db():  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
     global conn, cur
     try:  # Datenbankfehler abfangen...
-        conn = psycopg2.connect("host = 'localhost' dbname='prothesen' user='postgres' password='postgres'")
+        conn = psycopg2.connect(
+            "host='localhost' dbname='prothesen' user='postgres' password='postgres'")
         cur = conn.cursor()
     except psycopg2.OperationalError as e:
         protokoll_schreiben('-- ' + str(e))
@@ -120,36 +116,46 @@ def close_db():
 
 
 def hole_statistik():
-    global dic_statistik
+    mwindow.plainTextEdit_statistik.clear()
     open_db()
     suche = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = TRUE;"""
     cur.execute(suche)
     suche = """SELECT COUNT(*) FROM jahr;"""
     cur.execute(suche)
     lesen = cur.fetchone()
-    dic_statistik['alle Prothesen'] = lesen[0]
+    schreibe_statistik('alle Prothesen', lesen[0])
     suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Hüfte'"""
     cur.execute(suche)
     lesen = cur.fetchone()
-    dic_statistik['alle Hüft-TEP'] = lesen[0]
+    schreibe_statistik('alle Hüft-TEP', lesen[0])
     suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Knie'"""
     cur.execute(suche)
     lesen = cur.fetchone()
-    dic_statistik['alle Knie-TEP'] = lesen[0]
+    schreibe_statistik('alle Knie-TEP', lesen[0])
     suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Schulter'"""
     cur.execute(suche)
     lesen = cur.fetchone()
-    dic_statistik['alle Schulter-TEP'] = lesen[0]
+    schreibe_statistik('alle Schulter-TEP', lesen[0])
     suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Radiusköpfchen'"""
     cur.execute(suche)
     lesen = cur.fetchone()
-    dic_statistik['alle Radiusköpfchenprothesen'] = lesen[0]
+    schreibe_statistik('alle Radiusköpfchenprothesen', lesen[0])
+    schreibe_statistik('=', 44)
+    suche = """SELECT operateur, COUNT(id)  FROM jahr GROUP BY operateur;"""
+    cur.execute(suche)
+    lesen = cur.fetchall()
+    for eintrag in lesen:
+        schreibe_statistik(eintrag[0], eintrag[1])
+    schreibe_statistik('=', 44)
     close_db()
-    mwindow.plainTextEdit_statistik.clear()
-    for it in dic_statistik.keys():
+
+
+def schreibe_statistik(kriterium, zahl):
+    if kriterium != '=':
         mwindow.plainTextEdit_statistik.appendPlainText(
-            it + ': ---> ' + str(dic_statistik.get(it)))
-    mwindow.plainTextEdit_statistik.appendPlainText('-' * 50)
+            kriterium + '   --->   ' + str(zahl))
+    else:
+        mwindow.plainTextEdit_statistik.appendPlainText(kriterium * zahl)
 
 
 def change_patientennummer():
@@ -250,8 +256,8 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
         format_winkel(str(dic_prothesen['kniewinkel_post'])))
     mwindow.checkBox_vierundzwanzig.setChecked(
         dic_prothesen['vierundzwanzig_plus'] if dic_prothesen['vierundzwanzig_plus'] is not None else False)
-    mwindow.checkBox_oak.setChecked(dic_prothesen['oak'] if dic_prothesen[
-                                                                'oak'] is not None else False)
+    mwindow.checkBox_oak.setChecked(
+        dic_prothesen['oak'] if dic_prothesen['oak'] is not None else False)
 
 
 def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
@@ -262,16 +268,13 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['seite'] = mwindow.comboBox_seite.currentText()
     dic_prothesen['proximal'] = mwindow.comboBox_proximal.currentText()
     dic_prothesen['distal'] = mwindow.comboBox_distal.currentText()
-    dic_prothesen[
-        'wechseleingriff'] = mwindow.checkBox_wechseleingriff.isChecked()
-    dic_prothesen[
-        'praeop_roentgen'] = mwindow.checkBox_praeop_roentgen.isChecked()
-    dic_prothesen[
-        'postop_roentgen'] = mwindow.checkBox_postop_roentgen.isChecked()
+    dic_prothesen['wechseleingriff'] = mwindow.checkBox_wechseleingriff.isChecked()
+    dic_prothesen['praeop_roentgen'] = mwindow.checkBox_praeop_roentgen.isChecked()
+    dic_prothesen['postop_roentgen'] = mwindow.checkBox_postop_roentgen.isChecked()
     dic_prothesen['fraktur'] = mwindow.checkBox_fraktur.isChecked()
     dic_prothesen['planung'] = mwindow.checkBox_praeop_planung.isChecked()
-    dic_prothesen['opdatum'] = mwindow.dateEdit_opdatum.date(
-    ).toString('yyyy-MM-dd')
+    dic_prothesen['opdatum'] = mwindow.dateEdit_opdatum.date().toString(
+        'yyyy-MM-dd')
     dic_prothesen['operateur'] = mwindow.comboBox_operateur.currentText()
     dic_prothesen['assistenz'] = mwindow.comboBox_assistenz.currentText()
     dic_prothesen[
@@ -280,22 +283,17 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['luxation'] = mwindow.checkBox_luxation.isChecked()
     dic_prothesen[
         'inklinationswinkel'] = mwindow.lineEdit_inklinationswinkel.text() if mwindow.lineEdit_inklinationswinkel.text() != '' else 'NULL'
-    dic_prothesen[
-        'trochanterabriss'] = mwindow.checkBox_trochanterabriss.isChecked()
+    dic_prothesen['trochanterabriss'] = mwindow.checkBox_trochanterabriss.isChecked()
     dic_prothesen['fissuren'] = mwindow.checkBox_fissur.isChecked()
-    dic_prothesen[
-        'thrombose_embolie'] = mwindow.checkBox_thromboembolie.isChecked()
+    dic_prothesen['thrombose_embolie'] = mwindow.checkBox_thromboembolie.isChecked()
     dic_prothesen['sterblichkeit'] = mwindow.checkBox_gestorben.isChecked()
     dic_prothesen['neurologie'] = mwindow.checkBox_neurologie.isChecked()
     dic_prothesen['dokumentation'] = mwindow.checkBox_vollstaendig.isChecked()
     dic_prothesen[
         'memo'] = mwindow.plainTextEdit_memo.toPlainText() if mwindow.plainTextEdit_memo.toPlainText() != '' else 'NULL'
-    dic_prothesen[
-        'knochenverankert'] = mwindow.checkBox_knochenverankert.isChecked()
-    dic_prothesen[
-        'periprothetisch'] = mwindow.checkBox_periprothetisch.isChecked()
-    dic_prothesen[
-        'reintervention'] = mwindow.checkBox_reintervention.isChecked()
+    dic_prothesen['knochenverankert'] = mwindow.checkBox_knochenverankert.isChecked()
+    dic_prothesen['periprothetisch'] = mwindow.checkBox_periprothetisch.isChecked()
+    dic_prothesen['reintervention'] = mwindow.checkBox_reintervention.isChecked()
     dic_prothesen['abweichung'] = mwindow.checkBox_abweichung.isChecked()
     dic_prothesen['ct'] = mwindow.checkBox_ct.isChecked()
     dic_prothesen['ab_imp_art'] = mwindow.checkBox_implantation.isChecked()
@@ -315,8 +313,7 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen[
         'kniewinkel_post'] = mwindow.lineEdit_postop_winkel.text() if mwindow.lineEdit_postop_winkel.text().strip() not in (
         '.', '+.', '-.') else 'NULL'
-    dic_prothesen[
-        'vierundzwanzig_plus'] = mwindow.checkBox_vierundzwanzig.isChecked()
+    dic_prothesen['vierundzwanzig_plus'] = mwindow.checkBox_vierundzwanzig.isChecked()
     dic_prothesen['oak'] = mwindow.checkBox_oak.isChecked()
 
 
@@ -491,10 +488,10 @@ def init_comboBox_proximal():  # Eingabemasken Implantate proximal und distal
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
                 "Ecofit-Pfanne",
-                "Pyramid-Pfanne",
                 "Link-Pfanne",
                 "Duokopf",
                 "Schraubpfanne",
+                "Icon-Pfanne",
                 "zementierte Pfanne",
                 "sonstiges"):
             mwindow.comboBox_proximal.addItem(it)
@@ -503,7 +500,6 @@ def init_comboBox_proximal():  # Eingabemasken Implantate proximal und distal
                 "3D Knie Femur",
                 "PS Knie Femur",
                 "Scharnierknie Femur",
-                "Rotationsknie Femur",
                 "Allergie-Knie Femur",
                 "sonstiges"):
             mwindow.comboBox_proximal.addItem(it)
@@ -524,12 +520,13 @@ def init_comboBox_distal():
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
                 "Ecofit-Schaft",
-                "Pyramid-Schaft",
+                "Ecofit-Kurzschaft",
                 "Actinia-Schaft",
                 "CFP-Schaft",
                 "zementierter Link-Schaft",
                 "Icon-Oberflächenersatz",
                 "Icon-Schaft zementfrei",
+                "Revisionsschaft zementfrei",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
@@ -537,7 +534,6 @@ def init_comboBox_distal():
                 "3D Knie Tibia",
                 "3D Knie Tibia mit Stem",
                 "Scharnierknie Tibia",
-                "Rotationsknie Tibia",
                 "Allergie-Knie Tibia",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
@@ -549,6 +545,7 @@ def init_comboBox_distal():
             mwindow.comboBox_distal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Radiusköpfchen':
         for it in (
+                "Radiusköpfchen Implantcast",
                 "Radiusköpfchen Link",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
@@ -627,6 +624,7 @@ def set_start_default():  # alle Eingaben auf Standard stellen...
         it.setText(lineEditState[it])
     for it in checkBoxState:
         it.setCheckState(checkBoxState[it])
+    mwindow.plainTextEdit_memo.setPlainText('')  # Memo-Feld löschen
 
 
 def save_state():  # Status der Widgets in Dictionaries speichern
@@ -698,12 +696,25 @@ def datensatz_speichern():
     status = False
 
 
+def pruefen():
+    korrekt = True
+    if mwindow.comboBox_operateur.currentText() == 'Joker' and mwindow.comboBox_assistenz.currentText() == 'Joker':  # kein Operatuer eingegeben
+        korrekt = False
+    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2018-01-01':  # kein Op-Datum eingegeben
+        korrekt = False
+    if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
+        korrekt = False
+    if not korrekt:
+        dwindow.exec()
+    return korrekt
+
+
 def speichern():
-    # TODO prüfen...
-    aktualisiere_dictionary()
-    datensatz_speichern()
-    set_start_default()
-    init_neuesFormular()
+    if pruefen():  # alle Eingaben gemacht?
+        aktualisiere_dictionary()
+        datensatz_speichern()
+        set_start_default()
+        init_neuesFormular()
 
 
 def init_neuesFormular():  # neues Formular initialisieren
