@@ -98,7 +98,7 @@ def open_db():  # "host='139.64.200.60' dbname='prothesen' user='postgres' passw
     global conn, cur
     try:  # Datenbankfehler abfangen...
         conn = psycopg2.connect(
-            "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'")
+            "host='localhost' dbname='prothesen' user='postgres' password='postgres'")
         cur = conn.cursor()
     except psycopg2.OperationalError as e:
         protokoll_schreiben('-- ' + str(e))
