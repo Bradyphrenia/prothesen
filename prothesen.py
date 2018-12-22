@@ -1,7 +1,3 @@
-#!/usr/local/bin/python3.7
-
-
-
 import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -112,7 +108,8 @@ def close_db():
 def hole_statistik():
     mwindow.plainTextEdit_statistik.clear()
     open_db()
-    suche = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = TRUE;"""
+    suche = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
+    "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = TRUE;"""
     cur.execute(suche)
     suche = """SELECT COUNT(*) FROM jahr;"""
     cur.execute(suche)
@@ -777,19 +774,15 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
-
     status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
-
     # Ereignisse mit Funktionen verbinden...
     mwindow.checkBox_wechseleingriff.stateChanged.connect(
         change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
     mwindow.checkBox_abweichung.stateChanged.connect(
         change_abweichung)  # Ereignis Abweichung an / aus
-    # Ereignis Taste Suchen/Laden gedrückt
-    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)
+    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)  # Ereignis Taste Suchen/Laden gedrückt
     mwindow.comboBox_operateur.currentTextChanged.connect(
         change_operateur)  # Ereignis Wechsel Operateur
     mwindow.comboBox_assistenz.currentTextChanged.connect(
