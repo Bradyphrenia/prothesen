@@ -1,3 +1,7 @@
+#!/usr/local/bin/python3.7
+
+
+
 import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -18,16 +22,6 @@ class achtung(QDialog, Ui_Dialog):  # Dialog-Klasse
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
-
-app = QApplication(sys.argv)
-mwindow = MainWindow()
-dwindow = achtung()
-
-dic_prothesen = {}  # Dictionary für Formulardaten
-dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
-
-status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
 
 
 def init_dictionary():
@@ -779,37 +773,47 @@ def format_winkel(text):
     return text
 
 
-# Ereignisse mit Funktionen verbinden...
-mwindow.checkBox_wechseleingriff.stateChanged.connect(
-    change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
-mwindow.checkBox_abweichung.stateChanged.connect(
-    change_abweichung)  # Ereignis Abweichung an / aus
-# Ereignis Taste Suchen/Laden gedrückt
-mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)
-mwindow.comboBox_operateur.currentTextChanged.connect(
-    change_operateur)  # Ereignis Wechsel Operateur
-mwindow.comboBox_assistenz.currentTextChanged.connect(
-    change_assistenz)  # Ereignis Wechsel Assistenz
-mwindow.pushButton_speichern.pressed.connect(
-    speichern)  # Ereignis Taste Speichern gedrückt
-mwindow.comboBox_prothesenart.currentTextChanged.connect(
-    change_prothesenart)  # Ereignis Wechsel Prothesenart
-mwindow.lineEdit_patientennummer.textChanged.connect(
-    change_patientennummer)  # Ereignis Änderung Patientennummer
-mwindow.lineEdit_operationszeit.textChanged.connect(change_opzeit)
-mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
-mwindow.checkBox_fraktur.stateChanged.connect(
-    change_fraktur)  # Ereignis Änderung Fraktur an / aus
-mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
-# Ereignis für alle CheckBoxes in Gruppe setzen
-for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):
-    it.stateChanged.connect(change_neunzig)
-mwindow.lineEdit_praeop_winkel.textChanged.connect(
-    change_praeop)  # Ereignis Eingabe präop. Winkel
-mwindow.lineEdit_postop_winkel.textChanged.connect(
-    change_postop)  # Ereignis Eingabe postop. Winkel
-# Formular generieren und anzeigen...
-init_neuesFormular()  # Aufruf neues Formular
-save_state()  # als Standard speichern
-mwindow.show()  # Fenster anzeigen
-sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    mwindow = MainWindow()
+    dwindow = achtung()
+
+    dic_prothesen = {}  # Dictionary für Formulardaten
+    dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
+
+    status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+
+    # Ereignisse mit Funktionen verbinden...
+    mwindow.checkBox_wechseleingriff.stateChanged.connect(
+        change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
+    mwindow.checkBox_abweichung.stateChanged.connect(
+        change_abweichung)  # Ereignis Abweichung an / aus
+    # Ereignis Taste Suchen/Laden gedrückt
+    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)
+    mwindow.comboBox_operateur.currentTextChanged.connect(
+        change_operateur)  # Ereignis Wechsel Operateur
+    mwindow.comboBox_assistenz.currentTextChanged.connect(
+        change_assistenz)  # Ereignis Wechsel Assistenz
+    mwindow.pushButton_speichern.pressed.connect(
+        speichern)  # Ereignis Taste Speichern gedrückt
+    mwindow.comboBox_prothesenart.currentTextChanged.connect(
+        change_prothesenart)  # Ereignis Wechsel Prothesenart
+    mwindow.lineEdit_patientennummer.textChanged.connect(
+        change_patientennummer)  # Ereignis Änderung Patientennummer
+    mwindow.lineEdit_operationszeit.textChanged.connect(change_opzeit)
+    mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
+    mwindow.checkBox_fraktur.stateChanged.connect(
+        change_fraktur)  # Ereignis Änderung Fraktur an / aus
+    mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
+    # Ereignis für alle CheckBoxes in Gruppe setzen
+    for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):
+        it.stateChanged.connect(change_neunzig)
+    mwindow.lineEdit_praeop_winkel.textChanged.connect(
+        change_praeop)  # Ereignis Eingabe präop. Winkel
+    mwindow.lineEdit_postop_winkel.textChanged.connect(
+        change_postop)  # Ereignis Eingabe postop. Winkel
+    # Formular generieren und anzeigen...
+    init_neuesFormular()  # Aufruf neues Formular
+    save_state()  # als Standard speichern
+    mwindow.show()  # Fenster anzeigen
+    sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
