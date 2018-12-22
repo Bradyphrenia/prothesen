@@ -1,11 +1,12 @@
+import datetime
 import sys
+
+import psycopg2
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import psycopg2
-from mainwindow import Ui_MainWindow
 from achtung import Ui_Dialog
-import datetime
+from mainwindow import Ui_MainWindow
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):  # Mainwindow-Klasse
@@ -67,9 +68,7 @@ def init_dictionary():
               "kniewinkel_post",
               "vierundzwanzig_plus",
               "oak"]
-
-    # Key-Liste Datenbank
-    for it in k_list:
+    for it in k_list:  # Key-Liste Datenbank
         dic_prothesen.update({it: None})
         dic_typ.update({it: 0})
     dic_typ['prothesenart'] = 1  # in ' setzen?
@@ -182,8 +181,7 @@ def datensatz_laden(patnr):
     lesen = cur.fetchone()
     pos = 0
     for it in k_list:
-        # Dictionary Formulardaten mit Datensatz aktualisieren...
-        dic_prothesen.update({it: lesen[pos]})
+        dic_prothesen.update({it: lesen[pos]})  # Dictionary Formulardaten mit Datensatz aktualisieren...
         pos += 1
     close_db()
     aktualisiere_widgets()
@@ -364,8 +362,7 @@ def change_prothesenart():  # Eingabemaske anpassen...
         mwindow.checkBox_luxation.setCheckState(False)
         mwindow.label_inklinationswinkel.setVisible(True)  # Inklination an
         mwindow.lineEdit_inklinationswinkel.setVisible(True)
-        mwindow.checkBox_trochanterabriss.setVisible(
-            True)  # Trochanterabriss an
+        mwindow.checkBox_trochanterabriss.setVisible(True)  # Trochanterabriss an
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
         mwindow.label_praeop_winkel.setVisible(True)  # präop. Winkel an
         mwindow.lineEdit_praeop_winkel.setVisible(True)
@@ -376,8 +373,7 @@ def change_prothesenart():  # Eingabemaske anpassen...
         mwindow.label_inklinationswinkel.setVisible(False)
         mwindow.checkBox_luxation.setVisible(False)  # Luxation aus
         mwindow.checkBox_luxation.setCheckState(False)
-        mwindow.checkBox_trochanterabriss.setVisible(
-            False)  # Trochanterabriss aus
+        mwindow.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         mwindow.checkBox_trochanterabriss.setCheckState(False)
     else:  # Schulter- und Radiusköpchenprothese
         mwindow.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
@@ -390,8 +386,7 @@ def change_prothesenart():  # Eingabemaske anpassen...
         mwindow.lineEdit_inklinationswinkel.setText('')
         mwindow.lineEdit_inklinationswinkel.setVisible(False)
         mwindow.checkBox_luxation.setVisible(True)  # Luxation an
-        mwindow.checkBox_trochanterabriss.setVisible(
-            False)  # Trochanterabriss aus
+        mwindow.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         mwindow.checkBox_trochanterabriss.setCheckState(False)
     init_comboBox_proximal()
     init_comboBox_distal()
@@ -406,8 +401,7 @@ def change_abweichung():  # Abweichung an und aus
         mwindow.checkBox_implantat,
         mwindow.checkBox_stabilisatoren,
         mwindow.checkBox_anaesthesie)
-    # Eingabemaske für Abweichungen...
-    if mwindow.checkBox_abweichung.isChecked() == True:
+    if mwindow.checkBox_abweichung.isChecked() == True:  # Eingabemaske für Abweichungen...
         for wg in wglist:  # einschalten
             wg.setVisible(True)
         mwindow.groupBox_abweichung.setVisible(True)
@@ -420,21 +414,17 @@ def change_abweichung():  # Abweichung an und aus
 
 def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
     if mwindow.checkBox_wechseleingriff.isChecked() == True:
-        mwindow.checkBox_knochenverankert.setVisible(
-            True)  # Checkbox knochenverankert ein-
+        mwindow.checkBox_knochenverankert.setVisible(True)  # Checkbox knochenverankert ein-
     else:
-        mwindow.checkBox_knochenverankert.setVisible(
-            False)  # und ausschalten / löschen
+        mwindow.checkBox_knochenverankert.setVisible(False)  # und ausschalten / löschen
         mwindow.checkBox_knochenverankert.setCheckState(False)
 
 
 def change_fraktur():  # Änderung Fraktur -> periprothetisch?
     if mwindow.checkBox_fraktur.isChecked() == True:
-        mwindow.checkBox_periprothetisch.setVisible(
-            True)  # Checkbox periprothetisch ein-
+        mwindow.checkBox_periprothetisch.setVisible(True)  # Checkbox periprothetisch ein-
     else:
-        mwindow.checkBox_periprothetisch.setVisible(
-            False)  # und ausschalten / löschen
+        mwindow.checkBox_periprothetisch.setVisible(False)  # und ausschalten / löschen
         mwindow.checkBox_periprothetisch.setCheckState(False)
 
 
@@ -607,8 +597,7 @@ def change_inklination():
 
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
-    # Schalter zurückstellen, sonst Datensatzsuche!
-    mwindow.pushButton_suche.setText('Suchen...')
+    mwindow.pushButton_suche.setText('Suchen...')  # Schalter zurückstellen, sonst Datensatzsuche!
     global status
     status = False  # Datensatzstatus zurücksetzen
     for it in lineEditState.keys():
@@ -652,7 +641,6 @@ def datensatz_speichern():
 "ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post",\
 "vierundzwanzig_plus","oak")\
  = ("""
-        pos = 0
         for it in k_list:
             if it != 'id':  # Postgres-Update ohne 'ID'
                 schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
@@ -673,7 +661,6 @@ def datensatz_speichern():
 "ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post",\
 "vierundzwanzig_plus","oak")\
  VALUES ("""
-        pos = 0
         for it in k_list:
             if it != 'id':  # Postgres-Insert ohne 'ID'
                 schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
@@ -744,10 +731,8 @@ def change_postop():
 
 def format_winkel(text):
     text = text.strip()
-    if text == 'Null' or text == '.':  # leer?
+    if text == 'Null' or text == '.' or text == '':  # leer?
         return ''
-    if text == '':
-        return text
     if '.' not in text and text[0:1] not in ('+', '-'):  # nur 3 Ziffern
         text = '+' + text[0:2] + '.' + text[2:]
         return format_winkel(text)  # Rekursion
@@ -777,7 +762,6 @@ if __name__ == "__main__":
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
     status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
-    # Ereignisse mit Funktionen verbinden...
     mwindow.checkBox_wechseleingriff.stateChanged.connect(
         change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
     mwindow.checkBox_abweichung.stateChanged.connect(
@@ -798,15 +782,13 @@ if __name__ == "__main__":
     mwindow.checkBox_fraktur.stateChanged.connect(
         change_fraktur)  # Ereignis Änderung Fraktur an / aus
     mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
-    # Ereignis für alle CheckBoxes in Gruppe setzen
-    for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):
+    for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
         it.stateChanged.connect(change_neunzig)
     mwindow.lineEdit_praeop_winkel.textChanged.connect(
         change_praeop)  # Ereignis Eingabe präop. Winkel
     mwindow.lineEdit_postop_winkel.textChanged.connect(
         change_postop)  # Ereignis Eingabe postop. Winkel
-    # Formular generieren und anzeigen...
-    init_neuesFormular()  # Aufruf neues Formular
+    init_neuesFormular()  # Formular generieren und anzeigen...
     save_state()  # als Standard speichern
     mwindow.show()  # Fenster anzeigen
     sys.exit(app.exec_())  # Fenster mit Beenden des Programmes schließen
