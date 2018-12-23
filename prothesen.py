@@ -187,10 +187,8 @@ def datensatz_laden(patnr):
     open_db()
     cur.execute(suche)
     lesen = cur.fetchone()
-    pos = 0
     for it in k_list:
-        dic_prothesen.update({it: lesen[pos]})  # Dictionary Formulardaten mit Datensatz aktualisieren...
-        pos += 1
+        dic_prothesen.update({it: lesen[k_list.index(it)]})  # Dictionary Formulardaten mit Datensatz aktualisieren...
     close_db()
     aktualisiere_widgets()
 
@@ -247,14 +245,11 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     mwindow.comboBox_einweiser.setCurrentText(dic_prothesen['einweiser'])
     mwindow.checkBox_neunzig.setChecked(
         dic_prothesen['neunzig_tage'] if dic_prothesen['neunzig_tage'] is not None else False)
-    mwindow.lineEdit_praeop_winkel.setText(
-        format_winkel(str(dic_prothesen['kniewinkel_prae'])))
-    mwindow.lineEdit_postop_winkel.setText(
-        format_winkel(str(dic_prothesen['kniewinkel_post'])))
+    mwindow.lineEdit_praeop_winkel.setText(format_winkel(str(dic_prothesen['kniewinkel_prae'])))
+    mwindow.lineEdit_postop_winkel.setText(format_winkel(str(dic_prothesen['kniewinkel_post'])))
     mwindow.checkBox_vierundzwanzig.setChecked(
         dic_prothesen['vierundzwanzig_plus'] if dic_prothesen['vierundzwanzig_plus'] is not None else False)
-    mwindow.checkBox_oak.setChecked(
-        dic_prothesen['oak'] if dic_prothesen['oak'] is not None else False)
+    mwindow.checkBox_oak.setChecked(dic_prothesen['oak'] if dic_prothesen['oak'] is not None else False)
 
 
 def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
@@ -453,8 +448,7 @@ def change_neunzig():
 
 def init_lineEdit_patientennummer():  # Patientennummer initialisieren
     mwindow.lineEdit_patientennummer.setText('48000000')  # Maske vorbelegen
-    mwindow.lineEdit_patientennummer.setCursorPosition(
-        2)  # Cursor auf 3. Position
+    mwindow.lineEdit_patientennummer.setCursorPosition(2)  # Cursor auf 3. Position
 
 
 def init_comboBox_seite():  # Seitenangabe ...
@@ -550,8 +544,7 @@ def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
     open_db()
     cur.execute("""SELECT "operateur" FROM "prothesen";""")
     lesen = set(cur.fetchall())  # Satz aller Operateure (auch None!)
-    operateur = [it[0]
-                 for it in lesen if it[0] != None]  # Operateurliste bereinigen
+    operateur = [it[0] for it in lesen if it[0] != None]  # Operateurliste bereinigen
     for op in sorted(operateur):  # Einweiser laden
         mwindow.comboBox_operateur.addItem(op)
         mwindow.comboBox_assistenz.addItem(op)
@@ -739,7 +732,7 @@ def format_winkel(text):
         return ''
     if text[0:1] == '.':  # . an erster Position
         text = '0' + text
-        return format_winkel(text)
+        return format_winkel(text)  # Rekursion
     if '.' not in text and text[0:1] not in ('+', '-'):  # nur 3 Ziffern
         text = '+' + text[0:2] + '.' + text[2:3]
         return format_winkel(text)  # Rekursion
@@ -754,10 +747,10 @@ def format_winkel(text):
         return format_winkel(text)  # Rekursion
     if len(text) < 5 and '.' in text:  # leer nach Punkt, .0
         text += '0'
-        return format_winkel(text)
+        return format_winkel(text)  # Rekursion
     if text[1:2] == '0':  # zwei führende Nullen vor Punkt
         text = text[0:1] + ' ' + text[2:]
-        return format_winkel(text)
+        return format_winkel(text)  # Rekursion
     if text[1:3] == '  ':  # 2 Lehrstelle vor Punkt
         text = text[0:1] + ' 0' + text[3:]
         return format_winkel(text)  # Rekursion
