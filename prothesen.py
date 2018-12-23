@@ -751,10 +751,10 @@ def format_winkel(text):
     if text[1:2] == '0':  # zwei führende Nullen vor Punkt
         text = text[0:1] + ' ' + text[2:]
         return format_winkel(text)  # Rekursion
-    if text[1:3] == '  ':  # 2 Lehrstelle vor Punkt
+    if text[1:3] == '  ':  # 2 Leerstellen vor Punkt
         text = text[0:1] + ' 0' + text[3:]
         return format_winkel(text)  # Rekursion
-    if text[2:3] == ' ':  # Lehrstelle vor Punkt
+    if text[2:3] == ' ':  # Leerstelle vor Punkt
         text = text[0:2] + text[3:]
         return format_winkel(text)  # Rekursion
     return text
