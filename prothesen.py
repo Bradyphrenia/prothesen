@@ -3,8 +3,8 @@ import sys
 
 import psycopg2
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+
 from achtung import Ui_Dialog
 from mainwindow import Ui_MainWindow
 
@@ -137,11 +137,19 @@ def hole_statistik():
     for eintrag in lesen:
         schreibe_statistik(eintrag[0], eintrag[1])
     schreibe_statistik('=', 44)
+    suche = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM "public"."prothesen" WHERE \
+    "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = FALSE;"""
+    cur.execute(suche)
+    suche = """SELECT COUNT(*) FROM nicht;"""
+    cur.execute(suche)
+    lesen = cur.fetchone()
+    schreibe_statistik('Dokumentation unvollständig', lesen[0])
+    schreibe_statistik('=', 44)
     close_db()
 
 
 def schreibe_statistik(kriterium, zahl):
-    if kriterium != '=':
+    if kriterium != '=':  # Trennzeichen
         mwindow.plainTextEdit_statistik.appendPlainText(
             kriterium + '   --->   ' + str(zahl))
     else:
@@ -342,8 +350,7 @@ def init_comboBox_einweiser():  # Eingabemaske Einweiser initialisieren
     open_db()
     cur.execute("""SELECT "einweiser" FROM "prothesen";""")
     lesen = set(cur.fetchall())  # Satz aller Einweiser (auch None!)
-    einweiser = [it[0]
-                 for it in lesen if it[0] != None]  # Einweiserliste bereinigen
+    einweiser = [it[0] for it in lesen if it[0] is not None]  # Einweiserliste bereinigen
     for ew in sorted(einweiser):  # Einweiser laden
         mwindow.comboBox_einweiser.addItem(ew)
     close_db()
@@ -624,7 +631,6 @@ def protokoll_schreiben(text):
     log = open('protokoll.log', 'a')
     log.write('-- ' + str(datetime.datetime.now()) + '\n')
     log.write(text + '\n')
-
     log.flush()
     log.close()
 
@@ -632,7 +638,7 @@ def protokoll_schreiben(text):
 def datensatz_speichern():
     global status, dic_prothesen, k_list
     idnr = str(dic_prothesen['id'])
-    if status:  # Update
+    if status:  # SQL Update
         schreiben = """UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
@@ -652,7 +658,7 @@ def datensatz_speichern():
         open_db()
         cur.execute(schreiben)
         close_db()
-    else:  # Insert
+    else:  # SQL Insert
         schreiben = """INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
@@ -719,36 +725,42 @@ def init_neuesFormular():  # neues Formular initialisieren
 
 def change_praeop():
     if len(mwindow.lineEdit_praeop_winkel.text()) > 4 or mwindow.lineEdit_praeop_winkel.cursorPosition() == 5:
-        mwindow.lineEdit_praeop_winkel.setText(
-            format_winkel(mwindow.lineEdit_praeop_winkel.text()))
+        mwindow.lineEdit_praeop_winkel.setText(format_winkel(mwindow.lineEdit_praeop_winkel.text()))
 
 
 def change_postop():
     if len(mwindow.lineEdit_postop_winkel.text()) > 4 or mwindow.lineEdit_postop_winkel.cursorPosition() == 5:
-        mwindow.lineEdit_postop_winkel.setText(
-            format_winkel(mwindow.lineEdit_postop_winkel.text()))
+        mwindow.lineEdit_postop_winkel.setText(format_winkel(mwindow.lineEdit_postop_winkel.text()))
 
 
 def format_winkel(text):
     text = text.strip()
     if text == 'Null' or text == '.' or text == '':  # leer?
         return ''
+    if text[0:1] == '.':  # . an erster Position
+        text = '0' + text
+        return format_winkel(text)
     if '.' not in text and text[0:1] not in ('+', '-'):  # nur 3 Ziffern
-        text = '+' + text[0:2] + '.' + text[2:]
+        text = '+' + text[0:2] + '.' + text[2:3]
         return format_winkel(text)  # Rekursion
     if text[0:1] not in ('+', '-'):  # kein Vorzeichen
         text = '+' + text
         return format_winkel(text)  # Rekursion
     if text[0:1] in ('+', '-') and '.' not in text:  # Vorzeichen, kein Punkt
-        text = text[0:3] + '.'
+        text = text[0:3] + '.' + text[3:4]
         return format_winkel(text)  # Rekursion
     if text[2:3] == '.':  # einstellig vor Punkt, Punkt nach hinten
         text = text[0:1] + ' ' + text[1:]
         return format_winkel(text)  # Rekursion
-    if len(text) < 5:  # leer nach Punkt, .0
+    if len(text) < 5 and '.' in text:  # leer nach Punkt, .0
         text += '0'
+        return format_winkel(text)
     if text[1:2] == '0':  # zwei führende Nullen vor Punkt
         text = text[0:1] + ' ' + text[2:]
+        return format_winkel(text)
+    if text[1:3] == '  ':  # 2 Lehrstelle vor Punkt
+        text = text[0:1] + ' 0' + text[3:]
+        return format_winkel(text)  # Rekursion
     if text[2:3] == ' ':  # Lehrstelle vor Punkt
         text = text[0:2] + text[3:]
         return format_winkel(text)  # Rekursion
@@ -762,32 +774,22 @@ if __name__ == "__main__":
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
     status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
-    mwindow.checkBox_wechseleingriff.stateChanged.connect(
-        change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
-    mwindow.checkBox_abweichung.stateChanged.connect(
-        change_abweichung)  # Ereignis Abweichung an / aus
+    mwindow.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
+    mwindow.checkBox_abweichung.stateChanged.connect(change_abweichung)  # Ereignis Abweichung an / aus
     mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)  # Ereignis Taste Suchen/Laden gedrückt
-    mwindow.comboBox_operateur.currentTextChanged.connect(
-        change_operateur)  # Ereignis Wechsel Operateur
-    mwindow.comboBox_assistenz.currentTextChanged.connect(
-        change_assistenz)  # Ereignis Wechsel Assistenz
-    mwindow.pushButton_speichern.pressed.connect(
-        speichern)  # Ereignis Taste Speichern gedrückt
-    mwindow.comboBox_prothesenart.currentTextChanged.connect(
-        change_prothesenart)  # Ereignis Wechsel Prothesenart
-    mwindow.lineEdit_patientennummer.textChanged.connect(
-        change_patientennummer)  # Ereignis Änderung Patientennummer
+    mwindow.comboBox_operateur.currentTextChanged.connect(change_operateur)  # Ereignis Wechsel Operateur
+    mwindow.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis Wechsel Assistenz
+    mwindow.pushButton_speichern.pressed.connect(speichern)  # Ereignis Taste Speichern gedrückt
+    mwindow.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
+    mwindow.lineEdit_patientennummer.textChanged.connect(change_patientennummer)  # Ereignis Änderung Patientennummer
     mwindow.lineEdit_operationszeit.textChanged.connect(change_opzeit)
     mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
-    mwindow.checkBox_fraktur.stateChanged.connect(
-        change_fraktur)  # Ereignis Änderung Fraktur an / aus
+    mwindow.checkBox_fraktur.stateChanged.connect(change_fraktur)  # Ereignis Änderung Fraktur an / aus
     mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
     for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
         it.stateChanged.connect(change_neunzig)
-    mwindow.lineEdit_praeop_winkel.textChanged.connect(
-        change_praeop)  # Ereignis Eingabe präop. Winkel
-    mwindow.lineEdit_postop_winkel.textChanged.connect(
-        change_postop)  # Ereignis Eingabe postop. Winkel
+    mwindow.lineEdit_praeop_winkel.textChanged.connect(change_praeop)  # Ereignis Eingabe präop. Winkel
+    mwindow.lineEdit_postop_winkel.textChanged.connect(change_postop)  # Ereignis Eingabe postop. Winkel
     init_neuesFormular()  # Formular generieren und anzeigen...
     save_state()  # als Standard speichern
     mwindow.show()  # Fenster anzeigen
