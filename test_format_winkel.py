@@ -1,4 +1,4 @@
-#  Copyright (c) 2018. Steffen Troeger
+#  Copyright (c) 2018 Steffen Troeger
 
 from unittest import TestCase
 from prothesen import format_winkel
