@@ -24,7 +24,6 @@ class TestFormat_winkel(TestCase):
         self.assertEqual('+ 0.5', format_winkel('+ .5'))
         self.assertEqual('+ 0.5', format_winkel(' .5'))
         self.assertEqual('- 0.5', format_winkel('-  .5'))
-
         self.assertEqual(5, len(format_winkel('123')))
         self.assertEqual(5, len(format_winkel('12.3 ')))
         self.assertEqual(5, len(format_winkel('+123')))
