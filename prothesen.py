@@ -32,13 +32,13 @@ class database:
         self.username = 'postgres'
         self.password = 'postgres'
         self.database = 'prothesen'
+        self.conn, self.cur = None, None
 
     def open_db(self):  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
         # global conn, cur
         try:  # Datenbankfehler abfangen...
             self.conn = psycopg2.connect(
                 "host=" + self.host + " dbname=" + self.database + " user=" + self.username + " password=" + self.password)
-
             self.cur = self.conn.cursor()
         except psycopg2.OperationalError as e:
             self.protocol('-- ' + str(e))
@@ -79,7 +79,6 @@ class database:
         log = open('protokoll.log', 'a')
         log.write('-- ' + str(datetime.datetime.now()) + '\n')
         log.write(text + '\n')
-
         log.flush()
         log.close()
 
@@ -90,7 +89,19 @@ db = database()
 dic_prothesen = {}  # Dictionary für Formulardaten
 dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
 
-status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+
+class DataSetStatus:
+    def __init__(self):
+        self.__status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+
+    @property
+    def status(self):
+        return self.__status
+
+    @status.setter
+    def status(self, stat):
+        assert isinstance(stat, bool)
+        self.__status = stat
 
 
 def init_dictionary():
@@ -162,31 +173,23 @@ def hole_statistik():
     db.open_db()
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = TRUE;"""
     db.execute(sql)
-
     sql = """SELECT COUNT(*) FROM jahr;"""
     lesen = db.fetchone(sql)
-
     schreibe_statistik('alle Prothesen', lesen[0])
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Hüfte'"""
-
     lesen = db.fetchone(sql)
     schreibe_statistik('alle Hüft-TEP', lesen[0])
-
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Knie'"""
-
     lesen = db.fetchone(sql)
     schreibe_statistik('alle Knie-TEP', lesen[0])
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Schulter'"""
-
     lesen = db.fetchone(sql)
     schreibe_statistik('alle Schulter-TEP', lesen[0])
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Radiusköpfchen'"""
-
     lesen = db.fetchone(sql)
     schreibe_statistik('alle Radiusköpfchenprothesen', lesen[0])
     schreibe_statistik('=', 44)
     sql = """SELECT operateur, COUNT(id)  FROM jahr GROUP BY operateur;"""
-
     lesen = db.fetchall(sql)
     for eintrag in lesen:
         schreibe_statistik(eintrag[0], eintrag[1])
@@ -203,10 +206,10 @@ def schreibe_statistik(kriterium, zahl):
 
 
 def change_patientennummer():
-    global status
-    if status:
+    # global status
+    if DataSetStatus.status:
         if mwindow.lineEdit_patientennummer.text() != mwindow.label_alt_patnummer.text():
-            status = False
+            DataSetStatus.status = False
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
     elif mwindow.pushButton_suche.text() == 'Laden...':  # bereits gefunden?
@@ -218,10 +221,10 @@ def change_patientennummer():
 
 
 def datensatz_laden(patnr):
-    global status
-    status = True
-    global dic_prothesen
-    suche = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
+    # global status
+    DataSetStatus.status = True
+    # global dic_prothesen
+    sql = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
 "sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention",\
@@ -229,10 +232,10 @@ def datensatz_laden(patnr):
 "ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post",\
 "vierundzwanzig_plus","oak"\
  FROM "prothesen" WHERE "patientennummer" = """
-    suche += patnr + ';'
-    open_db()
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql += patnr + ';'
+    database.open_db()
+
+    lesen = db.fetchone(sql)
     pos = 0
     for it in k_list:
         # Dictionary Formulardaten mit Datensatz aktualisieren...
