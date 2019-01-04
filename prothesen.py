@@ -104,7 +104,6 @@ class DataSetStatus:
         self.__status = stat
 
 
-
 class ButtonStatus:
     def __init__(self):
         self.__status = False  # Knopfstatus False -> Suche ..., True -> Laden ...
@@ -117,6 +116,7 @@ class ButtonStatus:
     def status(self, stat):
         assert isinstance(stat, bool)
         self.__status = stat
+
 
 def init_dictionary():
     #    global k_list, dic_prothesen, dic_typ, dic_statistik
