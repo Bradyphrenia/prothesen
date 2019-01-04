@@ -34,7 +34,7 @@ class database:
         self.database = 'prothesen'
 
     def open_db(self):  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
-        global conn, cur
+        # global conn, cur
         try:  # Datenbankfehler abfangen...
             self.conn = psycopg2.connect(
                 "host=" + self.host + " dbname=" + self.database + " user=" + self.username + " password=" + self.password)
@@ -94,7 +94,7 @@ status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Upd
 
 
 def init_dictionary():
-#    global k_list, dic_prothesen, dic_typ, dic_statistik
+    #    global k_list, dic_prothesen, dic_typ, dic_statistik
     k_list = ["id",
               "patientennummer",
               "prothesenart",
