@@ -104,6 +104,20 @@ class DataSetStatus:
         self.__status = stat
 
 
+
+class ButtonStatus:
+    def __init__(self):
+        self.__status = False  # Knopfstatus False -> Suche ..., True -> Laden ...
+
+    @property
+    def status(self):
+        return self.__status
+
+    @status.setter
+    def status(self, stat):
+        assert isinstance(stat, bool)
+        self.__status = stat
+
 def init_dictionary():
     #    global k_list, dic_prothesen, dic_typ, dic_statistik
     k_list = ["id",
@@ -364,8 +378,8 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['oak'] = mwindow.checkBox_oak.isChecked()
 
 
-def schalter_suchen_laden():  # Schalter mit 2 Funktionen Suchen / Laden (Statusspeicherung)
-    if mwindow.pushButton_suche.text() == 'Laden...':
+def schalter_suchen_laden():  # Schalter  Suchen / Laden
+    if not ButtonStatus.status:
         patnr = mwindow.lineEdit_patientennummer.text()
         datensatz_laden(patnr)
     else:
@@ -386,12 +400,14 @@ def suche_patientennummer():
         mwindow.label_alt_seite.setText(str(lesen[2]))
         mwindow.label_alt_op_datum.setText(str(lesen[3]))
         mwindow.pushButton_suche.setText('Laden...')
+        ButtonStatus.status = True
     else:
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
         mwindow.label_alt_seite.setText('------')
         mwindow.label_alt_op_datum.setText('-----------')
         mwindow.pushButton_suche.setText('Suchen...')
+        ButtonStatus.status = False
     db.close_db()
 
 
@@ -697,10 +713,10 @@ def protokoll_schreiben(text):
 
 
 def datensatz_speichern():
-    global status, dic_prothesen, k_list
+    # global status, dic_prothesen, k_list
     idnr = str(dic_prothesen['id'])
-    if status:  # Update
-        schreiben = """UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
+    if DataSetStatus.status:  # Update
+        sql = """UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
 "sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention",\
@@ -711,17 +727,17 @@ def datensatz_speichern():
         pos = 0
         for it in k_list:
             if it != 'id':  # Postgres-Update ohne 'ID'
-                schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
+                sql += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
                     it] != 'NULL' else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'oak' else ''  # letztes Feld?
-        schreiben += """) WHERE "id" = """
-        schreiben += str(idnr) + ';'
-        protokoll_schreiben(schreiben)
-        open_db()
-        cur.execute(schreiben)
-        close_db()
+                sql += ',' if it != 'oak' else ''  # letztes Feld?
+        sql += """) WHERE "id" = """
+        sql += str(idnr) + ';'
+        protokoll_schreiben(sql)
+        db.open_db()
+        db.execute(sql)
+        db.close_db()
     else:  # Insert
-        schreiben = """INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
+        sql = """INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
 "sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention",\
@@ -732,15 +748,15 @@ def datensatz_speichern():
         pos = 0
         for it in k_list:
             if it != 'id':  # Postgres-Insert ohne 'ID'
-                schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
+                sql += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
                     it] != 'NULL' else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'oak' else ''  # letztes Feld?
-        schreiben += """);"""
-        protokoll_schreiben(schreiben)
-        open_db()
-        cur.execute(schreiben)
-        close_db()
-    status = False
+                sql += ',' if it != 'oak' else ''  # letztes Feld?
+        sql += """);"""
+        protokoll_schreiben(sql)
+        db.open_db()
+        db.execute(sql)
+        db.close_db()
+    DataSetStatus.status = False
 
 
 def pruefen():
