@@ -897,3 +897,12 @@ INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proxim
 INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (48020113,'Hüfte',NULL,'Ecofit-Pfanne','Ecofit-Schaft','rechts',False,True,True,False,True,'2018-10-10','Neu','Schoen',42,False,False,41,False,False,False,False,False,True,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,'Frenzel',False,NULL,NULL,False,False);
 -- 2018-11-07 12:49:13.787710
 INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (48020565,'Hüfte',NULL,'Ecofit-Pfanne','Ecofit-Schaft','rechts',False,True,True,False,True,'2018-10-17','Neu','Joker',53,False,False,38,False,False,False,False,False,True,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,'Manecke',False,NULL,NULL,False,False);
+-- 2019-01-04 20:42:29.832218
+-- FATAL:  role "postgre" does not exist
+
+-- 2019-01-04 20:47:04.333443
+-- FATAL:  role "postgre" does not exist
+
+-- 2019-01-04 20:49:48.418635
+-- FATAL:  role "postgre" does not exist
+

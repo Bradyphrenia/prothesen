@@ -26,7 +26,7 @@ mwindow = MainWindow()
 dwindow = achtung()
 
 
-class datenbank:
+class database:
     def __init__(self):
         self.host = 'localhost'
         self.username = 'postgres'
@@ -41,16 +41,16 @@ class datenbank:
 
             self.cur = self.conn.cursor()
         except psycopg2.OperationalError as e:
-            protokoll_schreiben('-- ' + str(e))
+            self.protocol('-- ' + str(e))
             sys.exit(1)
 
     def close_db(self):
         try:  # Datenbankfehler abfangen...
-            self.conn.commit()
+            # self.conn.commit()
             self.cur.close()
             self.conn.close()
         except psycopg2.OperationalError as e:
-            protokoll_schreiben('-- ' + str(e))
+            self.protocol('-- ' + str(e))
             sys.exit(1)
 
     def fetchall(self, sql):
@@ -65,16 +65,27 @@ class datenbank:
         self.cur.execute(sql)
         return None
 
-    def update (self, sql):
+    def update(self, sql):
         self.cur.execute(sql)
+        self.conn.commit()
         return None
 
-    def insert(self,sql):
+    def insert(self, sql):
         self.cur.execute(sql)
+        self.con.commit()
         return None
 
-db = datenbank()
-db.open_db()
+    def protocol(self, text):
+        log = open('protokoll.log', 'a')
+        log.write('-- ' + str(datetime.datetime.now()) + '\n')
+        log.write(text + '\n')
+
+        log.flush()
+        log.close()
+
+
+db = database()
+# db.open_db()
 
 dic_prothesen = {}  # Dictionary für Formulardaten
 dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
@@ -83,7 +94,7 @@ status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Upd
 
 
 def init_dictionary():
-    global k_list, dic_prothesen, dic_typ, dic_statistik
+#    global k_list, dic_prothesen, dic_typ, dic_statistik
     k_list = ["id",
               "patientennummer",
               "prothesenart",
@@ -594,7 +605,7 @@ def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
     mwindow.comboBox_assistenz.clear()
     db.open_db()
     sql = """SELECT "operateur" FROM "prothesen";"""
-    lesen = set(db.lesen_alle(sql))  # Satz aller Operateure (auch None!)
+    lesen = set(db.fetchall(sql))  # Satz aller Operateure (auch None!)
     operateur = [it[0]
                  for it in lesen if it[0] != None]  # Operateurliste bereinigen
     for op in sorted(operateur):  # Einweiser laden
