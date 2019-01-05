@@ -739,7 +739,7 @@ def init_neuesFormular():  # neues Formular initialisieren
     mwindow.label_inklination_achtung.setVisible(False)
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
-    DataSetStatus.status = False  # Insert
+    DataSetStatus.status = False  # Datenbank-Insert als initialer Status
 
 
 def change_praeop():
