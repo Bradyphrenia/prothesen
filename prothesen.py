@@ -22,8 +22,79 @@ class achtung(QDialog, Ui_Dialog):  # Dialog-Klasse
         self.setupUi(self)
 
 
+class database:
+    def __init__(self):
+        self.host = 'localhost'
+        self.username = 'postgres'
+        self.password = 'postgres'
+        self.database = 'prothesen'
+        self.conn, self.cur = None, None
+
+    def open_db(self):  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
+        # global conn, cur
+        try:  # Datenbankfehler abfangen...
+            self.conn = psycopg2.connect(
+                "host=" + self.host + " dbname=" + self.database + " user=" + self.username + " password=" + self.password)
+            self.cur = self.conn.cursor()
+        except psycopg2.OperationalError as e:
+            self.protocol('-- ' + str(e))
+            sys.exit(1)
+
+    def close_db(self):
+        try:  # Datenbankfehler abfangen...
+            # self.conn.commit()
+            self.cur.close()
+            self.conn.close()
+        except psycopg2.OperationalError as e:
+            self.protocol('-- ' + str(e))
+            sys.exit(1)
+
+    def fetchall(self, sql):
+        self.cur.execute(sql)
+        return self.cur.fetchall()
+
+    def fetchone(self, sql):
+        self.cur.execute(sql)
+        return self.cur.fetchone()
+
+    def execute(self, sql):
+        self.cur.execute(sql)
+        return None
+
+    def update(self, sql):
+        self.cur.execute(sql)
+        self.conn.commit()
+        return None
+
+    def insert(self, sql):
+        self.cur.execute(sql)
+        self.con.commit()
+        return None
+
+    def protocol(self, text):
+        log = open('protokoll.log', 'a')
+        log.write('-- ' + str(datetime.datetime.now()) + '\n')
+        log.write(text + '\n')
+        log.flush()
+        log.close()
+
+
+class Status:
+    def __init__(self):
+        self.__status = False
+
+    @property
+    def status(self):
+        return self.__status
+
+    @status.setter
+    def status(self, stat):
+        assert isinstance(stat, bool)
+        self.__status = stat
+
+
 def init_dictionary():
-    global k_list, dic_prothesen, dic_typ, dic_statistik
+    #    global k_list, dic_prothesen, dic_typ, dic_statistik
     k_list = ["id",
               "patientennummer",
               "prothesenart",
@@ -84,69 +155,41 @@ def init_dictionary():
     dic_typ['einweiser'] = 1
 
 
-def open_db():  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
-    global conn, cur
-    try:  # Datenbankfehler abfangen...
-        conn = psycopg2.connect(
-            "host='localhost' dbname='prothesen' user='postgres' password='postgres'")
-        cur = conn.cursor()
-    except psycopg2.OperationalError as e:
-        protokoll_schreiben('-- ' + str(e))
-        sys.exit(1)
-
-
-def close_db():
-    try:  # Datenbankfehler abfangen...
-        conn.commit()
-        cur.close()
-        conn.close()
-    except psycopg2.OperationalError as e:
-        protokoll_schreiben('-- ' + str(e))
-        sys.exit(1)
-
-
 def hole_statistik():
     mwindow.plainTextEdit_statistik.clear()
-    open_db()
-    suche = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
+    db.open_db()
+    sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
     "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = TRUE;"""
-    cur.execute(suche)
-    suche = """SELECT COUNT(*) FROM jahr;"""
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    db.execute(sql)
+    sql = """SELECT COUNT(*) FROM jahr;"""
+    lesen = db.fetchone(sql)
     schreibe_statistik('alle Prothesen', lesen[0])
-    suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Hüfte'"""
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Hüfte'"""
+    lesen = db.fetchone(sql)
     schreibe_statistik('alle Hüft-TEP', lesen[0])
-    suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Knie'"""
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Knie'"""
+    lesen = db.fetchone(sql)
     schreibe_statistik('alle Knie-TEP', lesen[0])
-    suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Schulter'"""
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Schulter'"""
+    lesen = db.fetchone(sql)
     schreibe_statistik('alle Schulter-TEP', lesen[0])
-    suche = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Radiusköpfchen'"""
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Radiusköpfchen'"""
+    lesen = db.fetchone(sql)
     schreibe_statistik('alle Radiusköpfchenprothesen', lesen[0])
     schreibe_statistik('=', 44)
-    suche = """SELECT operateur, COUNT(id)  FROM jahr GROUP BY operateur;"""
-    cur.execute(suche)
-    lesen = cur.fetchall()
+    sql = """SELECT operateur, COUNT(id)  FROM jahr GROUP BY operateur;"""
+    lesen = db.fetchall(sql)
     for eintrag in lesen:
         schreibe_statistik(eintrag[0], eintrag[1])
     schreibe_statistik('=', 44)
-    suche = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM "public"."prothesen" WHERE \
+    sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM "public"."prothesen" WHERE \
     "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = FALSE;"""
-    cur.execute(suche)
-    suche = """SELECT COUNT(*) FROM nicht;"""
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    db.execute(sql)
+    sql = """SELECT COUNT(*) FROM nicht;"""
+    lesen = db.fetchone(sql)
     schreibe_statistik('Dokumentation unvollständig', lesen[0])
     schreibe_statistik('=', 44)
-    close_db()
+    db.close_db()
 
 
 def schreibe_statistik(kriterium, zahl):
@@ -158,10 +201,9 @@ def schreibe_statistik(kriterium, zahl):
 
 
 def change_patientennummer():
-    global status
-    if status:
+    if DataSetStatus.status:
         if mwindow.lineEdit_patientennummer.text() != mwindow.label_alt_patnummer.text():
-            status = False
+            DataSetStatus.status = False
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
     elif mwindow.pushButton_suche.text() == 'Laden...':  # bereits gefunden?
@@ -173,10 +215,8 @@ def change_patientennummer():
 
 
 def datensatz_laden(patnr):
-    global status
-    status = True
-    global dic_prothesen
-    suche = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
+    DataSetStatus.status = True
+    sql = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
 "sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention",\
@@ -184,13 +224,13 @@ def datensatz_laden(patnr):
 "ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post",\
 "vierundzwanzig_plus","oak"\
  FROM "prothesen" WHERE "patientennummer" = """
-    suche += patnr + ';'
-    open_db()
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql += patnr + ';'
+    db.open_db()
+    db.execute(sql)
+    lesen = db.fetchone()
     for it in k_list:
         dic_prothesen.update({it: lesen[k_list.index(it)]})  # Dictionary Formulardaten mit Datensatz aktualisieren...
-    close_db()
+    db.close_db()
     aktualisiere_widgets()
 
 
@@ -310,8 +350,8 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['oak'] = mwindow.checkBox_oak.isChecked()
 
 
-def schalter_suchen_laden():  # Schalter mit 2 Funktionen -> Suchen / Laden (Statusspeicherung)
-    if mwindow.pushButton_suche.text() == 'Laden...':
+def schalter_suchen_laden():  # Schalter -> Suchen / Laden
+    if not ButtonStatus.status:
         patnr = mwindow.lineEdit_patientennummer.text()
         datensatz_laden(patnr)
     else:
@@ -321,35 +361,36 @@ def schalter_suchen_laden():  # Schalter mit 2 Funktionen -> Suchen / Laden (Sta
 def suche_patientennummer():
     patnr = (
         mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
-    suche = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
-    suche += patnr + ';'
-    open_db()
-    cur.execute(suche)
-    lesen = cur.fetchone()
+    sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
+    sql += patnr + ';'
+    db.open_db()
+    lesen = db.fetchone(sql)
     if lesen:  # ein Datensatz mit dieser Patientennummer vorhanden...
         mwindow.label_alt_patnummer.setText(str(lesen[0]))
         mwindow.label_alt_proth_art.setText(str(lesen[1]))
         mwindow.label_alt_seite.setText(str(lesen[2]))
         mwindow.label_alt_op_datum.setText(str(lesen[3]))
         mwindow.pushButton_suche.setText('Laden...')
+        ButtonStatus.status = True
     else:
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
         mwindow.label_alt_seite.setText('------')
         mwindow.label_alt_op_datum.setText('-----------')
         mwindow.pushButton_suche.setText('Suchen...')
-    close_db()
+        ButtonStatus.status = False
+    db.close_db()
 
 
 def init_comboBox_einweiser():  # Eingabemaske Einweiser initialisieren
     mwindow.comboBox_einweiser.clear()  # Liste löschen
-    open_db()
-    cur.execute("""SELECT "einweiser" FROM "prothesen";""")
-    lesen = set(cur.fetchall())  # Satz aller Einweiser (auch None!)
+    db.open_db()
+    sql = """SELECT "einweiser" FROM "prothesen";"""
+    lesen = set(db.fetchall(sql))  # Satz aller Einweiser (auch None!)
     einweiser = [it[0] for it in lesen if it[0] is not None]  # Einweiserliste bereinigen
     for ew in sorted(einweiser):  # Einweiser laden
         mwindow.comboBox_einweiser.addItem(ew)
-    close_db()
+    db.close_db()
     mwindow.comboBox_einweiser.setCurrentText('')  # Eingabe leer
 
 
@@ -542,14 +583,14 @@ def init_dateEdit_opdatum():
 def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
     mwindow.comboBox_operateur.clear()
     mwindow.comboBox_assistenz.clear()
-    open_db()
-    cur.execute("""SELECT "operateur" FROM "prothesen";""")
-    lesen = set(cur.fetchall())  # Satz aller Operateure (auch None!)
+    db.open_db()
+    sql = """SELECT "operateur" FROM "prothesen";"""
+    lesen = set(db.fetchall(sql))  # Satz aller Operateure (auch None!)
     operateur = [it[0] for it in lesen if it[0] != None]  # Operateurliste bereinigen
     for op in sorted(operateur):  # Einweiser laden
         mwindow.comboBox_operateur.addItem(op)
         mwindow.comboBox_assistenz.addItem(op)
-    close_db()
+    db.close_db()
     mwindow.comboBox_operateur.setCurrentText('Joker')  # Eingabe vorbelegen
     mwindow.comboBox_assistenz.setCurrentText('Joker')
 
@@ -610,30 +651,19 @@ def set_start_default():  # alle Eingaben auf Standard stellen...
 
 def save_state():  # Status der Widgets in Dictionaries speichern
     lineEdits = mwindow.findChildren(QLineEdit)
-    global lineEditState
     lineEditState = {}
     for it in lineEdits:
         lineEditState.update({it: it.text()})
-    global checkBoxState
     checkBoxState = {}
     checkBoxes = mwindow.findChildren(QCheckBox)
     for it in checkBoxes:
         checkBoxState.update({it: it.checkState()})
 
 
-def protokoll_schreiben(text):
-    log = open('protokoll.log', 'a')
-    log.write('-- ' + str(datetime.datetime.now()) + '\n')
-    log.write(text + '\n')
-    log.flush()
-    log.close()
-
-
 def datensatz_speichern():
-    global status, dic_prothesen, k_list
     idnr = str(dic_prothesen['id'])
-    if status:  # SQL Update
-        schreiben = """UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
+    if DataSetStatus.status:  # SQL Update
+        sql = """UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
 "sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention",\
@@ -643,17 +673,17 @@ def datensatz_speichern():
  = ("""
         for it in k_list:
             if it != 'id':  # Postgres-Update ohne 'ID'
-                schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
+                sql += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
                     it] != 'NULL' else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'oak' else ''  # letztes Feld?
-        schreiben += """) WHERE "id" = """
-        schreiben += str(idnr) + ';'
-        protokoll_schreiben(schreiben)
-        open_db()
-        cur.execute(schreiben)
-        close_db()
+                sql += ',' if it != 'oak' else ''  # letztes Feld?
+        sql += """) WHERE "id" = """
+        sql += str(idnr) + ';'
+        db.open_db()
+        db.protocol(sql)
+        db.execute(sql)
+        db.close_db()
     else:  # SQL Insert
-        schreiben = """INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
+        sql = """INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
 "sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention",\
@@ -663,15 +693,15 @@ def datensatz_speichern():
  VALUES ("""
         for it in k_list:
             if it != 'id':  # Postgres-Insert ohne 'ID'
-                schreiben += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
+                sql += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
                     it] != 'NULL' else str(dic_prothesen[it])  # '?
-                schreiben += ',' if it != 'oak' else ''  # letztes Feld?
-        schreiben += """);"""
-        protokoll_schreiben(schreiben)
-        open_db()
-        cur.execute(schreiben)
-        close_db()
-    status = False
+                sql += ',' if it != 'oak' else ''  # letztes Feld?
+        sql += """);"""
+        db.open_db()
+        db.protocol(sql)
+        db.execute(sql)
+        db.close_db()
+    DataSetStatus.status = False
 
 
 def pruefen():
@@ -765,6 +795,9 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
+    db = database()
+    DataSetStatus = Status  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+    ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
     status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
