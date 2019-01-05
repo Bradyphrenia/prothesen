@@ -1,3 +1,4 @@
+#  Copyright (c) 2018 Steffen Troeger
 import datetime
 import sys
 
@@ -309,7 +310,7 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
     dic_prothesen['oak'] = mwindow.checkBox_oak.isChecked()
 
 
-def schalter_suchen_laden():  # Schalter mit 2 Funktionen Suchen / Laden (Statusspeicherung)
+def schalter_suchen_laden():  # Schalter mit 2 Funktionen -> Suchen / Laden (Statusspeicherung)
     if mwindow.pushButton_suche.text() == 'Laden...':
         patnr = mwindow.lineEdit_patientennummer.text()
         datensatz_laden(patnr)
@@ -751,11 +752,10 @@ def format_winkel(text):
     if text[1:2] == '0':  # zwei führende Nullen vor Punkt
         text = text[0:1] + ' ' + text[2:]
         return format_winkel(text)  # Rekursion
-    if text[1:2] not in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0') and text[2:3] not in (
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'):  # 2 Leerstellen vor Punkt
+    if text[1:2] == ' ' and text[2:3] == ' ':  # 2 Leerstellen vor Punkt
         text = text[0:1] + '0' + text[3:]
         return format_winkel(text)  # Rekursion
-    if text[2:3] not in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0'):  # Leerstelle vor Punkt
+    if text[2:3] == ' ':  # Leerstelle vor Punkt
         text = text[0:2] + text[3:]
         return format_winkel(text)  # Rekursion
     return text
