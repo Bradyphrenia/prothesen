@@ -350,7 +350,6 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         DataSetStatus.status = True
     else:
         suche_patientennummer()
-        DataSetStatus.status = False
 
 
 def suche_patientennummer():
@@ -740,7 +739,7 @@ def init_neuesFormular():  # neues Formular initialisieren
     mwindow.label_inklination_achtung.setVisible(False)
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
-    DataSetStatus.status = False
+    DataSetStatus.status = False  # Insert
 
 
 def change_praeop():
@@ -796,7 +795,6 @@ if __name__ == "__main__":
     ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
-    status = False  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     mwindow.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
     mwindow.checkBox_abweichung.stateChanged.connect(change_abweichung)  # Ereignis Abweichung an / aus
     mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)  # Ereignis Taste Suchen/Laden gedrückt
