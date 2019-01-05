@@ -93,6 +93,7 @@ class Status:  # Klasse zur Statusspeicherung
 
 
 def init_dictionary():
+    global k_list
     k_list = ["id",
               "patientennummer",
               "prothesenart",
@@ -199,21 +200,16 @@ def schreibe_statistik(kriterium, zahl):
 
 
 def change_patientennummer():
-    if DataSetStatus.status:
-        if mwindow.lineEdit_patientennummer.text() != mwindow.label_alt_patnummer.text():
-            DataSetStatus.status = False
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
-    elif mwindow.pushButton_suche.text() == 'Laden...':  # bereits gefunden?
+    elif not DataSetStatus.status:  # bereits gefunden?
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
         mwindow.label_alt_seite.setText('------')
         mwindow.label_alt_op_datum.setText('-----------')
-        mwindow.pushButton_suche.setText('Suchen...')  # keine Schleife!
 
 
 def datensatz_laden(patnr):
-    DataSetStatus.status = True
     sql = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
@@ -224,8 +220,7 @@ def datensatz_laden(patnr):
  FROM "prothesen" WHERE "patientennummer" = """
     sql += patnr + ';'
     db.open_db()
-    db.execute(sql)
-    lesen = db.fetchone()
+    lesen = db.fetchone(sql)
     for it in k_list:
         dic_prothesen.update({it: lesen[k_list.index(it)]})  # Dictionary Formulardaten mit Datensatz aktualisieren...
     db.close_db()
@@ -349,11 +344,13 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
 
 
 def schalter_suchen_laden():  # Schalter -> Suchen / Laden
-    if not ButtonStatus.status:
+    if ButtonStatus.status:
         patnr = mwindow.lineEdit_patientennummer.text()
         datensatz_laden(patnr)
+        DataSetStatus.status = True
     else:
         suche_patientennummer()
+        DataSetStatus.status = False
 
 
 def suche_patientennummer():
@@ -647,6 +644,7 @@ def set_start_default():  # alle Eingaben auf Standard stellen...
 
 
 def save_state():  # Status der Widgets in Dictionaries speichern
+    global lineEditState, checkBoxState
     lineEdits = mwindow.findChildren(QLineEdit)
     lineEditState = {}
     for it in lineEdits:
@@ -742,6 +740,7 @@ def init_neuesFormular():  # neues Formular initialisieren
     mwindow.label_inklination_achtung.setVisible(False)
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
+    DataSetStatus.status = False
 
 
 def change_praeop():
