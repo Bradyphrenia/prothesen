@@ -31,7 +31,6 @@ class database:
         self.conn, self.cur = None, None
 
     def open_db(self):  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
-        # global conn, cur
         try:  # Datenbankfehler abfangen...
             self.conn = psycopg2.connect(
                 "host=" + self.host + " dbname=" + self.database + " user=" + self.username + " password=" + self.password)
@@ -42,7 +41,6 @@ class database:
 
     def close_db(self):
         try:  # Datenbankfehler abfangen...
-            # self.conn.commit()
             self.cur.close()
             self.conn.close()
         except psycopg2.OperationalError as e:
@@ -59,6 +57,7 @@ class database:
 
     def execute(self, sql):
         self.cur.execute(sql)
+        self.conn.commit()
         return None
 
     def update(self, sql):
@@ -79,7 +78,7 @@ class database:
         log.close()
 
 
-class Status:
+class Status:  # Klasse zur Statusspeicherung
     def __init__(self):
         self.__status = False
 
@@ -94,7 +93,6 @@ class Status:
 
 
 def init_dictionary():
-    #    global k_list, dic_prothesen, dic_typ, dic_statistik
     k_list = ["id",
               "patientennummer",
               "prothesenart",
@@ -640,8 +638,7 @@ def change_inklination():
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
     mwindow.pushButton_suche.setText('Suchen...')  # Schalter zurückstellen, sonst Datensatzsuche!
-    global status
-    status = False  # Datensatzstatus zurücksetzen
+    DataSetStatus.status = False  # Datensatzstatus zurücksetzen
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
     for it in checkBoxState:
