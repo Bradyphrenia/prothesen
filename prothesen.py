@@ -190,7 +190,7 @@ def hole_statistik():
     sql = """SELECT patientennummer from nicht"""
     lesen = db.fetchall(sql)
     for eintrag in lesen:
-        schreibe_statistik('Fallnummer:', eintrag[0])
+        schreibe_statistik('Fallnummer', eintrag[0])
     schreibe_statistik('=', 44)
     db.close_db()
 
