@@ -1,4 +1,4 @@
-#  Copyright (c) 2018 Steffen Troeger
+#  Copyright (c) 2017-2019 Steffen Troeger
 import datetime
 import sys
 
