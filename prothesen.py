@@ -187,6 +187,10 @@ def hole_statistik():
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
     schreibe_statistik('Dokumentation unvollständig', lesen[0])
+    sql = """SELECT patientennummer from nicht"""
+    lesen = db.fetchall(sql)
+    for eintrag in lesen:
+        schreibe_statistik('Fallnummer:', eintrag[0])
     schreibe_statistik('=', 44)
     db.close_db()
 
@@ -805,8 +809,8 @@ if __name__ == "__main__":
     mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
     mwindow.checkBox_fraktur.stateChanged.connect(change_fraktur)  # Ereignis Änderung Fraktur an / aus
     mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
-    for ite in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
-        ite.stateChanged.connect(change_neunzig)
+    for cb in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
+        cb.stateChanged.connect(change_neunzig)
     mwindow.lineEdit_praeop_winkel.textChanged.connect(change_praeop)  # Ereignis Eingabe präop. Winkel
     mwindow.lineEdit_postop_winkel.textChanged.connect(change_postop)  # Ereignis Eingabe postop. Winkel
     init_neuesFormular()  # Formular generieren und anzeigen...
