@@ -666,16 +666,12 @@ def datensatz_speichern():
 "vierundzwanzig_plus","oak")\
  = ("""
         for it in k_list:
-            if it != 'id':  # Postgres-Update ohne 'ID'
+            if it != 'id':  # Postgres-Update mit 'ID'
                 sql += ("'" + str(dic_prothesen[it]) + "'") if dic_typ[it] != 0 and dic_prothesen[
                     it] != 'NULL' else str(dic_prothesen[it])  # '?
                 sql += ',' if it != 'oak' else ''  # letztes Feld?
         sql += """) WHERE "id" = """
         sql += str(idnr) + ';'
-        db.open_db()
-        db.protocol(sql)
-        db.execute(sql)
-        db.close_db()
     else:  # SQL Insert
         sql = """INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
@@ -691,10 +687,10 @@ def datensatz_speichern():
                     it] != 'NULL' else str(dic_prothesen[it])  # '?
                 sql += ',' if it != 'oak' else ''  # letztes Feld?
         sql += """);"""
-        db.open_db()
-        db.protocol(sql)
-        db.execute(sql)
-        db.close_db()
+    db.open_db()
+    db.protocol(sql)
+    db.execute(sql)
+    db.close_db()
     DataSetStatus.status = False
 
 
@@ -705,6 +701,8 @@ def pruefen():
     if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2018-01-01':  # kein Op-Datum eingegeben
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
+        korrekt = False
+    if dic_prothesen['id'] is None and DataSetStatus.status:  # Update ohne id
         korrekt = False
     if not korrekt:
         dwindow.exec()
@@ -807,8 +805,8 @@ if __name__ == "__main__":
     mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
     mwindow.checkBox_fraktur.stateChanged.connect(change_fraktur)  # Ereignis Änderung Fraktur an / aus
     mwindow.checkBox_vierundzwanzig.stateChanged.connect(change_vierundzwanzig)
-    for it in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
-        it.stateChanged.connect(change_neunzig)
+    for ite in mwindow.groupBox_komplikation.findChildren(QCheckBox):  # Ereignis für alle CheckBoxes in Gruppe setzen
+        ite.stateChanged.connect(change_neunzig)
     mwindow.lineEdit_praeop_winkel.textChanged.connect(change_praeop)  # Ereignis Eingabe präop. Winkel
     mwindow.lineEdit_postop_winkel.textChanged.connect(change_postop)  # Ereignis Eingabe postop. Winkel
     init_neuesFormular()  # Formular generieren und anzeigen...
