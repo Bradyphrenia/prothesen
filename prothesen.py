@@ -1,4 +1,4 @@
-#  Copyright (c) 2017-2019 Steffen Troeger
+#  Copyright (c) 2017-19 Steffen Troeger
 import datetime
 import sys
 
@@ -185,7 +185,8 @@ def hole_statistik():
     for eintrag in lesen:
         schreibe_statistik(eintrag[0], eintrag[1])
     schreibe_statistik('=', 44)
-    sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM jahr  WHERE "dokumentation" = FALSE;"""
+    sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM  "public"."prothesen" WHERE \
+    "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = FALSE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
@@ -612,7 +613,8 @@ def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
     operateur = [it[0]
                  for it in lesen if it[0] != None]  # Operateurliste bereinigen
     mwindow.comboBox_operateur.clear()
-    for op in reversed(sorted(operateur)):  # Operateure laden -> getrennt wegen Fehlerprüfung
+    for op in reversed(
+            sorted(operateur)):  # Operateure laden -> getrennte for-loop und reverse-list wegen f() test_operateur
         mwindow.comboBox_operateur.addItem(op)
     mwindow.comboBox_operateur.setCurrentText('Svacina')  # Eingabe vorbelegen
     mwindow.comboBox_assistenz.clear()
