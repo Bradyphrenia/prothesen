@@ -185,8 +185,7 @@ def hole_statistik():
     for eintrag in lesen:
         schreibe_statistik(eintrag[0], eintrag[1])
     schreibe_statistik('=', 44)
-    sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM "public"."prothesen" WHERE \
-    "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = FALSE;"""
+    sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM jahr  WHERE "dokumentation" = FALSE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
@@ -606,17 +605,17 @@ def init_dateEdit_opdatum():
 
 
 def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
-    mwindow.comboBox_operateur.clear()
-    mwindow.comboBox_assistenz.clear()
     db.open_db()
     sql = """SELECT "operateur" FROM "prothesen";"""
     lesen = set(db.fetchall(sql))  # Satz aller Operateure (auch None!)
     db.close_db()
     operateur = [it[0]
                  for it in lesen if it[0] != None]  # Operateurliste bereinigen
-    for op in sorted(operateur):  # Operateure laden -> getrennt wegen Fehlerprüfung
+    mwindow.comboBox_operateur.clear()
+    for op in reversed(sorted(operateur)):  # Operateure laden -> getrennt wegen Fehlerprüfung
         mwindow.comboBox_operateur.addItem(op)
     mwindow.comboBox_operateur.setCurrentText('Svacina')  # Eingabe vorbelegen
+    mwindow.comboBox_assistenz.clear()
     for op in sorted(operateur):  # Assistenten laden
         mwindow.comboBox_assistenz.addItem(op)
     mwindow.comboBox_assistenz.setCurrentText('Joker')
@@ -636,8 +635,6 @@ def change_assistenz():
 
 def test_operateur(operateur1, operateur2):  # Test der Eingabe Operateur & Assistenz
     if operateur1 == 'Joker' and operateur2 == 'Joker':
-        return False
-    elif operateur1 == '' and operateur2 == '':
         return False
     elif operateur1 == operateur2:
         return False
