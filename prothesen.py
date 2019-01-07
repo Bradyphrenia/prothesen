@@ -28,9 +28,9 @@ class database:
 
     def __init__(self, host, dbase, username, password):
         self.host = host
+        self.dbase = dbase
         self.username = username
         self.password = password
-        self.dbase = dbase
         self.conn, self.cur = None, None
 
     def open_db(self):  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
