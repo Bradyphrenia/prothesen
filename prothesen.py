@@ -26,17 +26,17 @@ class achtung(QDialog, Ui_Dialog):  # Dialog-Klasse
 
 class database:
 
-    def __init__(self, host, dbase, username, password):
+    def __init__(self, host, dbname, username, password):
         self.host = host
-        self.dbase = dbase
+        self.dbname = dbname
         self.username = username
         self.password = password
         self.conn, self.cur = None, None
 
-    def open_db(self):  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
+    def open_db(self):
         try:  # Datenbankfehler abfangen...
             self.conn = psycopg2.connect(
-                "host=" + self.host + " dbname=" + self.dbase + " user=" + self.username + " password=" + self.password)
+                "host=" + self.host + " dbname=" + self.dbname + " user=" + self.username + " password=" + self.password)
             self.cur = self.conn.cursor()
         except psycopg2.OperationalError as e:
             self.protocol('-- ' + str(e))
@@ -825,8 +825,9 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = database('localhost', 'prothesen', 'postgres',
-                  'postgres')  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
-    DataSetStatus = Status  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+                  'postgres')  # host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
+    # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+    DataSetStatus = Status
     ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
