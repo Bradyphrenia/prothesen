@@ -906,3 +906,24 @@ INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proxim
 -- 2019-01-04 20:49:48.418635
 -- FATAL:  role "postgre" does not exist
 
+-- 2019-01-07 20:07:08.793407
+-- FATAL:  role "prothesen" does not exist
+
+-- 2019-01-07 20:07:49.559559
+-- FATAL:  role "prothesen" does not exist
+
+-- 2019-01-07 20:09:20.999718
+-- FATAL:  role "prothesen" does not exist
+
+-- 2019-01-07 20:09:27.245105
+-- FATAL:  role "prothesen" does not exist
+
+-- 2019-01-07 20:12:02.175005
+-- FATAL:  role "prothesen" does not exist
+
+-- 2019-01-07 20:13:35.636427
+-- FATAL:  role "prothesen" does not exist
+
+-- 2019-01-07 20:14:33.276580
+-- FATAL:  role "prothesen" does not exist
+
