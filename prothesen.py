@@ -826,7 +826,6 @@ if __name__ == "__main__":
     dwindow = achtung()
     db = database('localhost', 'prothesen', 'postgres',
                   'postgres')  # "host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'"
-
     DataSetStatus = Status  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
     dic_prothesen = {}  # Dictionary für Formulardaten
