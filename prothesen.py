@@ -823,8 +823,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-    db = database('139.64.200.60', 'prothesen', 'postgres',
-                  'SuperUser2012')  # host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
+    db = database('localhost', 'prothesen', 'postgres',
+                  'postgres')  # host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
     # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     DataSetStatus = Status
     ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
