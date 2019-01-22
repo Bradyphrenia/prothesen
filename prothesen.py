@@ -208,16 +208,26 @@ def schreibe_statistik(kriterium, zahl):
 
 
 def change_patientennummer():
+    """Änderung des Eingabefeldes Patientennummer"""
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
-    elif not DataSetStatus.status:  # bereits gefunden?
+    else:  # Zurücksetzen des Anzeigefeldes...
+
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
         mwindow.label_alt_seite.setText('------')
         mwindow.label_alt_op_datum.setText('-----------')
+        mwindow.pushButton_suche.setText('Suchen...')
+
+        DataSetStatus.status = False  # Append
+        ButtonStatus.status = False  # Suche...
 
 
 def datensatz_laden(patnr):
+    """
+    Wird bei Vorhandensein eines Datensatzes und Drücken des
+    Laden... -Knopfes aufgerufen / lädt Datensatz in Eingabemaske
+    """
     sql = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
 "op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie",\
@@ -365,15 +375,23 @@ def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
 
 
 def schalter_suchen_laden():  # Schalter -> Suchen / Laden
-    if ButtonStatus.status:
+    """
+    Schalter Suchen/Laden gedrückt
+    lädt bei vorhandenem Datensatz diesen
+    """
+    if ButtonStatus.status:  # Laden...
         patnr = mwindow.lineEdit_patientennummer.text()
         datensatz_laden(patnr)
-        DataSetStatus.status = True
+        DataSetStatus.status = True  # Append...
     else:
-        suche_patientennummer()
+        suche_patientennummer()  # sonst manuelle Datensatzsuche
 
 
 def suche_patientennummer():
+    """
+    Suche der Patientennummer...
+    wird bei Eingage der 8. Stelle der Patienennummer automatisch aufgerufen
+    """
     patnr = (
         mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
     sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
@@ -386,14 +404,14 @@ def suche_patientennummer():
         mwindow.label_alt_seite.setText(str(lesen[2]))
         mwindow.label_alt_op_datum.setText(str(lesen[3]))
         mwindow.pushButton_suche.setText('Laden...')
-        ButtonStatus.status = True
+        ButtonStatus.status = True  # Laden...
     else:
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
         mwindow.label_alt_seite.setText('------')
         mwindow.label_alt_op_datum.setText('-----------')
         mwindow.pushButton_suche.setText('Suchen...')
-        ButtonStatus.status = False
+        ButtonStatus.status = False  # Suchen...
     db.close_db()
 
 
@@ -666,8 +684,8 @@ def change_inklination():
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
     # Schalter zurückstellen, sonst Datensatzsuche!
-    mwindow.pushButton_suche.setText('Suchen...')
-    DataSetStatus.status = False  # Datensatzstatus zurücksetzen
+    # mwindow.pushButton_suche.setText('Suchen...')
+    # DataSetStatus.status = False  # Datensatzstatus zurücksetzen
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
     for it in checkBoxState:
@@ -735,7 +753,7 @@ def pruefen():
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
-    if dic_prothesen['id'] is None and DataSetStatus.status:  # Update ohne id
+    if dic_prothesen['id'] is None and DataSetStatus.status == True:  # Update ohne id
         korrekt = False
     if not korrekt:
         dwindow.exec()
@@ -746,7 +764,7 @@ def speichern():
     if pruefen():  # alle Eingaben gemacht?
         aktualisiere_dictionary()
         datensatz_speichern()
-        set_start_default()
+        #set_start_default()
         init_neuesFormular()
 
 
