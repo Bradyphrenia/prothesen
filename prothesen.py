@@ -384,7 +384,20 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         datensatz_laden(patnr)
         DataSetStatus.status = True  # Append...
     else:
+        set_start_default()  # ???
         suche_patientennummer()  # sonst manuelle Datensatzsuche
+        DataSetStatus.status = False  # Insert...
+
+
+
+    # mwindow.label_alt_patnummer.setText('----------')
+    # mwindow.label_alt_proth_art.setText('----------------')
+    # mwindow.label_alt_seite.setText('------')
+    # mwindow.label_alt_op_datum.setText('-----------')
+    # mwindow.pushButton_suche.setText('Suchen...')
+    # ButtonStatus.status = False  # Suche...
+
+
 
 
 def suche_patientennummer():
@@ -764,7 +777,7 @@ def speichern():
     if pruefen():  # alle Eingaben gemacht?
         aktualisiere_dictionary()
         datensatz_speichern()
-        #set_start_default()
+        set_start_default()
         init_neuesFormular()
 
 
@@ -789,6 +802,7 @@ def init_neuesFormular():  # neues Formular initialisieren
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
     DataSetStatus.status = False  # Datenbank-Insert als initialer Status
+    ButtonStatus.status = False  # Suche...
 
 
 def change_praeop():
