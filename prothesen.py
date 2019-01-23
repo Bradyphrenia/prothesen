@@ -208,7 +208,9 @@ def schreibe_statistik(kriterium, zahl):
 
 
 def change_patientennummer():
-    """Änderung des Eingabefeldes Patientennummer"""
+    """
+    Änderung des Eingabefeldes Patientennummer
+    """
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
     else:  # Zurücksetzen des Anzeigefeldes...
@@ -306,6 +308,7 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
         dic_prothesen['vierundzwanzig_plus'] if dic_prothesen['vierundzwanzig_plus'] is not None else False)
     mwindow.checkBox_oak.setChecked(
         dic_prothesen['oak'] if dic_prothesen['oak'] is not None else False)
+    mwindow.repaint()  # Fenster aktualisieren
 
 
 def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
@@ -387,17 +390,6 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         set_start_default()  # ???
         suche_patientennummer()  # sonst manuelle Datensatzsuche
         DataSetStatus.status = False  # Insert...
-
-
-
-    # mwindow.label_alt_patnummer.setText('----------')
-    # mwindow.label_alt_proth_art.setText('----------------')
-    # mwindow.label_alt_seite.setText('------')
-    # mwindow.label_alt_op_datum.setText('-----------')
-    # mwindow.pushButton_suche.setText('Suchen...')
-    # ButtonStatus.status = False  # Suche...
-
-
 
 
 def suche_patientennummer():
@@ -696,9 +688,6 @@ def change_inklination():
 
 
 def set_start_default():  # alle Eingaben auf Standard stellen...
-    # Schalter zurückstellen, sonst Datensatzsuche!
-    # mwindow.pushButton_suche.setText('Suchen...')
-    # DataSetStatus.status = False  # Datensatzstatus zurücksetzen
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
     for it in checkBoxState:
@@ -766,7 +755,7 @@ def pruefen():
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
-    if dic_prothesen['id'] is None and DataSetStatus.status == True:  # Update ohne id
+    if dic_prothesen['id'] is None and DataSetStatus.status is True:  # Update ohne id
         korrekt = False
     if not korrekt:
         dwindow.exec()
