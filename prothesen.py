@@ -162,7 +162,7 @@ def hole_statistik():
     mwindow.plainTextEdit_statistik.clear()
     db.open_db()
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
-    "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = TRUE;"""
+    "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = TRUE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM jahr;"""
     lesen = db.fetchone(sql)
@@ -186,7 +186,7 @@ def hole_statistik():
         schreibe_statistik(eintrag[0], eintrag[1])
     schreibe_statistik('=', 44)
     sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM  "public"."prothesen" WHERE \
-    "opdatum" >= '2018-01-01' AND "opdatum" <= '2018-12-31' AND "dokumentation" = FALSE;"""
+    "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = FALSE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
@@ -537,7 +537,7 @@ def change_neunzig():
 
 
 def init_lineEdit_patientennummer():  # Patientennummer initialisieren
-    mwindow.lineEdit_patientennummer.setText('48000000')  # Maske vorbelegen
+    mwindow.lineEdit_patientennummer.setText('49000000')  # Maske vorbelegen
     mwindow.lineEdit_patientennummer.setCursorPosition(
         2)  # Cursor auf 3. Position
 
@@ -752,7 +752,7 @@ def pruefen():
     korrekt = True
     if mwindow.comboBox_operateur.currentText() == 'Joker' and mwindow.comboBox_assistenz.currentText() == 'Joker':  # kein Operatuer eingegeben
         korrekt = False
-    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2018-01-01':  # kein Op-Datum eingegeben
+    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2019-01-01':  # kein Op-Datum eingegeben
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
@@ -793,6 +793,7 @@ def init_neuesFormular():  # neues Formular initialisieren
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
     DataSetStatus.status = False  # Datenbank-Insert als initialer Status
     ButtonStatus.status = False  # Suche...
+    mwindow.repaint()
 
 
 def change_praeop():

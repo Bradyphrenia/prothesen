@@ -209,7 +209,7 @@ class Ui_MainWindow(object):
         self.dateEdit_opdatum.setGeometry(QtCore.QRect(190, 430, 110, 24))
         self.dateEdit_opdatum.setDateTime(QtCore.QDateTime(QtCore.QDate(2017, 1, 1), QtCore.QTime(0, 0, 0)))
         self.dateEdit_opdatum.setCalendarPopup(True)
-        self.dateEdit_opdatum.setDate(QtCore.QDate(2017, 1, 1))
+        self.dateEdit_opdatum.setDate(QtCore.QDate(2019, 1, 1))
         self.dateEdit_opdatum.setObjectName("dateEdit_opdatum")
         self.label_copyright_year = QtWidgets.QLabel(self.centralwidget)
         self.label_copyright_year.setGeometry(QtCore.QRect(1080, 720, 31, 21))
