@@ -387,9 +387,10 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         datensatz_laden(patnr)
         DataSetStatus.status = True  # Append...
     else:
-        set_start_default()  # ???
+        set_start_default()
         suche_patientennummer()  # sonst manuelle Datensatzsuche
         DataSetStatus.status = False  # Insert...
+        mwindow.repaint()
 
 
 def suche_patientennummer():
