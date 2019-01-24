@@ -220,9 +220,9 @@ def change_patientennummer():
         mwindow.label_alt_seite.setText('------')
         mwindow.label_alt_op_datum.setText('-----------')
         mwindow.pushButton_suche.setText('Suchen...')
-
+        ButtonStatus.status = False  # Suchen...
         DataSetStatus.status = False  # Append
-        ButtonStatus.status = False  # Suche...
+
 
 
 def datensatz_laden(patnr):
@@ -385,11 +385,11 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
     if ButtonStatus.status:  # Laden...
         patnr = mwindow.lineEdit_patientennummer.text()
         datensatz_laden(patnr)
-        DataSetStatus.status = True  # Append...
+        DataSetStatus.status = True  # Update...
     else:
         set_start_default()
         suche_patientennummer()  # sonst manuelle Datensatzsuche
-        DataSetStatus.status = False  # Insert...
+        DataSetStatus.status = False  # Append...
         mwindow.repaint()
 
 
@@ -756,7 +756,7 @@ def pruefen():
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
-    if dic_prothesen['id'] is None and DataSetStatus.status is True:  # Update ohne id
+    if dic_prothesen['id'] is None and DataSetStatus.status == True:  # Update ohne id
         korrekt = False
     if not korrekt:
         dwindow.exec()

@@ -212,7 +212,7 @@ class Ui_MainWindow(object):
         self.dateEdit_opdatum.setDate(QtCore.QDate(2019, 1, 1))
         self.dateEdit_opdatum.setObjectName("dateEdit_opdatum")
         self.label_copyright_year = QtWidgets.QLabel(self.centralwidget)
-        self.label_copyright_year.setGeometry(QtCore.QRect(1080, 720, 31, 21))
+        self.label_copyright_year.setGeometry(QtCore.QRect(1080, 720, 41, 21))
         font = QtGui.QFont()
         font.setPointSize(7)
         self.label_copyright_year.setFont(font)
