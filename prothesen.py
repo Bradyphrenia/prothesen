@@ -10,7 +10,10 @@ from achtung import Ui_Dialog
 from mainwindow import Ui_MainWindow
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):  # Mainwindow-Klasse
+class MainWindow(QMainWindow, Ui_MainWindow):
+    """
+    Mainwindow-Klasse
+    """
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent=parent)
@@ -25,6 +28,9 @@ class achtung(QDialog, Ui_Dialog):  # Dialog-Klasse
 
 
 class database:
+    """
+    Datenbank-Klasse
+    """
 
     def __init__(self, host, dbname, username, password):
         self.host = host
@@ -81,7 +87,10 @@ class database:
         log.close()
 
 
-class Status:  # Klasse zur Statusspeicherung
+class Status:
+    """
+    Klasse zur Statusspeicherung
+    """
 
     def __init__(self):
         self.__status = False
@@ -97,6 +106,10 @@ class Status:  # Klasse zur Statusspeicherung
 
 
 def init_dictionary():
+    """
+    Dictionaries für Datenspeicherung initialisieren...
+    :return: None
+    """
     global k_list
     k_list = ["id",
               "patientennummer",
@@ -159,6 +172,10 @@ def init_dictionary():
 
 
 def hole_statistik():
+    """
+    statistische Daten aus der PostgreSQL-Datenbank holen...
+    :return: None
+    """
     mwindow.plainTextEdit_statistik.clear()
     db.open_db()
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
@@ -200,6 +217,12 @@ def hole_statistik():
 
 
 def schreibe_statistik(kriterium, zahl):
+    """
+    Ausgabe der statistischen Daten...
+    :param kriterium: Text
+    :param zahl: Zahl
+    :return: None
+    """
     if kriterium != '=':  # Trennzeichen
         mwindow.plainTextEdit_statistik.appendPlainText(
             kriterium + '   --->   ' + str(zahl))
@@ -209,7 +232,8 @@ def schreibe_statistik(kriterium, zahl):
 
 def change_patientennummer():
     """
-    Änderung des Eingabefeldes Patientennummer
+    Änderung des Eingabefeldes Patientennummer...
+    :return: None
     """
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
@@ -227,6 +251,7 @@ def datensatz_laden(patnr):
     """
     Wird bei Vorhandensein eines Datensatzes und Drücken des
     Laden... -Knopfes aufgerufen / lädt Datensatz in Eingabemaske
+    :return: None
     """
     sql = """SELECT "id","patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
 "praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz",\
@@ -246,7 +271,11 @@ def datensatz_laden(patnr):
     aktualisiere_widgets()
 
 
-def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
+def aktualisiere_widgets():
+    """
+    Daten aus Dictionary ins Formular laden...
+    :return: None
+    """
     mwindow.comboBox_prothesenart.setCurrentText(dic_prothesen['prothesenart'])
     mwindow.comboBox_seite.setCurrentText(dic_prothesen['seite'])
     mwindow.comboBox_proximal.setCurrentText(dic_prothesen['proximal'])
@@ -309,7 +338,11 @@ def aktualisiere_widgets():  # Daten aus Dictionary ins Formular laden...
     mwindow.repaint()  # Fenster aktualisieren
 
 
-def aktualisiere_dictionary():  # Daten aus Formular in das Dictionary laden...
+def aktualisiere_dictionary():
+    """
+    Daten aus Formular in das Dictionary laden...
+    :return:
+    """
     dic_prothesen['patientennummer'] = mwindow.lineEdit_patientennummer.text()
     dic_prothesen['prothesenart'] = mwindow.comboBox_prothesenart.currentText()
     dic_prothesen['prothesentyp'] = 'NULL' if str(dic_prothesen['prothesentyp']).strip() != '' else dic_prothesen[
@@ -419,7 +452,11 @@ def suche_patientennummer():
     db.close_db()
 
 
-def init_comboBox_einweiser():  # Eingabemaske Einweiser initialisieren
+def init_comboBox_einweiser():
+    """
+    Eingabemaske Einweiser initialisieren...
+    :return: None
+    """
     mwindow.comboBox_einweiser.clear()  # Liste löschen
     db.open_db()
     sql = """SELECT "einweiser" FROM "prothesen";"""
@@ -432,7 +469,11 @@ def init_comboBox_einweiser():  # Eingabemaske Einweiser initialisieren
     mwindow.comboBox_einweiser.setCurrentText('')  # Eingabe leer
 
 
-def change_prothesenart():  # Eingabemaske anpassen...
+def change_prothesenart():
+    """
+    Eingabemaske an Prothesenart anpassen...
+    :return: None
+    """
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         mwindow.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
         mwindow.lineEdit_praeop_winkel.setText('')
@@ -477,7 +518,11 @@ def change_prothesenart():  # Eingabemaske anpassen...
     init_comboBox_distal()
 
 
-def change_abweichung():  # Abweichung an und aus
+def change_abweichung():
+    """
+    Abweichungen an und aus...
+    :return: None
+    """
     wglist = (  # Elemente der Eingabemaske in Liste laden
         mwindow.checkBox_vorbereitung,
         mwindow.checkBox_blutung,
@@ -498,7 +543,11 @@ def change_abweichung():  # Abweichung an und aus
         mwindow.groupBox_abweichung.setVisible(False)
 
 
-def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
+def change_wechseleingriff():
+    """
+    Änderung Wechseleingriff -> knochenverankert?
+    :return: None
+    """
     if mwindow.checkBox_wechseleingriff.isChecked() == True:
         mwindow.checkBox_knochenverankert.setVisible(
             True)  # Checkbox knochenverankert ein-
@@ -508,7 +557,11 @@ def change_wechseleingriff():  # Änderung Wechseleingriff -> knochenverankert?
         mwindow.checkBox_knochenverankert.setCheckState(False)
 
 
-def change_fraktur():  # Änderung Fraktur -> periprothetisch?
+def change_fraktur():
+    """
+    Änderung Fraktur -> periprothetisch?
+    :return: None
+    """
     if mwindow.checkBox_fraktur.isChecked() == True:
         mwindow.checkBox_periprothetisch.setVisible(
             True)  # Checkbox periprothetisch ein-
@@ -519,6 +572,11 @@ def change_fraktur():  # Änderung Fraktur -> periprothetisch?
 
 
 def change_vierundzwanzig():
+    """
+    Versorgung nach 24h?
+    Ursache orale Antikoagulantien?
+    :return: None
+    """
     if mwindow.checkBox_vierundzwanzig.isChecked() == True:
         mwindow.checkBox_oak.setVisible(True)  # Checkbox periprothetisch ein-
     else:
@@ -527,26 +585,42 @@ def change_vierundzwanzig():
 
 
 def change_neunzig():
-    if mwindow.checkBox_infektion.isChecked() == False and mwindow.checkBox_luxation.isChecked() == False \
-            and mwindow.checkBox_trochanterabriss.isChecked() == False and mwindow.checkBox_fissur.isChecked() == False \
-            and mwindow.checkBox_thromboembolie.isChecked() == False and mwindow.checkBox_neurologie.isChecked() == False \
-            and mwindow.checkBox_gestorben.isChecked() == False:
+    """
+    Komplikationen < 90 Tage
+    :return: None
+    """
+    if mwindow.checkBox_infektion.isChecked() is False and mwindow.checkBox_luxation.isChecked() is False \
+            and mwindow.checkBox_trochanterabriss.isChecked() is False and mwindow.checkBox_fissur.isChecked() is False \
+            and mwindow.checkBox_thromboembolie.isChecked() is False and mwindow.checkBox_neurologie.isChecked() is False \
+            and mwindow.checkBox_gestorben.isChecked() is False:
         mwindow.checkBox_neunzig.setCheckState(False)
 
 
-def init_lineEdit_patientennummer():  # Patientennummer initialisieren
+def init_lineEdit_patientennummer():
+    """
+    Patientennummer initialisieren...
+    :return: None
+    """
     mwindow.lineEdit_patientennummer.setText('49000000')  # Maske vorbelegen
     mwindow.lineEdit_patientennummer.setCursorPosition(
         2)  # Cursor auf 3. Position
 
 
-def init_comboBox_seite():  # Seitenangabe ...
+def init_comboBox_seite():
+    """
+    Seitenangabe ...
+    :return: None
+    """
     mwindow.comboBox_seite.clear()
     mwindow.comboBox_seite.addItem('rechts')
     mwindow.comboBox_seite.addItem('links')
 
 
-def init_comboBox_prothesenart():  # Prothesenart ...
+def init_comboBox_prothesenart():
+    """
+    Prothesenart ...
+    :return: None
+    """
     mwindow.comboBox_prothesenart.clear()
     mwindow.comboBox_prothesenart.addItem('Hüfte')
     mwindow.comboBox_prothesenart.addItem('Knie')
@@ -554,7 +628,11 @@ def init_comboBox_prothesenart():  # Prothesenart ...
     mwindow.comboBox_prothesenart.addItem('Radiusköpfchen')
 
 
-def init_comboBox_proximal():  # Eingabemasken Implantate proximal und distal
+def init_comboBox_proximal():
+    """
+    Auswahlliste Implantate proximal füllen...
+    :return: None
+    """
     mwindow.comboBox_proximal.clear()  # Masken löschen und füllen...
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
@@ -587,6 +665,10 @@ def init_comboBox_proximal():  # Eingabemasken Implantate proximal und distal
 
 
 def init_comboBox_distal():
+    """
+    Auswahlliste Implantate distal füllen...
+    :return: None
+    """
     mwindow.comboBox_distal.clear()
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
@@ -623,11 +705,19 @@ def init_comboBox_distal():
 
 
 def init_dateEdit_opdatum():
+    """
+    Grenzen für Operationsdatum festlegen
+    :return: None
+    """
     mwindow.dateEdit_opdatum.setMinimumDate(QDate(2014, 1, 1))
     mwindow.dateEdit_opdatum.setMaximumDate(QDate(2020, 12, 31))
 
 
-def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
+def init_comboBox_operateur():
+    """
+    Auswahlmasken für Operateur und Assistent füllen
+    :return: None
+    """
     db.open_db()
     sql = """SELECT "operateur" FROM "prothesen";"""
     lesen = set(db.fetchall(sql))  # Satz aller Operateure (auch None!)
@@ -646,18 +736,33 @@ def init_comboBox_operateur():  # Eingabemaske Operateur initialisieren
 
 
 def change_operateur():
+    """
+    Änderung des Operateurs
+    :return: None
+    """
     if test_operateur(mwindow.comboBox_operateur.currentText(), mwindow.comboBox_assistenz.currentText()) == False:
         dwindow.exec()  # Fenster Eingabefehler
         mwindow.comboBox_operateur.setCurrentText('Svacina')
 
 
 def change_assistenz():
+    """
+    Änderung des Assistenten
+    :return: None
+    """
     if test_operateur(mwindow.comboBox_operateur.currentText(), mwindow.comboBox_assistenz.currentText()) == False:
         dwindow.exec()  # Fenster Eingabefehler
         mwindow.comboBox_assistenz.setCurrentText('Joker')
 
 
-def test_operateur(operateur1, operateur2):  # Test der Eingabe Operateur & Assistenz
+def test_operateur(operateur1, operateur2):
+    """
+    Test der Eingabe von Operateur und Assistent auf Validität
+    :param operateur1: Operateur oder Assistent 1
+    :param operateur2: Operateur oder Assistent 2
+    :return: True wenn richtig
+             False wenn falsch
+    """
     if operateur1 == 'Joker' and operateur2 == 'Joker':
         return False
     elif operateur1 == operateur2:
@@ -667,6 +772,10 @@ def test_operateur(operateur1, operateur2):  # Test der Eingabe Operateur & Assi
 
 
 def change_opzeit():
+    """
+    Änderung der Operationszeit
+    :return: None
+    """
     opzeit = int(
         mwindow.lineEdit_operationszeit.text() if mwindow.lineEdit_operationszeit.text() != '' else '0')  # '' abfangen!
     if opzeit > 100 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
@@ -678,6 +787,10 @@ def change_opzeit():
 
 
 def change_inklination():
+    """
+    Änderung des Inklinationswinkels
+    :return: None
+    """
     inklination = int(
         mwindow.lineEdit_inklinationswinkel.text() if mwindow.lineEdit_inklinationswinkel.text() != '' else '0')  # '' abfangen!
     if inklination > 50 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
@@ -686,7 +799,11 @@ def change_inklination():
         mwindow.label_inklination_achtung.setVisible(False)
 
 
-def set_start_default():  # alle Eingaben auf Standard stellen...
+def set_start_default():
+    """
+    alle Eingaben auf Standard stellen...
+    :return:
+    """
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
     for it in checkBoxState:
@@ -694,11 +811,15 @@ def set_start_default():  # alle Eingaben auf Standard stellen...
     mwindow.plainTextEdit_memo.setPlainText('')  # Memo-Feld löschen
 
 
-def save_state():  # Status der Widgets in Dictionaries speichern
+def save_state():
+    """
+    Status der Widgets in Dictionaries speichern
+    :return: None
+    """
     global lineEditState, checkBoxState
-    lineEdits = mwindow.findChildren(QLineEdit)
+    lineedits = mwindow.findChildren(QLineEdit)
     lineEditState = {}
-    for it in lineEdits:
+    for it in lineedits:
         lineEditState.update({it: it.text()})
     checkBoxState = {}
     checkBoxes = mwindow.findChildren(QCheckBox)
@@ -707,6 +828,11 @@ def save_state():  # Status der Widgets in Dictionaries speichern
 
 
 def datensatz_speichern():
+    """
+    Schreiben der Daten in die PostgreSQL-Datenbank
+    Update oder Insert
+    :return: None
+    """
     idnr = str(dic_prothesen['id'])
     if DataSetStatus.status:  # SQL Update
         sql = """UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff",\
@@ -747,6 +873,11 @@ def datensatz_speichern():
 
 
 def pruefen():
+    """
+    Prüfung der Eingaben...
+    :return: True wenn Eingaben richtig
+             False wenn Einagben falsch
+    """
     korrekt = True
     if mwindow.comboBox_operateur.currentText() == 'Joker' and mwindow.comboBox_assistenz.currentText() == 'Joker':  # kein Operatuer eingegeben
         korrekt = False
@@ -762,6 +893,10 @@ def pruefen():
 
 
 def speichern():
+    """
+    Speichern der Daten in der Datenbank
+    :return: None
+    """
     if pruefen():  # alle Eingaben gemacht?
         aktualisiere_dictionary()
         datensatz_speichern()
@@ -769,7 +904,11 @@ def speichern():
         init_neuesFormular()
 
 
-def init_neuesFormular():  # neues Formular initialisieren
+def init_neuesFormular():
+    """
+    neues Formular initialisieren
+    :return: None
+    """
     init_dictionary()
     hole_statistik()
     init_lineEdit_patientennummer()
@@ -795,18 +934,33 @@ def init_neuesFormular():  # neues Formular initialisieren
 
 
 def change_praeop():
+    """
+    Eingabe des präoperativen Knie-Winkels
+    :return: None
+    """
     if len(mwindow.lineEdit_praeop_winkel.text()) > 4 or mwindow.lineEdit_praeop_winkel.cursorPosition() == 5:
         mwindow.lineEdit_praeop_winkel.setText(
             format_winkel(mwindow.lineEdit_praeop_winkel.text()))
     mwindow.lineEdit_praeop_winkel.repaint()
 
+
 def change_postop():
+    """
+    Eingabe des postoperativen Knie-Winkels
+    :return: None
+    """
     if len(mwindow.lineEdit_postop_winkel.text()) > 4 or mwindow.lineEdit_postop_winkel.cursorPosition() == 5:
         mwindow.lineEdit_postop_winkel.setText(
             format_winkel(mwindow.lineEdit_postop_winkel.text()))
     mwindow.lineEdit_postop_winkel.repaint()
 
+
 def format_winkel(text):
+    """
+    Formatieren der Winkelangaben
+    :param text: unformatierter Winkel
+    :return: formatierter Winkel
+    """
     text = text.strip()
     if text == 'Null' or text == '.' or text == '':  # leer?
         return ''
