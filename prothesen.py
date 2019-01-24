@@ -341,7 +341,7 @@ def aktualisiere_widgets():
 def aktualisiere_dictionary():
     """
     Daten aus Formular in das Dictionary laden...
-    :return:
+    :return:  None
     """
     dic_prothesen['patientennummer'] = mwindow.lineEdit_patientennummer.text()
     dic_prothesen['prothesenart'] = mwindow.comboBox_prothesenart.currentText()
@@ -412,6 +412,7 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
     """
     Schalter Suchen/Laden gedrückt
     lädt bei vorhandenem Datensatz diesen
+    :return: None
     """
     if ButtonStatus.status:  # Laden...
         patnr = mwindow.lineEdit_patientennummer.text()
@@ -428,6 +429,7 @@ def suche_patientennummer():
     """
     Suche der Patientennummer...
     wird bei Eingage der 8. Stelle der Patienennummer automatisch aufgerufen
+    :return: None
     """
     patnr = (
         mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
@@ -802,7 +804,7 @@ def change_inklination():
 def set_start_default():
     """
     alle Eingaben auf Standard stellen...
-    :return:
+    :return: None
     """
     for it in lineEditState.keys():
         it.setText(lineEditState[it])
