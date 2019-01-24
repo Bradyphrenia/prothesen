@@ -1112,3 +1112,16 @@ hjhsjhdjkshdhsk
 add
 add
 test',False,False,False,False,False,False,False,False,False,False,False,False,False,'Barz',False,+0.0,+0.0,False,False) WHERE "id" = 3508;
+-- 2019-01-24 14:12:06.666878
+UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (48123456,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','links',False,True,True,False,True,'2018-06-07','Troeger','Schoen',90,False,False,NULL,False,False,False,False,False,True,'Test...
+
+hjhsjhdjkshdhsk
+
+add
+add
+test
+add',False,False,False,False,False,False,False,False,False,False,False,False,False,'Barz',False,+0.0,+0.0,False,False) WHERE "id" = 3508;
+-- 2019-01-24 14:12:54.510122
+UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (48011496,'Knie',NULL,'Scharnierknie Femur','3D Knie Tibia','rechts',False,True,True,True,True,'2018-06-22','Svacina','Schoen',126,False,False,NULL,False,True,False,False,False,True,'test',False,True,True,False,False,False,False,False,False,False,False,False,False,'Reichmuth',False,+5.7,+2.0,False,False) WHERE "id" = 3270;
+-- 2019-01-24 14:13:49.977194
+UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (48011496,'Knie',NULL,'Scharnierknie Femur','3D Knie Tibia','rechts',False,True,True,True,True,'2018-06-23','Svacina','Schoen',126,False,False,NULL,False,True,False,False,False,True,'test',False,True,True,False,False,False,False,False,False,False,False,False,False,'Reichmuth',False,+5.7,+2.0,False,False) WHERE "id" = 3270;

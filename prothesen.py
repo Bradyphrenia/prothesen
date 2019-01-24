@@ -214,7 +214,6 @@ def change_patientennummer():
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
     else:  # Zurücksetzen des Anzeigefeldes...
-
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
         mwindow.label_alt_seite.setText('------')
@@ -222,7 +221,6 @@ def change_patientennummer():
         mwindow.pushButton_suche.setText('Suchen...')
         ButtonStatus.status = False  # Suchen...
         DataSetStatus.status = False  # Append
-
 
 
 def datensatz_laden(patnr):
@@ -756,7 +754,7 @@ def pruefen():
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
-    if dic_prothesen['id'] is None and DataSetStatus.status == True:  # Update ohne id
+    if dic_prothesen['id'] is None and DataSetStatus.status is True:  # Update ohne id
         korrekt = False
     if not korrekt:
         dwindow.exec()
@@ -800,13 +798,13 @@ def change_praeop():
     if len(mwindow.lineEdit_praeop_winkel.text()) > 4 or mwindow.lineEdit_praeop_winkel.cursorPosition() == 5:
         mwindow.lineEdit_praeop_winkel.setText(
             format_winkel(mwindow.lineEdit_praeop_winkel.text()))
-
+    mwindow.lineEdit_praeop_winkel.repaint()
 
 def change_postop():
     if len(mwindow.lineEdit_postop_winkel.text()) > 4 or mwindow.lineEdit_postop_winkel.cursorPosition() == 5:
         mwindow.lineEdit_postop_winkel.setText(
             format_winkel(mwindow.lineEdit_postop_winkel.text()))
-
+    mwindow.lineEdit_postop_winkel.repaint()
 
 def format_winkel(text):
     text = text.strip()
