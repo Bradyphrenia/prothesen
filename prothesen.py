@@ -958,8 +958,8 @@ def change_postop():
 def format_winkel(text):
     """
     Formatieren der Winkelangaben
-    :param text: unformatierter Winkel
-    :return: formatierter Winkel
+    :param text: Text unformatierter Winkel
+    :return: Text formatierter Winkel
     """
     text = text.strip()
     if text == 'Null' or text == '.' or text == '':  # leer?
@@ -999,9 +999,15 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = database('localhost', 'prothesen', 'postgres',
-                  'postgres')  # host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
-    # Datensatzstatus False -> Postgres Append, True -> Postgres Update
-    DataSetStatus = Status
+                  'postgres')
+    """
+    Klinikrechner:
+    host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
+    eigener Rechner:
+    host='localhost' dbname='prothesen' user='postgres' password='postgres'
+    
+    """
+    DataSetStatus = Status  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
@@ -1009,8 +1015,7 @@ if __name__ == "__main__":
         change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
     mwindow.checkBox_abweichung.stateChanged.connect(
         change_abweichung)  # Ereignis Abweichung an / aus
-    # Ereignis Taste Suchen/Laden gedrückt
-    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)
+    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)  # Ereignis Taste Suchen/Laden gedrückt
     mwindow.comboBox_operateur.currentTextChanged.connect(
         change_operateur)  # Ereignis Wechsel Operateur
     mwindow.comboBox_assistenz.currentTextChanged.connect(
