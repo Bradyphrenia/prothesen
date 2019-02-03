@@ -4,6 +4,7 @@ import sys
 
 import psycopg2
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from achtung import Ui_Dialog
@@ -946,6 +947,17 @@ def change_postop():
     if len(mwindow.lineEdit_postop_winkel.text()) > 4 or mwindow.lineEdit_postop_winkel.cursorPosition() == 5:
         mwindow.lineEdit_postop_winkel.setText(
             format_winkel(mwindow.lineEdit_postop_winkel.text()))
+    palette = QPalette()
+    try:
+        winkel = abs(float(mwindow.lineEdit_postop_winkel.text()))  ## Winkel auffällig?
+    except ValueError:
+        winkel = 0
+    if winkel > 3:
+        palette.setColor(QPalette.Text, Qt.red)
+        mwindow.lineEdit_postop_winkel.setPalette(palette)
+    else:
+        palette.setColor(QPalette.Text, Qt.black)
+        mwindow.lineEdit_postop_winkel.setPalette(palette)
     mwindow.lineEdit_postop_winkel.repaint()
 
 
