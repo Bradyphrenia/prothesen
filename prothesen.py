@@ -417,7 +417,7 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
 def suche_patientennummer():
     """
     Suche der Patientennummer...
-    wird bei Eingage der 8. Stelle der Patienennummer automatisch aufgerufen
+    wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
     :return: None
     """
     patnr = (
