@@ -1,4 +1,4 @@
-#  Copyright (c) 2017-2019 Steffen Troeger
+#  Copyright (c) 2017-19 Steffen Troeger
 import datetime
 import sys
 
@@ -417,7 +417,7 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
 def suche_patientennummer():
     """
     Suche der Patientennummer...
-    wird bei Eingage der 8. Stelle der Patienennummer automatisch aufgerufen
+    wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
     :return: None
     """
     patnr = (
@@ -520,7 +520,8 @@ def change_abweichung():
         mwindow.checkBox_implantat,
         mwindow.checkBox_stabilisatoren,
         mwindow.checkBox_anaesthesie)
-    if mwindow.checkBox_abweichung.isChecked() is True:  # Eingabemaske für Abweichungen...
+    # Eingabemaske für Abweichungen...
+    if mwindow.checkBox_abweichung.isChecked() is True:
         for wg in wglist:  # einschalten
             wg.setVisible(True)
         mwindow.groupBox_abweichung.setVisible(True)
@@ -635,7 +636,7 @@ def init_comboBox_proximal():
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
         for it in (
                 "3D Knie Femur",
-                "PS Knie Femur",
+                "ACS-SC Knie Femur",
                 "Scharnierknie Femur",
                 "Allergie-Knie Femur",
                 "sonstiges"):
@@ -674,6 +675,7 @@ def init_comboBox_distal():
         for it in (
                 "3D Knie Tibia",
                 "3D Knie Tibia mit Stem",
+                "ACS-SC Knie Tibia",
                 "Scharnierknie Tibia",
                 "Allergie-Knie Tibia",
                 "sonstiges"):
@@ -949,7 +951,8 @@ def change_postop():
             format_winkel(mwindow.lineEdit_postop_winkel.text()))
     palette = QPalette()
     try:
-        winkel = abs(float(mwindow.lineEdit_postop_winkel.text()))  ## Winkel auffällig?
+        # Winkel auffällig?
+        winkel = abs(float(mwindow.lineEdit_postop_winkel.text()))
     except ValueError:
         winkel = 0
     if winkel > 3:
@@ -1020,7 +1023,8 @@ if __name__ == "__main__":
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
     mwindow.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
     mwindow.checkBox_abweichung.stateChanged.connect(change_abweichung)  # Ereignis Abweichung an / aus
-    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)  # Ereignis Taste Suchen/Laden gedrückt
+    # Ereignis Taste Suchen/Laden gedrückt
+    mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)
     mwindow.comboBox_operateur.currentTextChanged.connect(change_operateur)  # Ereignis Wechsel Operateur
     mwindow.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis Wechsel Assistenz
     mwindow.comboBox_operateur.highlighted.connect(focus_operateur)  # Ereignis Focus Operateur
