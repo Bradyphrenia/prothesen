@@ -1016,9 +1016,9 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = Database('localhost', 'prothesen', 'postgres', 'postgres')
-    DataSetStatus = Status  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
-    ButtonStatus = Status  # Knopfstatus False -> Suche ..., True -> Laden ...
-    ChangeState = Status
+    DataSetStatus = Status()  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+    ButtonStatus = Status()  # Knopfstatus False -> Suche ..., True -> Laden ...
+    ChangeState = Status()
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
     mwindow.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
