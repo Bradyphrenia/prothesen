@@ -416,32 +416,38 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
 
 
 def suche_eprd():
-    patnr = (
-        mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
-    sql = """SELECT id FROM fall WHERE khintkennz = '"""
-    sql += patnr + """';"""
-    eprd.open_db()
-    lesen = eprd.fetchone(sql)
-    if lesen:
-        sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
-        sql += lesen[0] + """';"""
+    """
+    Suche in der EPRD-Datenbank und ggf. Eintrag in die Maske
+    :return: None
+    """
+    try:
+        patnr = (
+            mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
+        sql = """SELECT id FROM fall WHERE khintkennz = '"""
+        sql += patnr + """';"""
         eprd.open_db()
-        eprd_data = eprd.fetchone(sql)
-        if eprd_data[1] == '1':
-            mwindow.comboBox_prothesenart.setCurrentText('Hüfte')
-        else:
-            mwindow.comboBox_prothesenart.setCurrentText('Knie')
-        if eprd_data[2] == '1':
-            mwindow.comboBox_seite.setCurrentText('links')
-        else:
-            mwindow.comboBox_seite.setCurrentText('rechts')
-        if eprd_data[3] != '1':
-            pass
-            # mwindow.checkBox_wechseleingriff.setChecked()
-        mwindow.dateEdit_opdatum.setDate(eprd_data[0])
-        if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger']:
-            mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
-    eprd.close_db()
+        lesen = eprd.fetchone(sql)
+        if lesen:
+            sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
+            sql += lesen[0] + """';"""
+            eprd.open_db()
+            eprd_data = eprd.fetchone(sql)
+            if eprd_data[1] == '1':
+                mwindow.comboBox_prothesenart.setCurrentText('Hüfte')
+            else:
+                mwindow.comboBox_prothesenart.setCurrentText('Knie')
+            if eprd_data[2] == '1':
+                mwindow.comboBox_seite.setCurrentText('links')
+            else:
+                mwindow.comboBox_seite.setCurrentText('rechts')
+            if eprd_data[3] != '1':
+                mwindow.checkBox_wechseleingriff.setChecked(True)
+            mwindow.dateEdit_opdatum.setDate(eprd_data[0])
+            if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner']:
+                mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
+        eprd.close_db()
+    except:
+        pass
 
 
 def suche_patientennummer():
