@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="prothesen@localhost" uuid="7194a0f5-9b1b-4c45-809a-18c89195fcbd">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/prothesen</jdbc-url>
-    </data-source>
     <data-source source="LOCAL" name="eprd_db@192.168.178.40" uuid="fac44c0a-447f-45fb-aebd-145415ca6b39">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
