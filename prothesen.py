@@ -237,6 +237,7 @@ def change_patientennummer():
     :return: None
     """
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
+        suche_eprd()
         suche_patientennummer()
     else:  # Zurücksetzen des Anzeigefeldes...
         mwindow.label_alt_patnummer.setText('----------')
@@ -412,6 +413,35 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         suche_patientennummer()  # sonst manuelle Datensatzsuche
         DataSetStatus.status = False  # Append...
         mwindow.repaint()
+
+
+def suche_eprd():
+    patnr = (
+        mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
+    sql = """SELECT id FROM fall WHERE khintkennz = '"""
+    sql += patnr + """';"""
+    eprd.open_db()
+    lesen = eprd.fetchone(sql)
+    if lesen:
+        sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
+        sql += lesen[0] + """';"""
+        eprd.open_db()
+        eprd_data = eprd.fetchone(sql)
+        if eprd_data[1] == '1':
+            mwindow.comboBox_prothesenart.setCurrentText('Hüfte')
+        else:
+            mwindow.comboBox_prothesenart.setCurrentText('Knie')
+        if eprd_data[2] == '1':
+            mwindow.comboBox_seite.setCurrentText('links')
+        else:
+            mwindow.comboBox_seite.setCurrentText('rechts')
+        if eprd_data[3] != '1':
+            pass
+            # mwindow.checkBox_wechseleingriff.setChecked()
+        mwindow.dateEdit_opdatum.setDate(eprd_data[0])
+        if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger']:
+            mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
+    eprd.close_db()
 
 
 def suche_patientennummer():
@@ -1016,6 +1046,7 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = Database('localhost', 'prothesen', 'postgres', 'postgres')
+    eprd = Database('localhost', 'eprd_db', 'steffen', '')
     DataSetStatus = Status()  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     ButtonStatus = Status()  # Knopfstatus False -> Suche ..., True -> Laden ...
     ChangeState = Status()

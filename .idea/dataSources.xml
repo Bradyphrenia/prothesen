@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/prothesen</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="eprd_db@192.168.178.40" uuid="fac44c0a-447f-45fb-aebd-145415ca6b39">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://192.168.178.40:5432/eprd_db</jdbc-url>
+    </data-source>
   </component>
 </project>
