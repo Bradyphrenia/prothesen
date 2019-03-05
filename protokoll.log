@@ -1143,3 +1143,13 @@ add
 dtdtdtdt',False,False,False,False,False,False,False,False,False,False,False,False,False,'Barz',False,+0.0,+0.0,False,False) WHERE "id" = 3508;
 -- 2019-03-05 21:10:02.649339
 UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (48025558,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','rechts',False,True,True,False,True,'2018-03-07','Svacina','Schoen',63,False,False,NULL,False,False,False,False,False,True,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,'Muschiol',False,-8.0,-0.5,False,False) WHERE "id" = 3094;
+-- 2019-03-05 23:17:55.300424
+-- column "arzt_nachnahme" does not exist
+LINE 1: SELECT opdatum, gelenk, seite, arteingriff, arzt_nachnahme  ...
+                                                    ^
+HINT:  Perhaps you meant to reference the column "operation.arzt_nachname".
+
+-- 2019-03-05 23:29:26.601783
+-- c
+-- 2019-03-05 23:32:04.378573
+-- column "arzt_nachnahme" does not exist

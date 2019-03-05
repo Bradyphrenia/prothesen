@@ -446,8 +446,8 @@ def suche_eprd():
             if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner']:
                 mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
         eprd.close_db()
-    except:
-        pass
+    except (psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
+        eprd.protocol('-- ' + str(e).split('\n')[0])
 
 
 def suche_patientennummer():
