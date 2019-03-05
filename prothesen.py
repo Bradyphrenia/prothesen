@@ -1052,7 +1052,7 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = Database('localhost', 'prothesen', 'postgres', 'postgres')
-    eprd = Database('localhost', 'eprd_db', 'steffen', '')
+    eprd = Database('localhost', 'eprd_db', 'postgres', 'postgres')
     DataSetStatus = Status()  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     ButtonStatus = Status()  # Knopfstatus False -> Suche ..., True -> Laden ...
     ChangeState = Status()
