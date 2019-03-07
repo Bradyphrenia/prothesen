@@ -442,6 +442,8 @@ def suche_eprd():
                 mwindow.comboBox_seite.setCurrentText('rechts')
             if eprd_data[3] != '1':
                 mwindow.checkBox_wechseleingriff.setChecked(True)
+            else:
+                mwindow.checkBox_wechseleingriff.setChecked(False)
             mwindow.dateEdit_opdatum.setDate(eprd_data[0])
             if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner']:
                 mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
@@ -456,7 +458,7 @@ def suche_patientennummer():
     wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
     :return: None
     """
-    patnr = (
+    patnr: str = (
         mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
     sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
     sql += patnr + ';'
@@ -1000,7 +1002,7 @@ def change_postop():
     mwindow.lineEdit_postop_winkel.repaint()
 
 
-def format_winkel(text):
+def format_winkel(text: str) -> 'format_winkel':
     """
     Formatieren der Winkelangaben
     :param text: Text unformatierter Winkel
