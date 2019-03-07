@@ -80,7 +80,7 @@ class Database:
         self.con.commit()
         return None
 
-    def protocol(self, text):
+    def protocol(self, text: str):
         log = open('protokoll.log', 'a')
         log.write('-- ' + str(datetime.datetime.now()) + '\n')
         log.write(text + '\n')
