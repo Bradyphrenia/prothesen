@@ -1037,3 +1037,18 @@ UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proxima
 INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (49000001,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','rechts',False,True,True,False,True,'2019-01-02','Machner','Joker',22,False,False,NULL,False,False,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,NULL,False,NULL,NULL,False,False);
 -- 2019-03-04 21:41:42.609997
 UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (49000001,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','rechts',False,True,True,False,True,'2019-01-02','Machner','Joker',22,False,False,NULL,False,False,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,NULL,False,+.0,+.0,False,False) WHERE "id" = 3393;
+-- 2019-03-25 23:30:54.166554
+-- FATAL:  database "eprd_db" does not exist
+
+-- 2019-03-25 23:31:17.178682
+-- FATAL:  database "eprd_db" does not exist
+
+-- 2019-03-25 23:31:52.280357
+-- FATAL:  database "eprd_db" does not exist
+
+-- 2019-03-25 23:32:33.441750
+-- FATAL:  database "eprd_db" does not exist
+
+-- 2019-03-25 23:32:36.494103
+-- FATAL:  database "eprd_db" does not exist
+

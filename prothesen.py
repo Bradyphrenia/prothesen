@@ -80,7 +80,7 @@ class Database:
         self.con.commit()
         return None
 
-    def protocol(self, text):
+    def protocol(self, text: str):
         log = open('protokoll.log', 'a')
         log.write('-- ' + str(datetime.datetime.now()) + '\n')
         log.write(text + '\n')
@@ -237,6 +237,7 @@ def change_patientennummer():
     :return: None
     """
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
+        suche_eprd()
         suche_patientennummer()
     else:  # Zurücksetzen des Anzeigefeldes...
         mwindow.label_alt_patnummer.setText('----------')
@@ -414,13 +415,50 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         mwindow.repaint()
 
 
+def suche_eprd():
+    """
+    Suche in der EPRD-Datenbank und ggf. Eintrag in die Maske
+    :return: None
+    """
+    try:
+        patnr = (
+            mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
+        sql = """SELECT id FROM fall WHERE khintkennz = '"""
+        sql += patnr + """';"""
+        eprd.open_db()
+        lesen = eprd.fetchone(sql)
+        if lesen:
+            sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
+            sql += lesen[0] + """';"""
+            eprd.open_db()
+            eprd_data = eprd.fetchone(sql)
+            if eprd_data[1] == '1':
+                mwindow.comboBox_prothesenart.setCurrentText('Hüfte')
+            else:
+                mwindow.comboBox_prothesenart.setCurrentText('Knie')
+            if eprd_data[2] == '1':
+                mwindow.comboBox_seite.setCurrentText('links')
+            else:
+                mwindow.comboBox_seite.setCurrentText('rechts')
+            if eprd_data[3] != '1':
+                mwindow.checkBox_wechseleingriff.setChecked(True)
+            else:
+                mwindow.checkBox_wechseleingriff.setChecked(False)
+            mwindow.dateEdit_opdatum.setDate(eprd_data[0])
+            if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner']:
+                mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
+        eprd.close_db()
+    except (psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
+        eprd.protocol('-- ' + str(e).split('\n')[0])
+
+
 def suche_patientennummer():
     """
     Suche der Patientennummer...
     wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
     :return: None
     """
-    patnr = (
+    patnr: str = (
         mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
     sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
     sql += patnr + ';'
@@ -964,7 +1002,7 @@ def change_postop():
     mwindow.lineEdit_postop_winkel.repaint()
 
 
-def format_winkel(text):
+def format_winkel(text: str) -> 'format_winkel':
     """
     Formatieren der Winkelangaben
     :param text: Text unformatierter Winkel
@@ -1016,6 +1054,7 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = Database('localhost', 'prothesen', 'postgres', 'postgres')
+    eprd = Database('localhost', 'eprd_db', 'postgres', 'postgres')
     DataSetStatus = Status()  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     ButtonStatus = Status()  # Knopfstatus False -> Suche ..., True -> Laden ...
     ChangeState = Status()
