@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="prothesen@localhost">
-  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.14">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.15">
     <root id="1">
       <ServerVersion>9.6.2</ServerVersion>
     </root>
@@ -56,8 +56,8 @@
       <CreateRole>1</CreateRole>
       <CreateDb>1</CreateDb>
       <CanLogin>1</CanLogin>
-      <Replication>1</Replication>
       <ConnectionLimit>-1</ConnectionLimit>
+      <Replication>1</Replication>
       <BypassRls>1</BypassRls>
     </role>
     <role id="11" parent="1" name="steffen">
@@ -150,8 +150,8 @@
     </access-method>
     <sequence id="24" parent="17" name="id_seq">
       <ObjectId>66827</ObjectId>
-      <Owner>postgres</Owner>
       <StateNumber>3633081</StateNumber>
+      <Owner>postgres</Owner>
       <SequenceIdentity>1</SequenceIdentity>
       <CacheSize>1</CacheSize>
     </sequence>
@@ -465,8 +465,8 @@
       <ObjectId>66847</ObjectId>
       <StateNumber>3633087</StateNumber>
       <ColNames>id</ColNames>
-      <UnderlyingIndexName>prothesen_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
+      <UnderlyingIndexName>prothesen_pkey</UnderlyingIndexName>
     </key>
     <column id="77" parent="26" name="id">
       <Position>1</Position>

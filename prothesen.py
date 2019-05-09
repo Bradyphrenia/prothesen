@@ -700,6 +700,7 @@ def init_comboBox_distal():
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
                 "Ecofit-Schaft",
+                "Ecofit-Schaft zementiert",
                 "Ecofit-Kurzschaft",
                 "Actinia-Schaft",
                 "CFP-Schaft",
