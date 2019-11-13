@@ -280,7 +280,7 @@ def aktualisiere_widgets():
     mwindow.comboBox_prothesenart.setCurrentText(dic_prothesen['prothesenart'])
     mwindow.comboBox_seite.setCurrentText(dic_prothesen['seite'])
     mwindow.comboBox_proximal.setCurrentText(dic_prothesen['proximal'])
-    mwindow.comboBox_proximal.setCurrentText(dic_prothesen['distal'])
+    mwindow.comboBox_distal.setCurrentText(dic_prothesen['distal'])
     mwindow.checkBox_wechseleingriff.setChecked(dic_prothesen['wechseleingriff'])
     mwindow.checkBox_praeop_roentgen.setChecked(dic_prothesen['praeop_roentgen'])
     mwindow.checkBox_postop_roentgen.setChecked(dic_prothesen['postop_roentgen'])

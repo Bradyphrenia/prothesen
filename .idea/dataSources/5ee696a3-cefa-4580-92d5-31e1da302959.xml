@@ -1,73 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="prothesen@localhost">
-  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.15">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.16">
     <root id="1">
       <ServerVersion>9.6.2</ServerVersion>
     </root>
     <database id="2" parent="1" name="biene">
       <ObjectId>16395</ObjectId>
-      <StateNumber>873</StateNumber>
       <Owner>steffen</Owner>
     </database>
     <database id="3" parent="1" name="epz_2018">
       <ObjectId>55774</ObjectId>
-      <StateNumber>3225915</StateNumber>
       <Owner>postgres</Owner>
     </database>
     <database id="4" parent="1" name="geo">
       <ObjectId>26308</ObjectId>
-      <StateNumber>2877659</StateNumber>
       <Owner>postgres</Owner>
     </database>
     <database id="5" parent="1" name="geodb">
       <ObjectId>19974</ObjectId>
-      <StateNumber>33628</StateNumber>
       <Owner>postgres</Owner>
     </database>
     <database id="6" parent="1" name="postgres">
       <ObjectId>12669</ObjectId>
       <Comment>default administrative connection database</Comment>
-      <StateNumber>864</StateNumber>
       <Owner>postgres</Owner>
     </database>
     <database id="7" parent="1" name="prothesen">
       <ObjectId>66826</ObjectId>
-      <StateNumber>3633079</StateNumber>
       <Owner>postgres</Owner>
       <Current>1</Current>
-      <Visible>1</Visible>
     </database>
     <role id="8" parent="1" name="masteruser">
       <ObjectId>16394</ObjectId>
-      <Inherit>1</Inherit>
       <CanLogin>1</CanLogin>
-      <ConnectionLimit>-1</ConnectionLimit>
       <ValidUntil>infinity</ValidUntil>
     </role>
     <role id="9" parent="1" name="pg_signal_backend">
       <ObjectId>4200</ObjectId>
-      <Inherit>1</Inherit>
-      <ConnectionLimit>-1</ConnectionLimit>
     </role>
     <role id="10" parent="1" name="postgres">
       <ObjectId>10</ObjectId>
       <SuperRole>1</SuperRole>
-      <Inherit>1</Inherit>
       <CreateRole>1</CreateRole>
       <CreateDb>1</CreateDb>
       <CanLogin>1</CanLogin>
-      <ConnectionLimit>-1</ConnectionLimit>
       <Replication>1</Replication>
       <BypassRls>1</BypassRls>
     </role>
     <role id="11" parent="1" name="steffen">
       <ObjectId>16393</ObjectId>
       <SuperRole>1</SuperRole>
-      <Inherit>1</Inherit>
       <CreateRole>1</CreateRole>
       <CreateDb>1</CreateDb>
       <CanLogin>1</CanLogin>
-      <ConnectionLimit>-1</ConnectionLimit>
     </role>
     <schema id="12" parent="7" name="information_schema">
       <ObjectId>12381</ObjectId>
@@ -104,7 +89,6 @@
       <IntrospectionTimestamp>2018-12-23.17:23:09.435</IntrospectionTimestamp>
       <IntrospectionStateNumber>3633150</IntrospectionStateNumber>
       <Current>1</Current>
-      <Visible>1</Visible>
     </schema>
     <access-method id="18" parent="7" name="btree">
       <ObjectId>403</ObjectId>
