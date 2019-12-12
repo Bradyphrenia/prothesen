@@ -178,57 +178,54 @@ def hole_statistik():
     :return: None
     """
     mwindow.plainTextEdit_statistik.clear()
+    schreibe_statistik('Hole Statistik ...')
+    schreibe_statistik('')
     db.open_db()
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
     "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = TRUE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM jahr;"""
     lesen = db.fetchone(sql)
-    schreibe_statistik('alle Prothesen', lesen[0])
+    schreibe_statistik('Prothesen: ' + str(lesen[0]))
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Hüfte'"""
     lesen = db.fetchone(sql)
-    schreibe_statistik('alle Hüft-TEP', lesen[0])
+    schreibe_statistik('Hüft-TEP: ' + str(lesen[0]))
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Knie'"""
     lesen = db.fetchone(sql)
-    schreibe_statistik('alle Knie-TEP', lesen[0])
+    schreibe_statistik('Knie-TEP: ' + str(lesen[0]))
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Schulter'"""
     lesen = db.fetchone(sql)
-    schreibe_statistik('alle Schulter-TEP', lesen[0])
+    schreibe_statistik('Schulter-TEP: ' + str(lesen[0]))
     sql = """SELECT COUNT(*) FROM jahr WHERE "prothesenart" = 'Radiusköpfchen'"""
     lesen = db.fetchone(sql)
-    schreibe_statistik('alle Radiusköpfchenprothesen', lesen[0])
-    schreibe_statistik('=', 44)
+    schreibe_statistik('Radiusköpfchenprothesen: ' + str(lesen[0]))
+    schreibe_statistik('')
     sql = """SELECT operateur, COUNT(id)  FROM jahr GROUP BY operateur;"""
     lesen = db.fetchall(sql)
     for eintrag in lesen:
-        schreibe_statistik(eintrag[0], eintrag[1])
-    schreibe_statistik('=', 44)
+        schreibe_statistik(eintrag[0] + ': ' + str(eintrag[1]))
+    schreibe_statistik('')
     sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM  "public"."prothesen" WHERE \
     "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = FALSE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
-    schreibe_statistik('Dokumentation unvollständig', lesen[0])
+    schreibe_statistik('unvollständige Fälle: ' + str(lesen[0]))
     sql = """SELECT patientennummer from nicht"""
     lesen = db.fetchall(sql)
     for eintrag in lesen:
-        schreibe_statistik('Fallnummer', eintrag[0])
-    schreibe_statistik('=', 44)
+        schreibe_statistik('Fallnummer: ' + str(eintrag[0]))
+    schreibe_statistik('')
     db.close_db()
 
 
-def schreibe_statistik(kriterium, zahl):
+def schreibe_statistik(text):
     """
     Ausgabe der statistischen Daten...
-    :param kriterium: Text
-    :param zahl: Zahl
+    :param text: Text
     :return: None
     """
-    if kriterium != '=':  # Trennzeichen
-        mwindow.plainTextEdit_statistik.appendPlainText(
-            kriterium + '   --->   ' + str(zahl))
-    else:
-        mwindow.plainTextEdit_statistik.appendPlainText(kriterium * zahl)
+    mwindow.plainTextEdit_statistik.appendPlainText(text)
 
 
 def change_patientennummer():
@@ -450,6 +447,47 @@ def suche_eprd():
         eprd.close_db()
     except (psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
         eprd.protocol('-- ' + str(e).split('\n')[0])
+    artikel = suche_implantate(patnr)  # Implantate aus EPRD-Datenbank
+    if artikel:
+        schreibe_statistik('')
+        schreibe_statistik('Implantate in EPRD-Datenbank gefunden...')
+        schreibe_statistik('')
+        for art in artikel:
+            schreibe_statistik(art)
+        schreibe_statistik('')
+
+
+def suche_implantate(fallnummer):
+    """
+    Implantatsuche in der EPRD-Datenbank
+    :return: List
+    """
+    artikelliste = []
+    eprd.open_db()
+    try:
+        fall_id_raw = eprd.fetchone(
+            "select * from fall where khintkennz = '" + fallnummer + "'")
+        fall_id = fall_id_raw[0]
+    except:
+        pass
+    else:
+        try:
+            op_id_raw = eprd.fetchone(
+                "select * from operation where fk_fall = '" + fall_id + "'")
+            op_id = op_id_raw[0]
+        except:
+            pass
+        else:
+            try:
+                artikel_raw = eprd.fetchall(
+                    "select * from op_artikel where fk_operation = '" + op_id + "'")
+                for artikel_zeile in artikel_raw:
+                    artikelliste.append(artikel_zeile[6])
+            except:
+                pass
+    finally:
+        eprd.close_db
+    return artikelliste
 
 
 def suche_patientennummer():
@@ -1053,8 +1091,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-    db = Database('localhost', 'prothesen', 'postgres', 'postgres')
-    eprd = Database('localhost', 'eprd_db', 'postgres', 'postgres')
+    db = Database('localhost', 'prothesen', 'postgres', '')
+    eprd = Database('localhost', 'eprd_db', 'postgres', '')
     DataSetStatus = Status()  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     ButtonStatus = Status()  # Knopfstatus False -> Suche ..., True -> Laden ...
     ChangeState = Status()
