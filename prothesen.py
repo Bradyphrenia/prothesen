@@ -178,7 +178,7 @@ def hole_statistik():
     :return: None
     """
     mwindow.plainTextEdit_statistik.clear()
-    schreibe_statistik('Hole Statistik ...')
+    schreibe_statistik('Statistik aus Prothesen-Datenbank...')
     schreibe_statistik('')
     db.open_db()
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
@@ -234,6 +234,7 @@ def change_patientennummer():
     :return: None
     """
     if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
+        hole_statistik()
         suche_eprd()
         suche_patientennummer()
     else:  # Zurücksetzen des Anzeigefeldes...
@@ -450,7 +451,7 @@ def suche_eprd():
     artikel = suche_implantate(patnr)  # Implantate aus EPRD-Datenbank
     if artikel:
         schreibe_statistik('')
-        schreibe_statistik('Implantate in EPRD-Datenbank gefunden...')
+        schreibe_statistik('Implantate aus EPRD-Datenbank...')
         schreibe_statistik('')
         for art in artikel:
             schreibe_statistik(art)
@@ -1093,8 +1094,10 @@ if __name__ == "__main__":
     dwindow = achtung()
     db = Database('localhost', 'prothesen', 'postgres', '')
     eprd = Database('localhost', 'eprd_db', 'postgres', '')
-    DataSetStatus = Status()  # Datensatzstatus False -> Postgres Append, True -> Postgres Update
-    ButtonStatus = Status()  # Knopfstatus False -> Suche ..., True -> Laden ...
+    # Datensatzstatus False -> Postgres Append, True -> Postgres Update
+    DataSetStatus = Status()
+    # Knopfstatus False -> Suche ..., True -> Laden ...
+    ButtonStatus = Status()
     ChangeState = Status()
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
