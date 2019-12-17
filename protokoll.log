@@ -1153,3 +1153,24 @@ HINT:  Perhaps you meant to reference the column "operation.arzt_nachname".
 -- c
 -- 2019-03-05 23:32:04.378573
 -- column "arzt_nachnahme" does not exist
+-- 2019-12-12 19:29:15.105237
+-- FATAL:  role "postgres" is not permitted to log in
+
+-- 2019-12-12 19:29:27.416950
+-- FATAL:  role "postgres" is not permitted to log in
+
+-- 2019-12-12 19:32:21.719354
+-- FATAL:  role "postgres" is not permitted to log in
+
+-- 2019-12-12 19:35:34.565664
+-- FATAL:  role "postgres" is not permitted to log in
+
+-- 2019-12-12 19:36:04.766414
+-- FATAL:  role "postgres" is not permitted to log in
+
+-- 2019-12-12 19:36:09.017911
+-- FATAL:  role "postgres" is not permitted to log in
+
+-- 2019-12-12 19:37:04.219835
+-- FATAL:  role "postgres" is not permitted to log in
+

@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -34,7 +35,8 @@ class Ui_MainWindow(object):
         self.lineEdit_patientennummer.setGeometry(QtCore.QRect(180, 80, 81, 21))
         self.lineEdit_patientennummer.setText("")
         self.lineEdit_patientennummer.setCursorPosition(3)
-        self.lineEdit_patientennummer.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.lineEdit_patientennummer.setAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.lineEdit_patientennummer.setPlaceholderText("")
         self.lineEdit_patientennummer.setClearButtonEnabled(False)
         self.lineEdit_patientennummer.setObjectName("lineEdit_patientennummer")
@@ -477,7 +479,8 @@ class Ui_MainWindow(object):
         self.label_inklinationswinkel.setText(_translate("MainWindow", "Inklinationswinkel:"))
         self.lineEdit_inklinationswinkel.setInputMask(_translate("MainWindow", "99"))
         self.checkBox_vollstaendig.setText(_translate("MainWindow", "Dokumentation vollst.:"))
-        self.checkBox_reintervention.setText(_translate("MainWindow", "Änderung des Behandlungspfades / Reintervention:"))
+        self.checkBox_reintervention.setText(
+            _translate("MainWindow", "Änderung des Behandlungspfades / Reintervention:"))
         self.checkBox_abweichung.setText(_translate("MainWindow", "Abweichung:"))
         self.label_copyright.setText(_translate("MainWindow", "© Steffen Troeger"))
         self.label_einweiser.setText(_translate("MainWindow", "Einweiser:"))
@@ -522,10 +525,10 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
