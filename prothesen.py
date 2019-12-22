@@ -483,7 +483,7 @@ def suche_implantate(fallnummer):
     except:
         pass
     else:
-        try:
+        try: # TODO: fetchall?
             op_id_raw = eprd.fetchone(
                 "select * from operation where fk_fall = '" + fall_id + "'")
             op_id = op_id_raw[0]
