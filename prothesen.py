@@ -233,10 +233,13 @@ def change_patientennummer():
     Änderung des Eingabefeldes Patientennummer...
     :return: None
     """
-    if mwindow.lineEdit_patientennummer.cursorPosition() == 8 or len(mwindow.lineEdit_patientennummer.text()) == 8:
-        hole_statistik()
-        suche_eprd()
+    hole_statistik()  # Statistikfeld zurücksetzen
+    if ButtonStatus.status or EPRD_Status.status:  # erster Aufruf nach gefundenem Datensatz?
+        EPRD_Status.status = False
+        reset_Formular()  # Formular bereinigen
+    if mwindow.lineEdit_patientennummer.cursorPosition() == 8 and len(mwindow.lineEdit_patientennummer.text()) == 8:
         suche_patientennummer()
+        suche_eprd()
     else:  # Zurücksetzen des Anzeigefeldes...
         mwindow.label_alt_patnummer.setText('----------')
         mwindow.label_alt_proth_art.setText('----------------')
@@ -421,6 +424,8 @@ def schalter_suchen_laden():  # Schalter -> Suchen / Laden
         set_start_default()
         suche_patientennummer()  # sonst manuelle Datensatzsuche
         DataSetStatus.status = False  # Append...
+        reset_Formular()
+        hole_statistik()
         mwindow.repaint()
 
 
@@ -439,6 +444,7 @@ def suche_eprd():
         if lesen:
             sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
             sql += lesen[0] + """';"""
+            EPRD_Status.status = True  # Eintrag in der EPRD-Datenbank gefunden
             eprd.open_db()
             eprd_data = eprd.fetchone(sql)
             if eprd_data[1] == '1':
@@ -516,8 +522,7 @@ def suche_patientennummer():
     wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
     :return: None
     """
-    patnr: str = (
-        mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
+    patnr = mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0'  # sonst Fehler bei Postgres
     sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
     sql += patnr + ';'
     db.open_db()
@@ -803,7 +808,23 @@ def init_dateEdit_opdatum():
     :return: None
     """
     mwindow.dateEdit_opdatum.setMinimumDate(QDate(2014, 1, 1))
-    mwindow.dateEdit_opdatum.setMaximumDate(QDate(2020, 12, 31))
+    mwindow.dateEdit_opdatum.setMaximumDate(QDate(2021, 12, 31))
+
+
+def init_lineEdit_dateEdit_opdatum():
+    """
+    Operationsdatum setzen
+    :return: None
+    """
+    mwindow.dateEdit_opdatum.setDate(QDate(2019, 1, 1))
+
+
+def init_lineEdit_opzeit():
+    """
+    Operationszeit löschen
+    :return: None
+    """
+    mwindow.lineEdit_operationszeit.setText('')
 
 
 def init_comboBox_operateur():
@@ -811,7 +832,7 @@ def init_comboBox_operateur():
     Auswahlmasken für Operateur und Assistent füllen
     :return: None
     """
-    ChangeState.status = False
+    ChangeStatus.status = False
     db.open_db()
     sql = """SELECT "operateur" FROM "prothesen";"""
     lesen = list(db.fetchall(
@@ -833,7 +854,7 @@ def change_operateur():
     Änderung des Operateurs
     :return: None
     """
-    if ChangeState.status is True:
+    if ChangeStatus.status is True:
         if test_operateur(mwindow.comboBox_operateur.currentText(), mwindow.comboBox_assistenz.currentText()) is False:
             dwindow.exec()  # Fenster Eingabefehler
 
@@ -843,17 +864,25 @@ def change_assistenz():
     Änderung des Assistenten
     :return: None
     """
-    if ChangeState.status is True:
+    if ChangeStatus.status is True:
         if test_operateur(mwindow.comboBox_operateur.currentText(), mwindow.comboBox_assistenz.currentText()) is False:
             dwindow.exec()  # Fenster Eingabefehler
 
 
 def focus_operateur():
-    ChangeState.status = True
+    """
+    Eingabefeld erhält Fokus
+    :return: None
+    """
+    ChangeStatus.status = True
 
 
 def focus_assistenz():
-    ChangeState.status = True
+    """
+     Eingabefeld erhält Fokus
+     :return: None
+     """
+    ChangeStatus.status = True
 
 
 def test_operateur(operateur1, operateur2):
@@ -1028,10 +1057,42 @@ def init_neuesFormular():
     init_comboBox_einweiser()
     mwindow.label_zeit_achtung.setVisible(False)
     mwindow.label_inklination_achtung.setVisible(False)
+    init_lineEdit_opzeit()
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
     DataSetStatus.status = False  # Datenbank-Insert als initialer Status
     ButtonStatus.status = False  # Suche...
+    EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
+    init_lineEdit_dateEdit_opdatum()
+    mwindow.repaint()
+
+
+def reset_Formular():
+    """
+    Formular bei Änderung der Patientennummer zurücksetzen
+    :return: None
+    """
+    init_comboBox_prothesenart()
+    change_prothesenart()
+    change_wechseleingriff()
+    init_comboBox_seite()
+    init_comboBox_proximal()
+    init_comboBox_distal()
+    change_fraktur()
+    change_vierundzwanzig()
+    init_dateEdit_opdatum()
+    change_abweichung()
+    init_comboBox_operateur()
+    init_comboBox_einweiser()
+    mwindow.label_zeit_achtung.setVisible(False)
+    mwindow.label_inklination_achtung.setVisible(False)
+    init_lineEdit_opzeit()
+    mwindow.lineEdit_operationszeit.setCursorPosition(0)
+    mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
+    DataSetStatus.status = False  # Datenbank-Insert als initialer Status
+    ButtonStatus.status = False  # Suche...
+    EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
+    init_lineEdit_dateEdit_opdatum()
     mwindow.repaint()
 
 
@@ -1055,8 +1116,7 @@ def change_postop():
         mwindow.lineEdit_postop_winkel.setText(
             format_winkel(mwindow.lineEdit_postop_winkel.text()))
     palette = QPalette()
-    try:
-        # Winkel auffällig?
+    try:  # Winkel auffällig?
         winkel = abs(float(mwindow.lineEdit_postop_winkel.text()))
     except ValueError:
         winkel = 0
@@ -1115,7 +1175,6 @@ if __name__ == "__main__":
     host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
     eigener Rechner:
     host='localhost' dbname='prothesen' user='postgres' password='postgres'
-
     """
     app = QApplication(sys.argv)
     mwindow = MainWindow()
@@ -1126,7 +1185,10 @@ if __name__ == "__main__":
     DataSetStatus = Status()
     # Knopfstatus False -> Suche ..., True -> Laden ...
     ButtonStatus = Status()
-    ChangeState = Status()
+    # Änderung der Eingabemaske Operateur / Assistenz
+    ChangeStatus = Status()
+    # Datensatz in EPRD-Datenbank gefunden
+    EPRD_Status = Status()
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
     mwindow.checkBox_wechseleingriff.stateChanged.connect(
