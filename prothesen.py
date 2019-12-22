@@ -461,11 +461,13 @@ def suche_eprd():
         eprd.protocol('-- ' + str(e).split('\n')[0])
     artikel = suche_implantate(patnr)  # Implantate aus EPRD-Datenbank
     if artikel:
+        artikel.sort(key=lambda x: x[0])
         schreibe_statistik('')
         schreibe_statistik('Implantate aus EPRD-Datenbank...')
         schreibe_statistik('')
-        for art in artikel:
-            schreibe_statistik(art)
+        for art_tuple in artikel:
+            op_datum, art = art_tuple
+            schreibe_statistik(op_datum + ': ' + art)
         schreibe_statistik('')
 
 
@@ -483,18 +485,24 @@ def suche_implantate(fallnummer):
     except:
         pass
     else:
-        try: # TODO: fetchall?
-            op_id_raw = eprd.fetchone(
+        try:  # TODO: fetchall?
+            op_id_raw_all = eprd.fetchall(
                 "select * from operation where fk_fall = '" + fall_id + "'")
-            op_id = op_id_raw[0]
+            op_id_list = []
+            for op_item in op_id_raw_all:
+                op_id_list.append((op_item[0], op_item[3].strftime('%d.%m.%Y')))  # Liste von Tupeln (Op-Nr., Op-Datum)
+
+            # op_id = op_id_raw[0]
         except:
             pass
         else:
             try:
-                artikel_raw = eprd.fetchall(
-                    "select * from op_artikel where fk_operation = '" + op_id + "'")
-                for artikel_zeile in artikel_raw:
-                    artikelliste.append(artikel_zeile[6])
+                for op_id_item in op_id_list:
+                    op_id, op_datum = op_id_item
+                    artikel_raw = eprd.fetchall(
+                        "select * from op_artikel where fk_operation = '" + op_id + "'")
+                    for artikel_zeile in artikel_raw:
+                        artikelliste.append((op_datum, artikel_zeile[6]))  # Liste von Tupeln (Op-Datum, Artikel)
             except:
                 pass
     finally:
@@ -515,10 +523,10 @@ def suche_patientennummer():
     db.open_db()
     lesen = db.fetchone(sql)
     if lesen:  # ein Datensatz mit dieser Patientennummer vorhanden...
-        mwindow.label_alt_patnummer.setText(str(lesen[0]))
+        mwindow.label_alt_patnummer.setText(str(lesen[0]))  # TODO String-Typen?
         mwindow.label_alt_proth_art.setText(str(lesen[1]))
         mwindow.label_alt_seite.setText(str(lesen[2]))
-        mwindow.label_alt_op_datum.setText(str(lesen[3]))
+        mwindow.label_alt_op_datum.setText(str(lesen[3].strftime('%d.%m.%Y')))
         mwindow.pushButton_suche.setText('Laden...')
         ButtonStatus.status = True  # Laden...
     else:
