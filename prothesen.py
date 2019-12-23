@@ -90,7 +90,7 @@ class Database:
 
 class Status:
     """
-    Klasse zur Statusspeicherung
+    Klasse zur Status-Speicherung
     """
 
     def __init__(self):
@@ -436,7 +436,8 @@ def suche_eprd():
     """
     try:
         patnr = (
-            mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
+            mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')
+        # sonst Fehler bei Postgres
         sql = """SELECT id FROM fall WHERE khintkennz = '"""
         sql += patnr + """';"""
         eprd.open_db()
@@ -497,8 +498,6 @@ def suche_implantate(fallnummer):
             op_id_list = []
             for op_item in op_id_raw_all:
                 op_id_list.append((op_item[0], op_item[3].strftime('%d.%m.%Y')))  # Liste von Tupeln (Op-Nr., Op-Datum)
-
-            # op_id = op_id_raw[0]
         except:
             pass
         else:
@@ -519,10 +518,11 @@ def suche_implantate(fallnummer):
 def suche_patientennummer():
     """
     Suche der Patientennummer...
-    wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
+    wird bei Eingabe der 8. Stelle der Patientennummer automatisch aufgerufen
     :return: None
     """
-    patnr = mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0'  # sonst Fehler bei Postgres
+    patnr = mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0'
+    # sonst Fehler bei Postgres
     sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
     sql += patnr + ';'
     db.open_db()
@@ -592,7 +592,7 @@ def change_prothesenart():
         mwindow.checkBox_trochanterabriss.setVisible(
             False)  # Trochanterabriss aus
         mwindow.checkBox_trochanterabriss.setCheckState(False)
-    else:  # Schulter- und Radiusköpchenprothese
+    else:  # Schulter- und Radiusköpfchenprothese
         mwindow.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
         mwindow.lineEdit_praeop_winkel.setText('')
         mwindow.lineEdit_praeop_winkel.setVisible(False)
@@ -923,7 +923,7 @@ def change_inklination():
 
 def set_start_default():
     """
-    alle Eingaben auf Standard stellen...
+    alle Eingabe-Widgets auf Standard stellen...
     :return: None
     """
     for it in lineEditState.keys():
@@ -998,11 +998,11 @@ def pruefen():
     """
     Prüfung der Eingaben...
     :return: True wenn Eingaben richtig
-             False wenn Einagben falsch
+             False wenn Eingaben falsch
     """
     korrekt = True
     if test_operateur(mwindow.comboBox_operateur.currentText(),
-                      mwindow.comboBox_assistenz.currentText()) is False:  # kein Operatuer eingegeben
+                      mwindow.comboBox_assistenz.currentText()) is False:  # kein Operateur eingegeben
         korrekt = False
     if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2019-01-01':  # kein Op-Datum eingegeben
         korrekt = False
@@ -1035,26 +1035,7 @@ def init_neuesFormular():
     init_dictionary()
     hole_statistik()
     init_lineEdit_patientennummer()
-    init_comboBox_prothesenart()
-    change_prothesenart()
-    change_wechseleingriff()
-    init_comboBox_seite()
-    init_comboBox_proximal()
-    init_comboBox_distal()
-    change_fraktur()
-    change_vierundzwanzig()
-    init_dateEdit_opdatum()
-    change_abweichung()
-    init_comboBox_operateur()
-    init_comboBox_einweiser()
-    mwindow.label_zeit_achtung.setVisible(False)
-    mwindow.label_inklination_achtung.setVisible(False)
-    mwindow.lineEdit_operationszeit.setCursorPosition(0)
-    mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
-    DataSetStatus.status = False  # Datenbank-Insert als initialer Status
-    ButtonStatus.status = False  # Suche...
-    EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
-    mwindow.repaint()
+    init_formular_allgemein()
 
 
 def reset_Formular():
@@ -1071,6 +1052,14 @@ def reset_Formular():
     for it in checkBoxState:
         it.setCheckState(checkBoxState[it])
     mwindow.plainTextEdit_memo.setPlainText('')  # Memo-Feld löschen
+    init_formular_allgemein()
+
+
+def init_formular_allgemein():
+    """
+    gemeinsamer Funktionsrumpf von init_neuesFormular und reset_Formular
+    :return: None
+    """
     init_comboBox_prothesenart()
     change_prothesenart()
     change_wechseleingriff()
