@@ -17,6 +17,9 @@
       <w>anzeigefeldes</w>
       <w>anzeigen</w>
       <w>artikel</w>
+      <w>artikelliste</w>
+      <w>assistent</w>
+      <w>assistenten</w>
       <w>assistenz</w>
       <w>auch</w>
       <w>auffällig</w>
@@ -24,6 +27,7 @@
       <w>aufruf</w>
       <w>ausgabe</w>
       <w>ausschalten</w>
+      <w>auswahlmasken</w>
       <w>automatisch</w>
       <w>beenden</w>
       <w>bereinigen</w>
@@ -44,6 +48,8 @@
       <w>eigener</w>
       <w>eines</w>
       <w>eingabe</w>
+      <w>eingabefehler</w>
+      <w>eingabefeld</w>
       <w>eingabefeldes</w>
       <w>eingabemaske</w>
       <w>eingaben</w>
@@ -57,6 +63,7 @@
       <w>eprd</w>
       <w>ereignis</w>
       <w>erfolgt</w>
+      <w>erhält</w>
       <w>ersten</w>
       <w>erster</w>
       <w>fallnummer</w>
@@ -64,6 +71,8 @@
       <w>fehler</w>
       <w>feld</w>
       <w>fenster</w>
+      <w>festlegen</w>
+      <w>fokus</w>
       <w>formatieren</w>
       <w>formatierter</w>
       <w>formular</w>
@@ -71,17 +80,22 @@
       <w>fraktur</w>
       <w>funktionsrumpf</w>
       <w>führende</w>
+      <w>füllen</w>
       <w>gedrückt</w>
       <w>gefunden</w>
       <w>gefundenem</w>
       <w>gemacht</w>
       <w>gemeinsamer</w>
+      <w>generieren</w>
+      <w>gruppe</w>
       <w>holen</w>
+      <w>hüfte</w>
       <w>implantate</w>
       <w>implantatsuche</w>
       <w>initialer</w>
       <w>initialisieren</w>
       <w>inklination</w>
+      <w>inklinationswinkels</w>
       <w>kein</w>
       <w>keine</w>
       <w>klasse</w>
@@ -103,11 +117,19 @@
       <w>löschen</w>
       <w>mainwindow</w>
       <w>manuelle</w>
+      <w>maske</w>
+      <w>masken</w>
       <w>nach</w>
       <w>neues</w>
+      <w>neunzig</w>
       <w>nullen</w>
       <w>ohne</w>
       <w>operateur</w>
+      <w>operateure</w>
+      <w>operateurliste</w>
+      <w>operateurs</w>
+      <w>operationsdatum</w>
+      <w>operationszeit</w>
       <w>orale</w>
       <w>patienennummer</w>
       <w>patientennummer</w>
@@ -123,16 +145,20 @@
       <w>präoperativen</w>
       <w>prüfung</w>
       <w>punkt</w>
+      <w>radiusköpfchen</w>
       <w>radiusköpfchenprothese</w>
+      <w>radiusköpfchenprothesen</w>
       <w>rechner</w>
       <w>rekursion</w>
       <w>richtig</w>
       <w>satz</w>
       <w>schalter</w>
       <w>schließen</w>
+      <w>schreiben</w>
       <w>schulter</w>
       <w>setzen</w>
       <w>sonst</w>
+      <w>sortieren</w>
       <w>speichern</w>
       <w>speichertaste</w>
       <w>speicherung</w>
@@ -147,12 +173,16 @@
       <w>tage</w>
       <w>trochanterabriss</w>
       <w>troeger</w>
+      <w>tupel</w>
       <w>tupeln</w>
       <w>typen</w>
+      <w>umwandeln</w>
       <w>unformatierter</w>
       <w>ursache</w>
+      <w>validität</w>
       <w>versorgung</w>
       <w>vierundzwanzig</w>
+      <w>vorbelegen</w>
       <w>vorhanden</w>
       <w>vorhandenem</w>
       <w>vorhandensein</w>
@@ -166,6 +196,7 @@
       <w>wird</w>
       <w>zerlegung</w>
       <w>ziffern</w>
+      <w>zugang</w>
       <w>zurücksetzen</w>
       <w>zwei</w>
       <w>änderung</w>

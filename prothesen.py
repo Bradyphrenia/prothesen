@@ -468,7 +468,7 @@ def suche_eprd():
         eprd.protocol('-- ' + str(e).split('\n')[0])
     artikel = suche_implantate(patnr)  # Implantate aus EPRD-Datenbank
     if artikel:
-        artikel.sort(key=lambda x: x[0])
+        artikel.sort(key=lambda x: x[0])  # nach Op-Datum Tupel in Liste sortieren
         schreibe_statistik('')
         schreibe_statistik('Implantate aus EPRD-Datenbank...')
         schreibe_statistik('')
@@ -528,10 +528,10 @@ def suche_patientennummer():
     db.open_db()
     lesen = db.fetchone(sql)
     if lesen:  # ein Datensatz mit dieser Patientennummer vorhanden...
-        mwindow.label_alt_patnummer.setText(str(lesen[0]))  # TODO String-Typen?
-        mwindow.label_alt_proth_art.setText(str(lesen[1]))
-        mwindow.label_alt_seite.setText(str(lesen[2]))
-        mwindow.label_alt_op_datum.setText(str(lesen[3].strftime('%d.%m.%Y')))
+        mwindow.label_alt_patnummer.setText(str(lesen[0]))  # bigint
+        mwindow.label_alt_proth_art.setText(lesen[1])  # varchar
+        mwindow.label_alt_seite.setText(lesen[2])  # varchar
+        mwindow.label_alt_op_datum.setText(lesen[3].strftime('%d.%m.%Y'))  # String aus Datum
         mwindow.pushButton_suche.setText('Laden...')
         ButtonStatus.status = True  # Laden...
     else:
@@ -914,7 +914,8 @@ def change_inklination():
     :return: None
     """
     inklination = int(
-        mwindow.lineEdit_inklinationswinkel.text() if mwindow.lineEdit_inklinationswinkel.text() != '' else '0')  # '' abfangen!
+        mwindow.lineEdit_inklinationswinkel.text() if mwindow.lineEdit_inklinationswinkel.text() != '' else '0')
+    # '' abfangen!
     if inklination > 50 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         mwindow.label_inklination_achtung.setVisible(True)
     else:
