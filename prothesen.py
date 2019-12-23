@@ -681,7 +681,7 @@ def change_neunzig():
     Komplikationen < 90 Tage
     :return: None
     """
-    regeln = [
+    regeln = [  # Liste aller Komplikations-Checkboxen
         mwindow.checkBox_infektion.isChecked() is False,
         mwindow.checkBox_luxation.isChecked() is False,
         mwindow.checkBox_trochanterabriss.isChecked() is False,
@@ -819,14 +819,6 @@ def init_lineEdit_dateEdit_opdatum():
     mwindow.dateEdit_opdatum.setDate(QDate(2019, 1, 1))
 
 
-def init_lineEdit_opzeit():
-    """
-    Operationszeit löschen
-    :return: None
-    """
-    mwindow.lineEdit_operationszeit.setText('')
-
-
 def init_comboBox_operateur():
     """
     Auswahlmasken für Operateur und Assistent füllen
@@ -908,9 +900,9 @@ def change_opzeit():
     """
     opzeit = int(
         mwindow.lineEdit_operationszeit.text() if mwindow.lineEdit_operationszeit.text() != '' else '0')  # '' abfangen!
-    if opzeit > 100 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
+    if opzeit > 100 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':  # Abweichung Hüfte
         mwindow.label_zeit_achtung.setVisible(True)
-    elif opzeit > 120 and mwindow.comboBox_prothesenart.currentText() == 'Knie':
+    elif opzeit > 120 and mwindow.comboBox_prothesenart.currentText() == 'Knie':  # Abweichung Knie
         mwindow.label_zeit_achtung.setVisible(True)
     else:
         mwindow.label_zeit_achtung.setVisible(False)
@@ -1057,13 +1049,11 @@ def init_neuesFormular():
     init_comboBox_einweiser()
     mwindow.label_zeit_achtung.setVisible(False)
     mwindow.label_inklination_achtung.setVisible(False)
-    init_lineEdit_opzeit()
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
     DataSetStatus.status = False  # Datenbank-Insert als initialer Status
     ButtonStatus.status = False  # Suche...
     EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
-    init_lineEdit_dateEdit_opdatum()
     mwindow.repaint()
 
 
@@ -1072,6 +1062,15 @@ def reset_Formular():
     Formular bei Änderung der Patientennummer zurücksetzen
     :return: None
     """
+    line_edit_state_reset = {}
+    for key in lineEditState:  # echte Kopie des Dictionary anlegen
+        line_edit_state_reset[key] = lineEditState[key]
+    line_edit_state_reset.pop(next(iter(line_edit_state_reset.keys())))  # ersten Eintrag des Dictionary löschen
+    for it in line_edit_state_reset.keys():
+        it.setText(line_edit_state_reset[it])
+    for it in checkBoxState:
+        it.setCheckState(checkBoxState[it])
+    mwindow.plainTextEdit_memo.setPlainText('')  # Memo-Feld löschen
     init_comboBox_prothesenart()
     change_prothesenart()
     change_wechseleingriff()
@@ -1086,13 +1085,11 @@ def reset_Formular():
     init_comboBox_einweiser()
     mwindow.label_zeit_achtung.setVisible(False)
     mwindow.label_inklination_achtung.setVisible(False)
-    init_lineEdit_opzeit()
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
     DataSetStatus.status = False  # Datenbank-Insert als initialer Status
     ButtonStatus.status = False  # Suche...
     EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
-    init_lineEdit_dateEdit_opdatum()
     mwindow.repaint()
 
 
