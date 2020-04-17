@@ -1,4 +1,4 @@
-#  Copyright (c) 2017-2019 Steffen Troeger
+#  Copyright (c) 2017-2020 Steffen Troeger
 import datetime
 import sys
 
@@ -90,7 +90,7 @@ class Database:
 
 class Status:
     """
-    Klasse zur Statusspeicherung
+    Klasse zur Status-Speicherung
     """
 
     def __init__(self):
@@ -181,8 +181,9 @@ def hole_statistik():
     schreibe_statistik('Statistik aus Prothesen-Datenbank...')
     schreibe_statistik('')
     db.open_db()
+    # Jahr ?
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
-    "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = TRUE;"""
+    "opdatum" >= '2020-01-01' AND "opdatum" <= '2020-12-31' AND "dokumentation" = TRUE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM jahr;"""
     lesen = db.fetchone(sql)
@@ -205,8 +206,9 @@ def hole_statistik():
     for eintrag in lesen:
         schreibe_statistik(eintrag[0] + ': ' + str(eintrag[1]))
     schreibe_statistik('')
+    # Jahr ?
     sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM  "public"."prothesen" WHERE \
-    "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = FALSE;"""
+    "opdatum" >= '2020-01-01' AND "opdatum" <= '2020-12-31' AND "dokumentation" = FALSE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
@@ -426,12 +428,12 @@ def suche_eprd():
     try:
         patnr = (
             mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
-        sql = """SELECT id FROM fall WHERE khintkennz = '"""
+        sql = """SELECT id FROM eprd_fall WHERE khintkennz = '"""
         sql += patnr + """';"""
         eprd.open_db()
         lesen = eprd.fetchone(sql)
         if lesen:
-            sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
+            sql = """SELECT opdatum, gelenk_code, seite_code, arteingriff_code, arzt_nachname  FROM eprd_operation WHERE fk_eprd_fall = '"""
             sql += lesen[0] + """';"""
             EPRD_Status.status = True  # Eintrag in der EPRD-Datenbank gefunden
             eprd.open_db()
@@ -456,6 +458,7 @@ def suche_eprd():
         eprd.protocol('-- ' + str(e).split('\n')[0])
     artikel = suche_implantate(patnr)  # Implantate aus EPRD-Datenbank
     if artikel:
+        # nach Op-Datum Tupel in Liste sortieren
         artikel.sort(key=lambda x: x[0])
         schreibe_statistik('')
         schreibe_statistik('Implantate aus EPRD-Datenbank...')
@@ -475,19 +478,19 @@ def suche_implantate(fallnummer):
     eprd.open_db()
     try:
         fall_id_raw = eprd.fetchone(
-            "select * from fall where khintkennz = '" + fallnummer + "'")
+            "select * from eprd_fall where khintkennz = '" + fallnummer + "'")
         fall_id = fall_id_raw[0]
     except:
         pass
     else:
         try:  # TODO: fetchall?
             op_id_raw_all = eprd.fetchall(
-                "select * from operation where fk_fall = '" + fall_id + "'")
+                "select * from eprd_operation where fk_eprd_fall = '" + fall_id + "'")
             op_id_list = []
             for op_item in op_id_raw_all:
-                op_id_list.append((op_item[0], op_item[3].strftime('%d.%m.%Y')))  # Liste von Tupeln (Op-Nr., Op-Datum)
-
-            # op_id = op_id_raw[0]
+                # Liste von Tupeln (Op-Nr., Op-Datum)
+                op_id_list.append(
+                    (op_item[0], op_item[3].strftime('%d.%m.%Y')))
         except:
             pass
         else:
@@ -495,9 +498,10 @@ def suche_implantate(fallnummer):
                 for op_id_item in op_id_list:
                     op_id, op_datum = op_id_item
                 artikel_raw = eprd.fetchall(
-                    "select * from op_artikel where fk_operation = '" + op_id + "'")
+                        "select * from eprd_op_artikel where fk_eprd_operation = '" + op_id + "'")
                 for artikel_zeile in artikel_raw:
-                        artikelliste.append((op_datum, artikel_zeile[6]))  # Liste von Tupeln (Op-Datum, Artikel)
+                        # Liste von Tupeln (Op-Datum, Artikel)
+                        artikelliste.append((op_datum, artikel_zeile[6]))
             except:
                 pass
     finally:
@@ -508,7 +512,7 @@ def suche_implantate(fallnummer):
 def suche_patientennummer():
     """
     Suche der Patientennummer...
-    wird bei Eingabe der 8. Stelle der Patienennummer automatisch aufgerufen
+    wird bei Eingabe der 8. Stelle der Patientennummer automatisch aufgerufen
     :return: None
     """
     patnr = mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0'  # sonst Fehler bei Postgres
@@ -517,10 +521,11 @@ def suche_patientennummer():
     db.open_db()
     lesen = db.fetchone(sql)
     if lesen:  # ein Datensatz mit dieser Patientennummer vorhanden...
-        mwindow.label_alt_patnummer.setText(str(lesen[0]))  # TODO String-Typen?
-        mwindow.label_alt_proth_art.setText(str(lesen[1]))
-        mwindow.label_alt_seite.setText(str(lesen[2]))
-        mwindow.label_alt_op_datum.setText(str(lesen[3].strftime('%d.%m.%Y')))
+        mwindow.label_alt_patnummer.setText(str(lesen[0]))  # bigint
+        mwindow.label_alt_proth_art.setText(lesen[1])  # varchar
+        mwindow.label_alt_seite.setText(lesen[2])  # varchar
+        mwindow.label_alt_op_datum.setText(
+            lesen[3].strftime('%d.%m.%Y'))  # String aus Datum
         mwindow.pushButton_suche.setText('Laden...')
         ButtonStatus.status = True  # Laden...
     else:
@@ -580,7 +585,7 @@ def change_prothesenart():
         mwindow.checkBox_luxation.setCheckState(False)
         mwindow.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         mwindow.checkBox_trochanterabriss.setCheckState(False)
-    else:  # Schulter- und Radiusköpchenprothese
+    else:  # Schulter- und Radiusköpfchenprothese
         mwindow.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
         mwindow.lineEdit_praeop_winkel.setText('')
         mwindow.lineEdit_praeop_winkel.setVisible(False)
@@ -664,7 +669,7 @@ def change_neunzig():
     Komplikationen < 90 Tage
     :return: None
     """
-    regeln = [
+    regeln = [  # Liste aller Komplikations-Checkboxen
         mwindow.checkBox_infektion.isChecked() is False,
         mwindow.checkBox_luxation.isChecked() is False,
         mwindow.checkBox_trochanterabriss.isChecked() is False,
@@ -681,7 +686,7 @@ def init_lineEdit_patientennummer():
     Patientennummer initialisieren...
     :return: None
     """
-    mwindow.lineEdit_patientennummer.setText('49000000')  # Maske vorbelegen
+    mwindow.lineEdit_patientennummer.setText('50000000')  # Maske vorbelegen
     mwindow.lineEdit_patientennummer.setCursorPosition(2)  # Cursor auf 3. Position
 
 
@@ -716,19 +721,19 @@ def init_comboBox_proximal():
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
                 "Ecofit-Pfanne",
-                "Link-Pfanne",
                 "Duokopf",
                 "Schraubpfanne",
-                "Icon-Pfanne",
+                "McMinn-Pfanne",
                 "zementierte Pfanne",
+                "Schnapppfanne",
                 "sonstiges"):
             mwindow.comboBox_proximal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
         for it in (
                 "3D Knie Femur",
                 "ACS-SC Knie Femur",
-                "Scharnierknie Femur",
-                "Allergie-Knie Femur",
+                "ACS-PS Knie Femur",
+                "GenuX Knie Femur",
                 "sonstiges"):
             mwindow.comboBox_proximal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Schulter':
@@ -754,20 +759,17 @@ def init_comboBox_distal():
                 "Ecofit-Schaft",
                 "Ecofit-Kurzschaft",
                 "Actinia-Schaft",
-                "CFP-Schaft",
-                "zementierter Link-Schaft",
-                "Icon-Oberflächenersatz",
-                "Icon-Schaft zementfrei",
+                "zementierter Ecofit-Schaft",
+                "McMinn-Oberflächenersatz",
                 "Revisionsschaft zementfrei",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
         for it in (
                 "3D Knie Tibia",
-                "3D Knie Tibia mit Stem",
                 "ACS-SC Knie Tibia",
-                "Scharnierknie Tibia",
-                "Allergie-Knie Tibia",
+                "ACS-PS Knie Tibia",
+                "GenuX Knie Tibia",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Schulter':
@@ -798,15 +800,7 @@ def init_lineEdit_dateEdit_opdatum():
     Operationsdatum setzen
     :return: None
     """
-    mwindow.dateEdit_opdatum.setDate(QDate(2019, 1, 1))
-
-
-def init_lineEdit_opzeit():
-    """
-    Operationszeit löschen
-    :return: None
-    """
-    mwindow.lineEdit_operationszeit.setText('')
+    mwindow.dateEdit_opdatum.setDate(QDate(2020, 1, 1))
 
 
 def init_comboBox_operateur():
@@ -888,9 +882,9 @@ def change_opzeit():
     """
     opzeit = int(
         mwindow.lineEdit_operationszeit.text() if mwindow.lineEdit_operationszeit.text() != '' else '0')  # '' abfangen!
-    if opzeit > 100 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
+    if opzeit > 100 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':  # Abweichung Hüfte
         mwindow.label_zeit_achtung.setVisible(True)
-    elif opzeit > 120 and mwindow.comboBox_prothesenart.currentText() == 'Knie':
+    elif opzeit > 120 and mwindow.comboBox_prothesenart.currentText() == 'Knie':  # Abweichung Knie
         mwindow.label_zeit_achtung.setVisible(True)
     else:
         mwindow.label_zeit_achtung.setVisible(False)
@@ -911,7 +905,7 @@ def change_inklination():
 
 def set_start_default():
     """
-    alle Eingaben auf Standard stellen...
+    alle Eingabe-Widgets auf Standard stellen...
     :return: None
     """
     for it in lineEditState.keys():
@@ -986,13 +980,13 @@ def pruefen():
     """
     Prüfung der Eingaben...
     :return: True wenn Eingaben richtig
-             False wenn Einagben falsch
+             False wenn Eingaben falsch
     """
     korrekt = True
     if test_operateur(mwindow.comboBox_operateur.currentText(),
-                      mwindow.comboBox_assistenz.currentText()) is False:  # kein Operatuer eingegeben
+                      mwindow.comboBox_assistenz.currentText()) is False:  # kein Operateur eingegeben
         korrekt = False
-    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2019-01-01':  # kein Op-Datum eingegeben
+    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2020-01-01':  # kein Op-Datum eingegeben
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
@@ -1023,33 +1017,30 @@ def init_neuesFormular():
     init_dictionary()
     hole_statistik()
     init_lineEdit_patientennummer()
-    init_comboBox_prothesenart()
-    change_prothesenart()
-    change_wechseleingriff()
-    init_comboBox_seite()
-    init_comboBox_proximal()
-    init_comboBox_distal()
-    change_fraktur()
-    change_vierundzwanzig()
-    init_dateEdit_opdatum()
-    change_abweichung()
-    init_comboBox_operateur()
-    init_comboBox_einweiser()
-    mwindow.label_zeit_achtung.setVisible(False)
-    mwindow.label_inklination_achtung.setVisible(False)
-    init_lineEdit_opzeit()
-    mwindow.lineEdit_operationszeit.setCursorPosition(0)
-    mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
-    DataSetStatus.status = False  # Datenbank-Insert als initialer Status
-    ButtonStatus.status = False  # Suche...
-    EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
-    init_lineEdit_dateEdit_opdatum()
-    mwindow.repaint()
+    init_formular_allgemein()
 
 
 def reset_Formular():
     """
     Formular bei Änderung der Patientennummer zurücksetzen
+    :return: None
+    """
+    line_edit_state_reset = {}
+    for key in lineEditState:  # echte Kopie des Dictionary anlegen
+        line_edit_state_reset[key] = lineEditState[key]
+    # ersten Eintrag des Dictionary löschen
+    line_edit_state_reset.pop(next(iter(line_edit_state_reset.keys())))
+    for it in line_edit_state_reset.keys():
+        it.setText(line_edit_state_reset[it])
+    for it in checkBoxState:
+        it.setCheckState(checkBoxState[it])
+    mwindow.plainTextEdit_memo.setPlainText('')  # Memo-Feld löschen
+    init_formular_allgemein()
+
+
+def init_formular_allgemein():
+    """
+    gemeinsamer Funktionsrumpf von init_neuesFormular und reset_Formular
     :return: None
     """
     init_comboBox_prothesenart()
@@ -1066,13 +1057,11 @@ def reset_Formular():
     init_comboBox_einweiser()
     mwindow.label_zeit_achtung.setVisible(False)
     mwindow.label_inklination_achtung.setVisible(False)
-    init_lineEdit_opzeit()
     mwindow.lineEdit_operationszeit.setCursorPosition(0)
     mwindow.lineEdit_inklinationswinkel.setCursorPosition(0)
     DataSetStatus.status = False  # Datenbank-Insert als initialer Status
     ButtonStatus.status = False  # Suche...
     EPRD_Status.status = False  # keine positive EPRD-Suche erfolgt
-    init_lineEdit_dateEdit_opdatum()
     mwindow.repaint()
 
 
@@ -1162,7 +1151,7 @@ if __name__ == "__main__":
     mwindow = MainWindow()
     dwindow = achtung()
     db = Database('localhost', 'prothesen', 'postgres', '')
-    eprd = Database('localhost', 'eprd_db', 'postgres', '')
+    eprd = Database('localhost', 'eprd_db_2_m1', 'postgres', '')
     # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     DataSetStatus = Status()
     # Knopfstatus False -> Suche ..., True -> Laden ...

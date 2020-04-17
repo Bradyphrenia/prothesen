@@ -1174,3 +1174,21 @@ HINT:  Perhaps you meant to reference the column "operation.arzt_nachname".
 -- 2019-12-12 19:37:04.219835
 -- FATAL:  role "postgres" is not permitted to log in
 
+-- 2020-04-17 22:08:31.351904
+-- FATAL:  database "eprd_db_2_m1" does not exist
+
+-- 2020-04-17 22:09:05.695409
+-- FATAL:  database "eprd_db_2_m1" does not exist
+
+-- 2020-04-17 22:09:26.230560
+-- FATAL:  database "eprd_db_2_m1" does not exist
+
+-- 2020-04-17 22:09:29.186142
+-- FATAL:  database "eprd_db_2_m1" does not exist
+
+-- 2020-04-17 22:09:39.787124
+-- FATAL:  database "eprd_db_2_m1" does not exist
+
+-- 2020-04-17 22:10:18.196377
+-- FATAL:  database "eprd_db_2_m1" does not exist
+
