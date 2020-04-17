@@ -498,10 +498,10 @@ def suche_implantate(fallnummer):
                 for op_id_item in op_id_list:
                     op_id, op_datum = op_id_item
                 artikel_raw = eprd.fetchall(
-                        "select * from eprd_op_artikel where fk_eprd_operation = '" + op_id + "'")
+                    "select * from eprd_op_artikel where fk_eprd_operation = '" + op_id + "'")
                 for artikel_zeile in artikel_raw:
-                        # Liste von Tupeln (Op-Datum, Artikel)
-                        artikelliste.append((op_datum, artikel_zeile[6]))
+                    # Liste von Tupeln (Op-Datum, Artikel)
+                    artikelliste.append((op_datum, artikel_zeile[6]))
             except:
                 pass
     finally:
@@ -1150,8 +1150,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-    db = Database('localhost', 'prothesen', 'postgres', '')
-    eprd = Database('localhost', 'eprd_db_2_m1', 'postgres', '')
+    db = Database('localhost', 'prothesen', 'postgres', 'postgres')
+    eprd = Database('localhost', 'eprd_db2_m1', 'postgres', 'postgres')
     # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     DataSetStatus = Status()
     # Knopfstatus False -> Suche ..., True -> Laden ...
