@@ -451,7 +451,7 @@ def suche_eprd():
             else:
                 mwindow.checkBox_wechseleingriff.setChecked(False)
             mwindow.dateEdit_opdatum.setDate(eprd_data[0])
-            if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner']:
+            if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner', 'Flachsmeyer']:
                 mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
         eprd.close_db()
     except (psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
@@ -811,14 +811,17 @@ def init_comboBox_operateur():
     ChangeStatus.status = False
     db.open_db()
     sql = """SELECT "operateur" FROM "prothesen";"""
-    lesen = list(db.fetchall(sql))  # Liste aller Operateure aus Datenbank (auch None!)
+    lesen = list(db.fetchall(
+        sql))  # Liste aller Operateure aus Datenbank (auch None!)
     db.close_db()
     operateur = [it[0]
-                 for it in lesen if it[0] != None]  # Operateurliste bereinigen
-    operateur = set(['Svacina', 'Neu', 'Suhren', 'Troeger', 'Joker'] + operateur)  # alle zum set() umwandeln
+                 for it in lesen if it[0] != None and it[0] != 'Joker']  # Operateurliste bereinigen
+    operateur = set(['Svacina', 'Neu', 'Suhren', 'Troeger', 'Flachsmeyer'] + operateur)  # alle zum set() umwandeln
     mwindow.comboBox_operateur.clear()
     mwindow.comboBox_assistenz.clear()
-    for op in sorted(operateur):  # Operateure laden
+    mwindow.comboBox_operateur.addItem('Joker') # 1. Position in der Liste
+    mwindow.comboBox_assistenz.addItem('Joker') # 1. Position in der Liste
+    for op in operateur:  # weitere Operateure laden
         mwindow.comboBox_operateur.addItem(op)
         mwindow.comboBox_assistenz.addItem(op)
 
@@ -1150,8 +1153,12 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-    db = Database('localhost', 'prothesen', 'postgres', 'postgres')
-    eprd = Database('localhost', 'eprd_db2_m1', 'postgres', 'postgres')
+    if sys.platform == 'win32': # Klinikrechner Windows
+        db = Database('139.64.200.60', 'prothesen', 'postgres', 'SuperUser2012')
+        eprd = Database('139.64.200.60', 'eprd_db2_m1', 'postgres', 'SuperUser2012')
+    else:   # eigener Rechner MacOSX
+        Database('localhost', dbname='prothesen', user='postgres', password='postgres')
+        Database('localhost', dbname='prothesen', user='postgres', password='postgres')
     # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     DataSetStatus = Status()
     # Knopfstatus False -> Suche ..., True -> Laden ...
