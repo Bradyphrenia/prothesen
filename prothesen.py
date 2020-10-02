@@ -819,8 +819,8 @@ def init_comboBox_operateur():
     operateur = set(['Svacina', 'Neu', 'Suhren', 'Troeger', 'Flachsmeyer'] + operateur)  # alle zum set() umwandeln
     mwindow.comboBox_operateur.clear()
     mwindow.comboBox_assistenz.clear()
-    mwindow.comboBox_operateur.addItem('Joker') # 1. Position in der Liste
-    mwindow.comboBox_assistenz.addItem('Joker') # 1. Position in der Liste
+    mwindow.comboBox_operateur.addItem('Joker')  # 1. Position in der Liste
+    mwindow.comboBox_assistenz.addItem('Joker')  # 1. Position in der Liste
     for op in operateur:  # weitere Operateure laden
         mwindow.comboBox_operateur.addItem(op)
         mwindow.comboBox_assistenz.addItem(op)
@@ -1153,12 +1153,12 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-    if sys.platform == 'win32': # Klinikrechner Windows
+    if sys.platform == 'win32':  # Klinikrechner Windows
         db = Database('139.64.200.60', 'prothesen', 'postgres', 'SuperUser2012')
         eprd = Database('139.64.200.60', 'eprd_db2_m1', 'postgres', 'SuperUser2012')
-    else:   # eigener Rechner MacOSX
-        Database('localhost', dbname='prothesen', user='postgres', password='postgres')
-        Database('localhost', dbname='prothesen', user='postgres', password='postgres')
+    else:  # eigener Rechner MacOSX
+        db = Database('localhost', 'prothesen', 'postgres', 'postgres')
+        eprd = Database('localhost', 'prothesen', 'postgres', 'postgres')
     # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     DataSetStatus = Status()
     # Knopfstatus False -> Suche ..., True -> Laden ...
