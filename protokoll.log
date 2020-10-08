@@ -1074,3 +1074,29 @@ UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proxima
 UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (49000001,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','links',False,True,True,False,True,'2019-02-26','Machner','Joker',22,False,False,NULL,False,True,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,'Machner',False,+2.1,+0.5,False,False) WHERE "id" = 3393;
 -- 2019-12-23 17:22:00.579187
 UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (49000001,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','links',False,True,True,False,True,'2019-02-26','Machner','Joker',22,False,False,NULL,False,True,False,False,False,False,'test',False,False,False,False,False,False,False,False,False,False,False,False,False,'Machner',False,+2.1,+0.5,False,False) WHERE "id" = 3393;
+-- 2020-10-08 15:25:52.651080
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 15:54:34.078803
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:14:02.892636
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:14:44.524755
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:15:45.572668
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:16:02.039856
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:17:02.464311
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:20:16.029091
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 17:21:48.691661
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 19:34:23.076808
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 19:37:08.633518
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 19:41:55.355166
+-- relation "eprd_fall" does not exist
+-- 2020-10-08 19:45:31.819512
+-- relation "eprd_fall" does not exist

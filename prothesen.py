@@ -1,4 +1,4 @@
-#  Copyright (c) 2017-2019 Steffen Troeger
+#  Copyright (c) 2017-2020 Steffen Troeger
 import datetime
 import sys
 
@@ -181,8 +181,9 @@ def hole_statistik():
     schreibe_statistik('Statistik aus Prothesen-Datenbank...')
     schreibe_statistik('')
     db.open_db()
+    # Jahr ?
     sql = """CREATE OR REPLACE VIEW jahr AS SELECT * FROM "public"."prothesen" WHERE \
-    "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = TRUE;"""
+    "opdatum" >= '2020-01-01' AND "opdatum" <= '2020-12-31' AND "dokumentation" = TRUE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM jahr;"""
     lesen = db.fetchone(sql)
@@ -205,8 +206,9 @@ def hole_statistik():
     for eintrag in lesen:
         schreibe_statistik(eintrag[0] + ': ' + str(eintrag[1]))
     schreibe_statistik('')
+    # Jahr ?
     sql = """CREATE OR REPLACE VIEW nicht AS SELECT * FROM  "public"."prothesen" WHERE \
-    "opdatum" >= '2019-01-01' AND "opdatum" <= '2019-12-31' AND "dokumentation" = FALSE;"""
+    "opdatum" >= '2020-01-01' AND "opdatum" <= '2020-12-31' AND "dokumentation" = FALSE;"""
     db.execute(sql)
     sql = """SELECT COUNT(*) FROM nicht;"""
     lesen = db.fetchone(sql)
@@ -282,12 +284,9 @@ def aktualisiere_widgets():
     mwindow.comboBox_seite.setCurrentText(dic_prothesen['seite'])
     mwindow.comboBox_proximal.setCurrentText(dic_prothesen['proximal'])
     mwindow.comboBox_distal.setCurrentText(dic_prothesen['distal'])
-    mwindow.checkBox_wechseleingriff.setChecked(
-        dic_prothesen['wechseleingriff'])
-    mwindow.checkBox_praeop_roentgen.setChecked(
-        dic_prothesen['praeop_roentgen'])
-    mwindow.checkBox_postop_roentgen.setChecked(
-        dic_prothesen['postop_roentgen'])
+    mwindow.checkBox_wechseleingriff.setChecked(dic_prothesen['wechseleingriff'])
+    mwindow.checkBox_praeop_roentgen.setChecked(dic_prothesen['praeop_roentgen'])
+    mwindow.checkBox_postop_roentgen.setChecked(dic_prothesen['postop_roentgen'])
     mwindow.checkBox_fraktur.setChecked(dic_prothesen['fraktur'])
     mwindow.checkBox_praeop_planung.setChecked(dic_prothesen['planung'])
     ds = str(dic_prothesen['opdatum'])  # Datums-String
@@ -300,21 +299,16 @@ def aktualisiere_widgets():
     mwindow.lineEdit_operationszeit.setText(str(dic_prothesen['op_zeiten']))
     mwindow.checkBox_infektion.setChecked(dic_prothesen['infektion'])
     mwindow.checkBox_luxation.setChecked(dic_prothesen['luxation'])
-    mwindow.lineEdit_inklinationswinkel.setText(
-        str(dic_prothesen['inklinationswinkel']))
-    mwindow.checkBox_trochanterabriss.setChecked(
-        dic_prothesen['trochanterabriss'])
+    mwindow.lineEdit_inklinationswinkel.setText(str(dic_prothesen['inklinationswinkel']))
+    mwindow.checkBox_trochanterabriss.setChecked(dic_prothesen['trochanterabriss'])
     mwindow.checkBox_fissur.setChecked(dic_prothesen['fissuren'])
-    mwindow.checkBox_thromboembolie.setChecked(
-        dic_prothesen['thrombose_embolie'])
+    mwindow.checkBox_thromboembolie.setChecked(dic_prothesen['thrombose_embolie'])
     mwindow.checkBox_gestorben.setChecked(dic_prothesen['sterblichkeit'])
     mwindow.checkBox_neurologie.setChecked(dic_prothesen['neurologie'])
     mwindow.checkBox_vollstaendig.setChecked(dic_prothesen['dokumentation'])
     mwindow.plainTextEdit_memo.setPlainText(dic_prothesen['memo'])
-    mwindow.checkBox_knochenverankert.setChecked(
-        dic_prothesen['knochenverankert'])
-    mwindow.checkBox_periprothetisch.setChecked(
-        dic_prothesen['periprothetisch'])
+    mwindow.checkBox_knochenverankert.setChecked(dic_prothesen['knochenverankert'])
+    mwindow.checkBox_periprothetisch.setChecked(dic_prothesen['periprothetisch'])
     mwindow.checkBox_reintervention.setChecked(dic_prothesen['reintervention'])
     mwindow.checkBox_abweichung.setChecked(dic_prothesen['abweichung'])
     mwindow.checkBox_ct.setChecked(dic_prothesen['ct'])
@@ -329,14 +323,11 @@ def aktualisiere_widgets():
     mwindow.comboBox_einweiser.setCurrentText(dic_prothesen['einweiser'])
     mwindow.checkBox_neunzig.setChecked(
         dic_prothesen['neunzig_tage'] if dic_prothesen['neunzig_tage'] is not None else False)
-    mwindow.lineEdit_praeop_winkel.setText(
-        format_winkel(str(dic_prothesen['kniewinkel_prae'])))
-    mwindow.lineEdit_postop_winkel.setText(
-        format_winkel(str(dic_prothesen['kniewinkel_post'])))
+    mwindow.lineEdit_praeop_winkel.setText(format_winkel(str(dic_prothesen['kniewinkel_prae'])))
+    mwindow.lineEdit_postop_winkel.setText(format_winkel(str(dic_prothesen['kniewinkel_post'])))
     mwindow.checkBox_vierundzwanzig.setChecked(
         dic_prothesen['vierundzwanzig_plus'] if dic_prothesen['vierundzwanzig_plus'] is not None else False)
-    mwindow.checkBox_oak.setChecked(
-        dic_prothesen['oak'] if dic_prothesen['oak'] is not None else False)
+    mwindow.checkBox_oak.setChecked(dic_prothesen['oak'] if dic_prothesen['oak'] is not None else False)
     mwindow.repaint()  # Fenster aktualisieren
 
 
@@ -436,14 +427,13 @@ def suche_eprd():
     """
     try:
         patnr = (
-            mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')
-        # sonst Fehler bei Postgres
-        sql = """SELECT id FROM fall WHERE khintkennz = '"""
+            mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
+        sql = """SELECT id FROM eprd_fall WHERE khintkennz = '"""
         sql += patnr + """';"""
         eprd.open_db()
         lesen = eprd.fetchone(sql)
         if lesen:
-            sql = """SELECT opdatum, gelenk, seite, arteingriff, arzt_nachname  FROM operation WHERE fk_fall = '"""
+            sql = """SELECT opdatum, gelenk_code, seite_code, arteingriff_code, arzt_nachname  FROM eprd_operation WHERE fk_eprd_fall = '"""
             sql += lesen[0] + """';"""
             EPRD_Status.status = True  # Eintrag in der EPRD-Datenbank gefunden
             eprd.open_db()
@@ -461,14 +451,15 @@ def suche_eprd():
             else:
                 mwindow.checkBox_wechseleingriff.setChecked(False)
             mwindow.dateEdit_opdatum.setDate(eprd_data[0])
-            if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner']:
+            if eprd_data[4] in ['Svacina', 'Neu', 'Suhren', 'Troeger', 'Machner', 'Flachsmeyer']:
                 mwindow.comboBox_operateur.setCurrentText(eprd_data[4])
         eprd.close_db()
     except (psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
         eprd.protocol('-- ' + str(e).split('\n')[0])
     artikel = suche_implantate(patnr)  # Implantate aus EPRD-Datenbank
     if artikel:
-        artikel.sort(key=lambda x: x[0])  # nach Op-Datum Tupel in Liste sortieren
+        # nach Op-Datum Tupel in Liste sortieren
+        artikel.sort(key=lambda x: x[0])
         schreibe_statistik('')
         schreibe_statistik('Implantate aus EPRD-Datenbank...')
         schreibe_statistik('')
@@ -487,27 +478,30 @@ def suche_implantate(fallnummer):
     eprd.open_db()
     try:
         fall_id_raw = eprd.fetchone(
-            "select * from fall where khintkennz = '" + fallnummer + "'")
+            "select * from eprd_fall where khintkennz = '" + fallnummer + "'")
         fall_id = fall_id_raw[0]
     except:
         pass
     else:
         try:  # TODO: fetchall?
             op_id_raw_all = eprd.fetchall(
-                "select * from operation where fk_fall = '" + fall_id + "'")
+                "select * from eprd_operation where fk_eprd_fall = '" + fall_id + "'")
             op_id_list = []
             for op_item in op_id_raw_all:
-                op_id_list.append((op_item[0], op_item[3].strftime('%d.%m.%Y')))  # Liste von Tupeln (Op-Nr., Op-Datum)
+                # Liste von Tupeln (Op-Nr., Op-Datum)
+                op_id_list.append(
+                    (op_item[0], op_item[3].strftime('%d.%m.%Y')))
         except:
             pass
         else:
             try:
                 for op_id_item in op_id_list:
                     op_id, op_datum = op_id_item
-                    artikel_raw = eprd.fetchall(
-                        "select * from op_artikel where fk_operation = '" + op_id + "'")
-                    for artikel_zeile in artikel_raw:
-                        artikelliste.append((op_datum, artikel_zeile[6]))  # Liste von Tupeln (Op-Datum, Artikel)
+                artikel_raw = eprd.fetchall(
+                    "select * from eprd_op_artikel where fk_eprd_operation = '" + op_id + "'")
+                for artikel_zeile in artikel_raw:
+                    # Liste von Tupeln (Op-Datum, Artikel)
+                    artikelliste.append((op_datum, artikel_zeile[6]))
             except:
                 pass
     finally:
@@ -521,8 +515,7 @@ def suche_patientennummer():
     wird bei Eingabe der 8. Stelle der Patientennummer automatisch aufgerufen
     :return: None
     """
-    patnr = mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0'
-    # sonst Fehler bei Postgres
+    patnr = mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0'  # sonst Fehler bei Postgres
     sql = """SELECT "patientennummer","prothesenart","seite","opdatum" FROM "prothesen" WHERE "patientennummer" = """
     sql += patnr + ';'
     db.open_db()
@@ -531,7 +524,8 @@ def suche_patientennummer():
         mwindow.label_alt_patnummer.setText(str(lesen[0]))  # bigint
         mwindow.label_alt_proth_art.setText(lesen[1])  # varchar
         mwindow.label_alt_seite.setText(lesen[2])  # varchar
-        mwindow.label_alt_op_datum.setText(lesen[3].strftime('%d.%m.%Y'))  # String aus Datum
+        mwindow.label_alt_op_datum.setText(
+            lesen[3].strftime('%d.%m.%Y'))  # String aus Datum
         mwindow.pushButton_suche.setText('Laden...')
         ButtonStatus.status = True  # Laden...
     else:
@@ -589,8 +583,7 @@ def change_prothesenart():
         mwindow.label_inklinationswinkel.setVisible(False)
         mwindow.checkBox_luxation.setVisible(False)  # Luxation aus
         mwindow.checkBox_luxation.setCheckState(False)
-        mwindow.checkBox_trochanterabriss.setVisible(
-            False)  # Trochanterabriss aus
+        mwindow.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         mwindow.checkBox_trochanterabriss.setCheckState(False)
     else:  # Schulter- und Radiusköpfchenprothese
         mwindow.label_praeop_winkel.setVisible(False)  # präop. Winkel aus
@@ -603,8 +596,7 @@ def change_prothesenart():
         mwindow.lineEdit_inklinationswinkel.setText('')
         mwindow.lineEdit_inklinationswinkel.setVisible(False)
         mwindow.checkBox_luxation.setVisible(True)  # Luxation an
-        mwindow.checkBox_trochanterabriss.setVisible(
-            False)  # Trochanterabriss aus
+        mwindow.checkBox_trochanterabriss.setVisible(False)  # Trochanterabriss aus
         mwindow.checkBox_trochanterabriss.setCheckState(False)
     init_comboBox_proximal()
     init_comboBox_distal()
@@ -641,11 +633,9 @@ def change_wechseleingriff():
     :return: None
     """
     if mwindow.checkBox_wechseleingriff.isChecked() is True:
-        mwindow.checkBox_knochenverankert.setVisible(
-            True)  # Checkbox knochenverankert ein-
+        mwindow.checkBox_knochenverankert.setVisible(True)  # Checkbox knochenverankert ein-
     else:
-        mwindow.checkBox_knochenverankert.setVisible(
-            False)  # und ausschalten / löschen
+        mwindow.checkBox_knochenverankert.setVisible(False)  # und ausschalten / löschen
         mwindow.checkBox_knochenverankert.setCheckState(False)
 
 
@@ -655,11 +645,9 @@ def change_fraktur():
     :return: None
     """
     if mwindow.checkBox_fraktur.isChecked() is True:
-        mwindow.checkBox_periprothetisch.setVisible(
-            True)  # Checkbox periprothetisch ein-
+        mwindow.checkBox_periprothetisch.setVisible(True)  # Checkbox periprothetisch ein-
     else:
-        mwindow.checkBox_periprothetisch.setVisible(
-            False)  # und ausschalten / löschen
+        mwindow.checkBox_periprothetisch.setVisible(False)  # und ausschalten / löschen
         mwindow.checkBox_periprothetisch.setCheckState(False)
 
 
@@ -698,9 +686,8 @@ def init_lineEdit_patientennummer():
     Patientennummer initialisieren...
     :return: None
     """
-    mwindow.lineEdit_patientennummer.setText('49000000')  # Maske vorbelegen
-    mwindow.lineEdit_patientennummer.setCursorPosition(
-        2)  # Cursor auf 3. Position
+    mwindow.lineEdit_patientennummer.setText('50000000')  # Maske vorbelegen
+    mwindow.lineEdit_patientennummer.setCursorPosition(2)  # Cursor auf 3. Position
 
 
 def init_comboBox_seite():
@@ -734,19 +721,19 @@ def init_comboBox_proximal():
     if mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         for it in (
                 "Ecofit-Pfanne",
-                "Link-Pfanne",
                 "Duokopf",
                 "Schraubpfanne",
-                "Icon-Pfanne",
+                "McMinn-Pfanne",
                 "zementierte Pfanne",
+                "Schnapppfanne",
                 "sonstiges"):
             mwindow.comboBox_proximal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
         for it in (
                 "3D Knie Femur",
                 "ACS-SC Knie Femur",
-                "Scharnierknie Femur",
-                "Allergie-Knie Femur",
+                "ACS-PS Knie Femur",
+                "GenuX Knie Femur",
                 "sonstiges"):
             mwindow.comboBox_proximal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Schulter':
@@ -772,20 +759,17 @@ def init_comboBox_distal():
                 "Ecofit-Schaft",
                 "Ecofit-Kurzschaft",
                 "Actinia-Schaft",
-                "CFP-Schaft",
-                "zementierter Link-Schaft",
-                "Icon-Oberflächenersatz",
-                "Icon-Schaft zementfrei",
+                "zementierter Ecofit-Schaft",
+                "McMinn-Oberflächenersatz",
                 "Revisionsschaft zementfrei",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Knie':
         for it in (
                 "3D Knie Tibia",
-                "3D Knie Tibia mit Stem",
                 "ACS-SC Knie Tibia",
-                "Scharnierknie Tibia",
-                "Allergie-Knie Tibia",
+                "ACS-PS Knie Tibia",
+                "GenuX Knie Tibia",
                 "sonstiges"):
             mwindow.comboBox_distal.addItem(it)
     elif mwindow.comboBox_prothesenart.currentText() == 'Schulter':
@@ -816,7 +800,7 @@ def init_lineEdit_dateEdit_opdatum():
     Operationsdatum setzen
     :return: None
     """
-    mwindow.dateEdit_opdatum.setDate(QDate(2019, 1, 1))
+    mwindow.dateEdit_opdatum.setDate(QDate(2020, 1, 1))
 
 
 def init_comboBox_operateur():
@@ -831,12 +815,13 @@ def init_comboBox_operateur():
         sql))  # Liste aller Operateure aus Datenbank (auch None!)
     db.close_db()
     operateur = [it[0]
-                 for it in lesen if it[0] != None]  # Operateurliste bereinigen
-    operateur = set(['Svacina', 'Neu', 'Suhren', 'Troeger',
-                     'Joker'] + operateur)  # alle zum set() umwandeln
+                 for it in lesen if it[0] != None and it[0] != 'Joker']  # Operateurliste bereinigen
+    operateur = set(['Svacina', 'Neu', 'Suhren', 'Troeger', 'Flachsmeyer'] + operateur)  # alle zum set() umwandeln
     mwindow.comboBox_operateur.clear()
     mwindow.comboBox_assistenz.clear()
-    for op in sorted(operateur):  # Operateure laden
+    mwindow.comboBox_operateur.addItem('Joker')  # 1. Position in der Liste
+    mwindow.comboBox_assistenz.addItem('Joker')  # 1. Position in der Liste
+    for op in operateur:  # weitere Operateure laden
         mwindow.comboBox_operateur.addItem(op)
         mwindow.comboBox_assistenz.addItem(op)
 
@@ -914,8 +899,7 @@ def change_inklination():
     :return: None
     """
     inklination = int(
-        mwindow.lineEdit_inklinationswinkel.text() if mwindow.lineEdit_inklinationswinkel.text() != '' else '0')
-    # '' abfangen!
+        mwindow.lineEdit_inklinationswinkel.text() if mwindow.lineEdit_inklinationswinkel.text() != '' else '0')  # '' abfangen!
     if inklination > 50 and mwindow.comboBox_prothesenart.currentText() == 'Hüfte':
         mwindow.label_inklination_achtung.setVisible(True)
     else:
@@ -1005,7 +989,7 @@ def pruefen():
     if test_operateur(mwindow.comboBox_operateur.currentText(),
                       mwindow.comboBox_assistenz.currentText()) is False:  # kein Operateur eingegeben
         korrekt = False
-    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2019-01-01':  # kein Op-Datum eingegeben
+    if mwindow.dateEdit_opdatum.date().toString('yyyy-MM-dd') == '2020-01-01':  # kein Op-Datum eingegeben
         korrekt = False
     if mwindow.lineEdit_operationszeit.text() == '':  # keine Op-Dauer eingegeben
         korrekt = False
@@ -1047,7 +1031,8 @@ def reset_Formular():
     line_edit_state_reset = {}
     for key in lineEditState:  # echte Kopie des Dictionary anlegen
         line_edit_state_reset[key] = lineEditState[key]
-    line_edit_state_reset.pop(next(iter(line_edit_state_reset.keys())))  # ersten Eintrag des Dictionary löschen
+    # ersten Eintrag des Dictionary löschen
+    line_edit_state_reset.pop(next(iter(line_edit_state_reset.keys())))
     for it in line_edit_state_reset.keys():
         it.setText(line_edit_state_reset[it])
     for it in checkBoxState:
@@ -1103,7 +1088,8 @@ def change_postop():
         mwindow.lineEdit_postop_winkel.setText(
             format_winkel(mwindow.lineEdit_postop_winkel.text()))
     palette = QPalette()
-    try:  # Winkel auffällig?
+    try:
+        # Winkel auffällig?
         winkel = abs(float(mwindow.lineEdit_postop_winkel.text()))
     except ValueError:
         winkel = 0
@@ -1162,12 +1148,17 @@ if __name__ == "__main__":
     host='139.64.200.60' dbname='prothesen' user='postgres' password='SuperUser2012'
     eigener Rechner:
     host='localhost' dbname='prothesen' user='postgres' password='postgres'
+
     """
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     dwindow = achtung()
-    db = Database('localhost', 'prothesen', 'postgres', '')
-    eprd = Database('localhost', 'eprd_db', 'postgres', '')
+    if sys.platform == 'win32':  # Klinikrechner Windows
+        db = Database('139.64.200.60', 'prothesen', 'postgres', 'SuperUser2012')
+        eprd = Database('139.64.200.60', 'eprd_db2_m1', 'postgres', 'SuperUser2012')
+    else:  # eigener Rechner MacOSX
+        db = Database('localhost', 'prothesen', 'postgres', 'postgres')
+        eprd = Database('localhost', 'prothesen', 'postgres', 'postgres')
     # Datensatzstatus False -> Postgres Append, True -> Postgres Update
     DataSetStatus = Status()
     # Knopfstatus False -> Suche ..., True -> Laden ...
@@ -1178,38 +1169,26 @@ if __name__ == "__main__":
     EPRD_Status = Status()
     dic_prothesen = {}  # Dictionary für Formulardaten
     dic_typ = {}  # Dictionary für Typ zur Speicherung in PostgreSQL
-    mwindow.checkBox_wechseleingriff.stateChanged.connect(
-        change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
-    mwindow.checkBox_abweichung.stateChanged.connect(
-        change_abweichung)  # Ereignis Abweichung an / aus
+    mwindow.checkBox_wechseleingriff.stateChanged.connect(change_wechseleingriff)  # Ereignis Wechseleingriff an / aus
+    mwindow.checkBox_abweichung.stateChanged.connect(change_abweichung)  # Ereignis Abweichung an / aus
     # Ereignis Taste Suchen/Laden gedrückt
     mwindow.pushButton_suche.clicked.connect(schalter_suchen_laden)
-    mwindow.comboBox_operateur.currentTextChanged.connect(
-        change_operateur)  # Ereignis Wechsel Operateur
-    mwindow.comboBox_assistenz.currentTextChanged.connect(
-        change_assistenz)  # Ereignis Wechsel Assistenz
-    mwindow.comboBox_operateur.highlighted.connect(
-        focus_operateur)  # Ereignis Focus Operateur
-    mwindow.comboBox_assistenz.highlighted.connect(
-        focus_assistenz)  # Ereignis Focus Assistenz
-    mwindow.pushButton_speichern.pressed.connect(
-        speichern)  # Ereignis Taste Speichern gedrückt
-    mwindow.comboBox_prothesenart.currentTextChanged.connect(
-        change_prothesenart)  # Ereignis Wechsel Prothesenart
-    mwindow.lineEdit_patientennummer.textChanged.connect(
-        change_patientennummer)  # Ereignis Änderung Patientennummer
+    mwindow.comboBox_operateur.currentTextChanged.connect(change_operateur)  # Ereignis Wechsel Operateur
+    mwindow.comboBox_assistenz.currentTextChanged.connect(change_assistenz)  # Ereignis Wechsel Assistenz
+    mwindow.comboBox_operateur.highlighted.connect(focus_operateur)  # Ereignis Focus Operateur
+    mwindow.comboBox_assistenz.highlighted.connect(focus_assistenz)  # Ereignis Focus Assistenz
+    mwindow.pushButton_speichern.pressed.connect(speichern)  # Ereignis Taste Speichern gedrückt
+    mwindow.comboBox_prothesenart.currentTextChanged.connect(change_prothesenart)  # Ereignis Wechsel Prothesenart
+    mwindow.lineEdit_patientennummer.textChanged.connect(change_patientennummer)  # Ereignis Änderung Patientennummer
     mwindow.lineEdit_operationszeit.textChanged.connect(change_opzeit)
     mwindow.lineEdit_inklinationswinkel.textChanged.connect(change_inklination)
-    mwindow.checkBox_fraktur.stateChanged.connect(
-        change_fraktur)  # Ereignis Änderung Fraktur an / aus
+    mwindow.checkBox_fraktur.stateChanged.connect(change_fraktur)  # Ereignis Änderung Fraktur an / aus
     mwindow.checkBox_vierundzwanzig.stateChanged.connect(
         change_vierundzwanzig)  # Ereignis für alle CheckBoxes in Gruppe setzen
     for cb in mwindow.groupBox_komplikation.findChildren(QCheckBox):
         cb.stateChanged.connect(change_neunzig)
-    mwindow.lineEdit_praeop_winkel.textChanged.connect(
-        change_praeop)  # Ereignis Eingabe präop. Winkel
-    mwindow.lineEdit_postop_winkel.textChanged.connect(
-        change_postop)  # Ereignis Eingabe postop. Winkel
+    mwindow.lineEdit_praeop_winkel.textChanged.connect(change_praeop)  # Ereignis Eingabe präop. Winkel
+    mwindow.lineEdit_postop_winkel.textChanged.connect(change_postop)  # Ereignis Eingabe postop. Winkel
     init_neuesFormular()  # Formular generieren und anzeigen...
     save_state()  # als Standard speichern
     mwindow.show()  # Fenster anzeigen

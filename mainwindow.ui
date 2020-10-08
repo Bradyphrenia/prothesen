@@ -348,6 +348,7 @@
     </property>
     <property name="font">
      <font>
+      <pointsize>10</pointsize>
       <underline>false</underline>
      </font>
     </property>
@@ -508,7 +509,7 @@
     <property name="geometry">
      <rect>
       <x>1080</x>
-      <y>710</y>
+      <y>700</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -644,8 +645,8 @@
    <widget class="QPushButton" name="pushButton_speichern">
     <property name="geometry">
      <rect>
-      <x>588</x>
-      <y>720</y>
+      <x>590</x>
+      <y>710</y>
       <width>190</width>
       <height>40</height>
      </rect>
@@ -657,8 +658,8 @@
    <widget class="QLabel" name="label_boddenkliniken">
     <property name="geometry">
      <rect>
-      <x>1078</x>
-      <y>717</y>
+      <x>1080</x>
+      <y>700</y>
       <width>131</width>
       <height>51</height>
      </rect>
@@ -685,8 +686,8 @@
    <widget class="QLabel" name="label_endocert">
     <property name="geometry">
      <rect>
-      <x>1023</x>
-      <y>717</y>
+      <x>1020</x>
+      <y>700</y>
       <width>51</width>
       <height>51</height>
      </rect>
@@ -724,7 +725,7 @@
       <hour>0</hour>
       <minute>0</minute>
       <second>0</second>
-      <year>2017</year>
+      <year>2020</year>
       <month>1</month>
       <day>1</day>
      </datetime>
@@ -737,7 +738,7 @@
     </property>
     <property name="date">
      <date>
-      <year>2017</year>
+      <year>2020</year>
       <month>1</month>
       <day>1</day>
      </date>
@@ -747,7 +748,7 @@
     <property name="geometry">
      <rect>
       <x>1080</x>
-      <y>720</y>
+      <y>710</y>
       <width>31</width>
       <height>21</height>
      </rect>
@@ -758,7 +759,7 @@
      </font>
     </property>
     <property name="text">
-     <string>2017</string>
+     <string>2020</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox_vorhanden">
@@ -1045,6 +1046,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <strikeout>false</strikeout>
       </font>
      </property>
@@ -1251,7 +1253,7 @@
       <x>795</x>
       <y>150</y>
       <width>413</width>
-      <height>561</height>
+      <height>541</height>
      </rect>
     </property>
    </widget>
@@ -1309,6 +1311,16 @@
    <zorder>plainTextEdit_statistik</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1225</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>lineEdit_patientennummer</tabstop>
@@ -1358,4 +1370,3 @@
  <resources/>
  <connections/>
 </ui>
-
