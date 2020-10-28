@@ -275,6 +275,17 @@ def datensatz_laden(patnr):
     aktualisiere_widgets()
 
 
+def zerlege_datum(datum: str) -> (int, int, int):
+    try:
+        yy = int(datum[0:4])  # Zerlegung ...
+        mm = int(datum[5:7])
+        dd = int(datum[8:10])
+    except ValueError:
+        yy, mm, dd = 2014, 1, 1
+    finally:
+        return yy, mm, dd
+
+
 def aktualisiere_widgets():
     """
     Daten aus Dictionary ins Formular laden...
@@ -290,9 +301,7 @@ def aktualisiere_widgets():
     mwindow.checkBox_fraktur.setChecked(dic_prothesen['fraktur'])
     mwindow.checkBox_praeop_planung.setChecked(dic_prothesen['planung'])
     ds = str(dic_prothesen['opdatum'])  # Datums-String
-    yy = int(ds[0:4])  # Zerlegung ...
-    mm = int(ds[5:7])  # TODO Fehler '' abfangen?
-    dd = int(ds[8:10])
+    yy, mm, dd = zerlege_datum(ds)
     mwindow.dateEdit_opdatum.setDate(QDate(yy, mm, dd))
     mwindow.comboBox_operateur.setCurrentText(dic_prothesen['operateur'])
     mwindow.comboBox_assistenz.setCurrentText(dic_prothesen['assistenz'])

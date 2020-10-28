@@ -1271,3 +1271,67 @@ HINT:  Perhaps you meant to reference the column "operation.arzt_nachname".
 -- relation "eprd_fall" does not exist
 -- 2020-10-02 18:54:16.793446
 -- relation "eprd_fall" does not exist
+-- 2020-10-14 22:36:48.083493
+-- relation "eprd_fall" does not exist
+-- 2020-10-27 10:45:27.569131
+-- could not connect to server: Connection refused
+	Is the server running on host "localhost" (::1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "localhost" (127.0.0.1) and accepting
+	TCP/IP connections on port 5432?
+
+-- 2020-10-27 10:45:45.078777
+-- could not connect to server: Connection refused
+	Is the server running on host "localhost" (::1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "localhost" (127.0.0.1) and accepting
+	TCP/IP connections on port 5432?
+
+-- 2020-10-27 10:48:59.813780
+-- could not connect to server: Connection refused
+	Is the server running on host "localhost" (::1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "localhost" (127.0.0.1) and accepting
+	TCP/IP connections on port 5432?
+
+-- 2020-10-27 10:50:26.555960
+-- could not connect to server: Connection refused
+	Is the server running on host "localhost" (::1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "localhost" (127.0.0.1) and accepting
+	TCP/IP connections on port 5432?
+
+-- 2020-10-27 10:50:39.459518
+-- could not connect to server: Connection refused
+	Is the server running on host "localhost" (::1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "localhost" (127.0.0.1) and accepting
+	TCP/IP connections on port 5432?
+
+-- 2020-10-27 10:50:42.028596
+-- could not connect to server: Connection refused
+	Is the server running on host "localhost" (::1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "localhost" (127.0.0.1) and accepting
+	TCP/IP connections on port 5432?
+
+-- 2020-10-27 22:02:00.427246
+-- relation "eprd_fall" does not exist
+-- 2020-10-28 12:50:54.800951
+-- relation "eprd_fall" does not exist
+-- 2020-10-28 12:51:00.530934
+-- relation "eprd_fall" does not exist
+-- 2020-10-28 12:53:23.130158
+-- relation "eprd_fall" does not exist
+-- 2020-10-28 12:53:27.972569
+-- relation "eprd_fall" does not exist
+-- 2020-10-28 13:10:50.264414
+-- relation "eprd_fall" does not exist
+-- 2020-10-28 13:10:56.323797
+-- relation "eprd_fall" does not exist
