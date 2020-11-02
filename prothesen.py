@@ -77,7 +77,7 @@ class Database:
 
     def insert(self, sql):
         self.cur.execute(sql)
-        self.con.commit()
+        self.conn.commit()
         return None
 
     def protocol(self, text: str):
@@ -276,6 +276,7 @@ def datensatz_laden(patnr):
 
 
 def zerlege_datum(datum: str) -> (int, int, int):
+    yy, mm, dd = None, None, None
     try:
         yy = int(datum[0:4])  # Zerlegung ...
         mm = int(datum[5:7])
@@ -434,6 +435,7 @@ def suche_eprd():
     Suche in der EPRD-Datenbank und ggf. Eintrag in die Maske
     :return: None
     """
+    patnr = None
     try:
         patnr = (
             mwindow.lineEdit_patientennummer.text() if mwindow.lineEdit_patientennummer.text() != '' else '0')  # sonst Fehler bei Postgres
@@ -503,6 +505,7 @@ def suche_implantate(fallnummer):
         except:
             pass
         else:
+            op_id, op_datum = None, None
             try:
                 for op_id_item in op_id_list:
                     op_id, op_datum = op_id_item
@@ -514,7 +517,7 @@ def suche_implantate(fallnummer):
             except:
                 pass
     finally:
-        eprd.close_db
+        eprd.close_db()
     return artikelliste
 
 
@@ -824,7 +827,7 @@ def init_comboBox_operateur():
         sql))  # Liste aller Operateure aus Datenbank (auch None!)
     db.close_db()
     operateur = [it[0]
-                 for it in lesen if it[0] != None and it[0] != 'Joker']  # Operateurliste bereinigen
+                 for it in lesen if it[0] is not None and it[0] != 'Joker']  # Operateurliste bereinigen
     operateur = set(['Svacina', 'Neu', 'Suhren', 'Troeger', 'Flachsmeyer'] + operateur)  # alle zum set() umwandeln
     mwindow.comboBox_operateur.clear()
     mwindow.comboBox_assistenz.clear()
