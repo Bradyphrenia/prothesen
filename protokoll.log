@@ -1112,3 +1112,5 @@ UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proxima
 -- relation "eprd_fall" does not exist
 -- 2020-10-08 22:40:31.829748
 -- relation "eprd_fall" does not exist
+-- 2020-11-02 21:06:07.499577
+-- relation "eprd_fall" does not exist
