@@ -1126,3 +1126,41 @@ UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proxima
 -- relation "eprd_fall" does not exist
 -- 2020-11-02 21:44:58.029755
 -- relation "eprd_fall" does not exist
+-- 2020-11-03 21:39:40.470239
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:39:47.638895
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:39:58.925492
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:41:09.846028
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:42:25.520736
+INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (50123456,'Hüfte',NULL,'Ecofit-Pfanne','Ecofit-Schaft','rechts',False,True,True,False,True,'2020-02-01','Flachsmeyer','Joker',30,False,False,34,False,False,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,'Altmann',False,NULL,NULL,False,False);
+-- 2020-11-03 21:43:46.161491
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:43:57.317388
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:43:57.736643
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:45:27.495937
+INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (50212121,'Hüfte',NULL,'Ecofit-Pfanne','Ecofit-Schaft','rechts',False,True,True,False,True,'2020-01-02','Flachsmeyer','Joker',40,False,False,NULL,False,False,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,NULL,False,NULL,NULL,False,False);
+-- 2020-11-03 21:45:53.637840
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:46:20.497517
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:47:07.163026
+INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (50654321,'Knie',NULL,'3D Knie Femur','3D Knie Tibia','rechts',False,True,True,False,True,'2020-01-03','Svacina','Joker',35,False,False,NULL,False,False,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,NULL,False,2.,2.,False,False);
+-- 2020-11-03 21:52:09.658461
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:52:14.827684
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 21:52:33.802840
+INSERT INTO "prothesen" ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") VALUES (50123456,'Hüfte',NULL,'Ecofit-Pfanne','Ecofit-Schaft','rechts',False,True,True,False,True,'2020-01-02','Troeger','Joker',40,False,False,NULL,False,False,False,False,False,False,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,NULL,False,NULL,NULL,False,False);
+-- 2020-11-03 21:52:33.904069
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 22:14:23.129553
+-- relation "eprd_fall" does not exist
+-- 2020-11-03 22:14:30.139613
+UPDATE "prothesen" SET ("patientennummer","prothesenart","prothesentyp","proximal","distal","seite","wechseleingriff","praeop_roentgen","postop_roentgen","fraktur","planung","opdatum","operateur","assistenz","op_zeiten","infektion","luxation","inklinationswinkel","trochanterabriss","fissuren","thrombose_embolie","sterblichkeit","neurologie","dokumentation","memo","knochenverankert","periprothetisch","reintervention","abweichung","ct","ab_imp_art","ab_imp_groesse","ab_stab","ab_blutung","ab_praeop","ab_operation","ab_anaesthesie","spaet_infekt","einweiser","neunzig_tage","kniewinkel_prae","kniewinkel_post","vierundzwanzig_plus","oak") = (50123456,'Hüfte',NULL,'Ecofit-Pfanne','Ecofit-Schaft','rechts',False,True,True,False,True,'2020-01-02','Troeger','Joker',40,False,False,NULL,False,False,False,False,False,True,NULL,False,False,False,False,False,False,False,False,False,False,False,False,False,NULL,False,+.0,+.0,False,False) WHERE "id" = 4034;
+-- 2020-11-03 22:14:30.300937
+-- relation "eprd_fall" does not exist
